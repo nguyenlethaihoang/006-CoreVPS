@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/cc34b35a-e9c5-4f4a-8708-68f490926e12/microsoft.web/sites/subscriptions/cc34b35a-e9c5-4f4a-8708-68f490926e12/resourceGroups/core-banking-rg/providers/Microsoft.Web/sites/cb-be",
+    "appService.deploySubpath": "."
+}

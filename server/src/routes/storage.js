@@ -1,0 +1,38 @@
+const express = require("express")
+const route = express.Router()
+
+const currencyController = require('../controllers/storage/currency')
+const accountOfficerController = require('../controllers/storage/accountOfficer')
+const cityProvinceController = require('../controllers/storage/cityProvince')
+const countryController = require('../controllers/storage/country')
+const doctypeController = require('../controllers/storage/doctype')
+const industryController = require('../controllers/storage/industry')
+const relationController = require('../controllers/storage/relation')
+const sectorController = require('../controllers/storage/sector')
+const categoryController = require('../controllers/storage/category')
+const chargeCodeController = require('../controllers/storage/chargeCode')
+const productLineController = require('../controllers/storage/productLine')
+const subSectorController = require('../controllers/storage/subSector')
+const subIndustryController = require('../controllers/storage/subIndustry')
+const savingTermController = require('../controllers/storage/savingTerm')
+
+route.get('/get_currency', currencyController.getAll)
+route.get('/get_account_officer', accountOfficerController.getAll)
+route.get('/get_city_province', cityProvinceController.getAll)
+route.get('/get_country', countryController.getAll)
+route.get('/get_doctype', doctypeController.getAll)
+route.get('/get_industry', industryController.getAll)
+route.get('/get_relation', relationController.getAll)
+route.get('/get_sector', sectorController.getAll)
+route.get('/get_category', categoryController.getAll)
+route.get('/get_charge_code', chargeCodeController.getAll)
+route.get('/get_product_line', productLineController.getAll)
+route.get('/get_subsector', subSectorController.getAll)
+route.get('/get_subsector_by_sector/:sectorid', subSectorController.getBySector)
+route.get('/get_subindustry', subIndustryController.getAll)
+route.get('/get_subindustry_by_industry/:industryid', subIndustryController.getByIndustry)
+route.get('/get_saving_term', savingTermController.getAll)
+
+
+
+module.exports = route
