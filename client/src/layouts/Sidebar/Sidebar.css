@@ -1,0 +1,17 @@
+.SidebarNav {
+    background: #c23616;
+    width: 280px;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0; 
+    transition: 350ms;
+    margin-top: 61.5px;
+    border-radius: 0px 10px 0px 0px;
+}
+
+.SidebarWrap {
+    width: 100%;
+}

@@ -1,0 +1,66 @@
+.inner {
+    display: flex;
+}
+
+.wrapper {
+    height: 60px;
+    /* display: flex; */
+    /* position: fixed;  */
+    /* top: 0;
+    left: 0;  */
+}
+.logo {
+    margin-right: 170px;
+    padding-left: 90px;
+    padding-top: 0px;
+}
+.university_logo{
+    margin-right: 380px;
+}
+.search_bar {
+    padding-top: 5px;
+}
+
+.email_logo {
+    padding-left: 60px;
+    padding-top: 17px;
+
+}
+
+.bell_logo {
+    padding-left: 30px;
+    padding-top: 17px;
+}
+
+.avt_logo {
+    padding-left: 30px;
+    padding-top: 8px;
+}
+
+.name_user {
+    padding-left: 10px;
+    padding-bottom: 20px;
+}
+
+.time {
+    padding-left: 70px;
+    padding-top: 18px;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+
+}
+.timeDate {
+    padding-left: 60px;
+    padding-top: 18px;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+
+}

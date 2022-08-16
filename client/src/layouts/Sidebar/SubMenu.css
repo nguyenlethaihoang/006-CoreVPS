@@ -1,0 +1,42 @@
+.SidebarLink {
+    display: flex;
+    color: #e1e9fc;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    list-style: none;
+    height: 70px;
+    text-decoration: none;
+    font-size: 19px;
+    border-radius: 0px 10px 0px 0px;
+
+
+}
+
+.SidebarLink:hover {
+    background: #b33939;
+    border-left: 4px solid #632ce4;
+    cursor: pointer;
+    border-radius: 0px 10px 0px 0px;
+}
+
+.SidebarLabel {
+    margin-left: 16px;
+    display: inline;
+}
+
+.DropdownLink {
+    background: #e84118;
+    height: 60px;
+    padding-left: 2rem;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #f5f5f5;
+    font-size: 16px;
+}
+
+.DropdownLink:hover {
+    background: #b33939;
+    cursor: pointer;
+}
