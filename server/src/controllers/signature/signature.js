@@ -165,7 +165,8 @@ const signatureController = {
             return next(new appError("Error", 404))
         }
 
-        const customerDB = await customerModel.findByPk(customerIDReq, {
+        const customerDB = await customerModel.findOne({
+            where: {DocID: customerIDReq},
             attributes: ["id", "GB_ShortName", "GB_FullName"]
         })
         .catch(err => {
