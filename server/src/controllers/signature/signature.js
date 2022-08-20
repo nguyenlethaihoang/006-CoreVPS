@@ -174,8 +174,9 @@ const signatureController = {
             return next(new appError("Customer not found", 404))
         })
 
+        const customerIDDB = customerDB.getDataValue("id")
         const {count, rows} = await signatureModel.findAndCountAll({
-            where: {CustomerID: customerIDReq}
+            where: {CustomerID: customerIDDB }
         })
         // .catch(err => {
         //     console.log(err)
