@@ -28,7 +28,7 @@ function EnquiryAccount() {
     const [bioGetAll, setBioGetAll] = useState([]);
     useEffect(() => {
         const fetchDataGetAll = async () => {
-            await axios.post(' https://cb-be.azurewebsites.net/account/debit_account/enquiry', {
+            await axios.post(' https://api-newcore.vietvictory.vn/account/debit_account/enquiry', {
 
             }).then(response => {
                 console.log("response Get all")
@@ -45,7 +45,7 @@ function EnquiryAccount() {
     const [bioCategory, setBioCategory] = useState([]);
     useEffect(() => {
         const fetchDataCustomer = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_category`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_category`);
             const data = await response.json();
             // console.log("dataProductLine")
             // console.log(data)
@@ -57,7 +57,7 @@ function EnquiryAccount() {
     const [bioProductLine, setBioProductLine] = useState([]);
     useEffect(() => {
         const fetchDataCustomer = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_product_line`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_product_line`);
             const data = await response.json();
             // console.log("dataProductLine")
             // console.log(data)
@@ -120,7 +120,7 @@ function EnquiryAccount() {
                             onClick={() => {
                                 rows = [];
                                 const fetchDataGetAll = async () => {
-                                    await axios.post(' https://cb-be.azurewebsites.net/account/debit_account/enquiry', {
+                                    await axios.post(' https://api-newcore.vietvictory.vn/account/debit_account/enquiry', {
                         
                                     }).then(response => {
                                         console.log("enquiry account")

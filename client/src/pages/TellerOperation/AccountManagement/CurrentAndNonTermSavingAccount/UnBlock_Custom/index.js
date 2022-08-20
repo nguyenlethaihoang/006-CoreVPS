@@ -23,7 +23,7 @@ let txtCustomerID = ""
 let txtDescription = ""
 
 function UnBlock_Custom(props1) {
-    let tmpURL = `https://cb-be.azurewebsites.net/account/debit_account/get/${props1.AccountCode}`
+    let tmpURL = `http://localhost:5000/account/debit_account/get/${props1.AccountCode}`
     const [bioFilled, setBioFilled] = useState([]);
     useEffect(() => {
         const fetchDataFilled = async () => {

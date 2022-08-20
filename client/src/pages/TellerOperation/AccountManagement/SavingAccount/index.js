@@ -36,7 +36,7 @@ function SavingAccount() {
                     <OpenPeriodic />
                     <OpenDiscounted />
                     <EnquiryArrearAndPeriodic />
-                    {/* <EnquiryDiscounted /> */}
+                    <EnquiryDiscounted />
                     {/* <CloseArrearPeriodic /> */}
                     {/* <CloseDiscounted /> */}
                 </AccordionDetails>

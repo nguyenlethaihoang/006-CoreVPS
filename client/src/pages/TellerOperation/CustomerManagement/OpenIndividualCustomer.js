@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import Popup_Custom from "../../../components/Popup_Custom";
 import Popup_Custom_Fail from "../../../components/Popup_Custom_Fail";
 import TextField_Value_Custom_No_Data from "../../../components/TextField_Value_Custom_No_Data";
+import Notification_Custom from "../../../components/Notification_Custom";
 
 function checkName(a, b) {
     let temp = null
@@ -41,11 +42,13 @@ function OpenIndividualCustomer() {
 
     const [buttonPopup, setButtonPopup] = useState(false)
     const [buttonPopupFail, setButtonPopupFail] = useState(false)
+    const [buttonPopupNoti, setButtonPopupNoti] = useState(false)
+
     
     const [bioCity, setBioCity] = useState([]);
     useEffect(() => {
         const fetchDataCity = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_city_province`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_city_province`);
             const data = await response.json();
             setBioCity(data.rows);  
         };
@@ -55,7 +58,7 @@ function OpenIndividualCustomer() {
     const [bioCountry, setBioCountry] = useState([]);
     useEffect(() => {
         const fetchDataCountry = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_country`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_country`);
             const data = await response.json();
             setBioCountry(data.rows);  
         };
@@ -65,7 +68,7 @@ function OpenIndividualCustomer() {
     const [bioDoctype, setBioDoctype] = useState([]);
     useEffect(() => {
         const fetchDataDoctype = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_doctype`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_doctype`);
             const data = await response.json();
             setBioDoctype(data.rows);  
         };
@@ -75,7 +78,7 @@ function OpenIndividualCustomer() {
     const [bioMainSector, setBioMainSector] = useState([]);
     useEffect(() => {
         const fetchDataMainSector = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_sector`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_sector`);
             const data = await response.json();
             setBioMainSector(data.rows);  
         };
@@ -85,7 +88,7 @@ function OpenIndividualCustomer() {
     const [bioMainIndustry, setBioMainIndustry] = useState([]);
     useEffect(() => {
         const fetchDataMainIndustry = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_industry`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_industry`);
             const data = await response.json();
             setBioMainIndustry(data.rows);  
         };
@@ -95,7 +98,7 @@ function OpenIndividualCustomer() {
     const [bioAccountOfficer, setBioAccountOfficer] = useState([]);
     useEffect(() => {
         const fetchDataAccountOfficer = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_account_officer`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_account_officer`);
             const data = await response.json();
             setBioAccountOfficer(data.rows);  
         };
@@ -186,64 +189,80 @@ function OpenIndividualCustomer() {
                                 // let txtMainIndustry = document.getElementById('sltMainIndustry').textContent.toString();
                                 let txtAccountOfficer = document.getElementById('sltAccountOfficer').textContent.toString();
 
-                                axios.post('https://cb-be.azurewebsites.net/customer/create_individual_customer',{
-                                    firstName: document.getElementById('txtFirstName').value,
-                                    lastName: document.getElementById('txtLastName').value,
-                                    middleName: document.getElementById('txtMiddleName').value,
-                                    GB_ShortName: document.getElementById('txtGBShortName').value,
-                                    GB_FullName: document.getElementById('txtGBFullName').value,
-                                    GB_Street: document.getElementById('txtGBStreet').value,
-                                    GB_Towndist: document.getElementById('txtGBTown/Dist').value,
-                                    mobilePhone: document.getElementById('txtMobilePhone').value,
-                                    docID: document.getElementById('txtDocID').value,
-                                    emailAddress: document.getElementById('txtEmailAddress').value,
-
-                                    cityProvince: checkName(bioCity, txtCity),
-                                    GB_Country: checkCode(bioCountry, txtCountry),
-                                    nationality: checkCode(bioCountry, txtNationality),
-                                    residence: checkCode(bioCountry, txtResidence),
-                                    doctype: checkName(bioDoctype, txtDoctype),
-                                    mainSector: checkName(bioMainSector, txtMainSector),
-                                    // mainIndustry: checkName(bioMainIndustry, txtMainIndustry),
-                                    accountOfficer: checkName(bioAccountOfficer, txtAccountOfficer),
-                                })
-                                .then(res => {  
-                                    document.getElementById('sltCityProvince').textContent = null;
-                                    document.getElementById('sltNationality').textContent = null;
-                                    document.getElementById('sltResidence').textContent = null;
-                                    document.getElementById('sltDocType').textContent = null;
-                                    document.getElementById('sltMainSector').textContent = null;
-                                    document.getElementById('sltAccountOfficer').textContent = null;
+                                arr = []
+                                if (document.getElementById('txtFirstName').value.length == 1 || document.getElementById('txtFirstName').value.length == 0) arr.push(`"First Name" is Required`);
+                                if (document.getElementById('txtLastName').value.length == 1 || document.getElementById('txtLastName').value.length == 0) arr.push(`"Last  Name" is Required`);
+                                if (document.getElementById('txtDocID').value.length == 1 || document.getElementById('txtDocID').value.length == 0) arr.push(`"Doc ID" is Required`);
+                                if (document.getElementById('txtMobilePhone').value.length == 1 || document.getElementById('txtMobilePhone').value.length == 0) arr.push(`"MobilePhone" is Required`);
+                                console.log("arr")
+                                console.log(arr)
+                                console.log(arr.length)
+                                if (arr.length != 0) {
+                                    setButtonPopupNoti(true)
                                     
-                                    document.getElementById('txtFirstName').value = null;
-                                    document.getElementById('txtLastName').value = null;
-                                    document.getElementById('txtMiddleName>').value = null;
-                                    document.getElementById('txtGBShortName>').value = "_";
-                                    document.getElementById('txtGBFullName>').value = "_";
-                                    document.getElementById('txtGBStreet').value = null;
-                                    document.getElementById('txtGBTownDist').value = null;
-                                    document.getElementById('txtMobilePhone').value = null;
-                                    document.getElementById('txtSex').value = null;
-                                    document.getElementById('txtDocID').value = null;
-                                    document.getElementById('txtEmailAddress').value = null;
+                                }
+                                else {
+                                    axios.post('https://api-newcore.vietvictory.vn/customer/create_individual_customer',{
+                                        firstName: document.getElementById('txtFirstName').value,
+                                        lastName: document.getElementById('txtLastName').value,
+                                        middleName: document.getElementById('txtMiddleName').value,
+                                        GB_ShortName: document.getElementById('txtGBShortName').value,
+                                        GB_FullName: document.getElementById('txtGBFullName').value,
+                                        GB_Street: document.getElementById('txtGBStreet').value,
+                                        GB_Towndist: document.getElementById('txtGBTown/Dist').value,
+                                        mobilePhone: document.getElementById('txtMobilePhone').value,
+                                        docID: document.getElementById('txtDocID').value,
+                                        emailAddress: document.getElementById('txtEmailAddress').value,
+
+                                        cityProvince: checkName(bioCity, txtCity),
+                                        GB_Country: checkCode(bioCountry, txtCountry),
+                                        nationality: checkCode(bioCountry, txtNationality),
+                                        residence: checkCode(bioCountry, txtResidence),
+                                        doctype: checkName(bioDoctype, txtDoctype),
+                                        mainSector: checkName(bioMainSector, txtMainSector),
+                                        // mainIndustry: checkName(bioMainIndustry, txtMainIndustry),
+                                        accountOfficer: checkName(bioAccountOfficer, txtAccountOfficer),
+                                    })
+                                    .then(res => {  
+                                        // document.getElementById('sltCityProvince').textContent = null;
+                                        // document.getElementById('sltNationality').textContent = null;
+                                        // document.getElementById('sltResidence').textContent = null;
+                                        // document.getElementById('sltDocType').textContent = null;
+                                        // document.getElementById('sltMainSector').textContent = null;
+                                        // document.getElementById('sltAccountOfficer').textContent = null;
+                                        
+                                        // document.getElementById('txtFirstName').value = null;
+                                        // document.getElementById('txtLastName').value = null;
+                                        // document.getElementById('txtMiddleName>').value = null;
+                                        // document.getElementById('txtGBShortName>').value = "_";
+                                        // document.getElementById('txtGBFullName>').value = "_";
+                                        // document.getElementById('txtGBStreet').value = null;
+                                        // document.getElementById('txtGBTownDist').value = null;
+                                        // document.getElementById('txtMobilePhone').value = null;
+                                        // document.getElementById('txtSex').value = null;
+                                        // document.getElementById('txtDocID').value = null;
+                                        // document.getElementById('txtEmailAddress').value = null;
 
 
 
-                                    setButtonPopup(true)
+                                        setButtonPopup(true)
 
-                                })
-                                .catch(err=>{
-                                    console.log(err)
-                                    arr = []
-                                    if (document.getElementById('txtGBShortName').value.length == 1 || document.getElementById('txtGBShortName').value.length == 0) arr.push(`"GB Short Name" is Required`);
-                                    if (document.getElementById('txtGBFullName').value.length == 1 || document.getElementById('txtGBFullName').value.length == 0) arr.push(`"GB Full Name" is Required`);
-                                    if (document.getElementById('txtGBStreet').value.length == 1 || document.getElementById('txtGBStreet').value.length == 0) arr.push(`"GB Street" is Required`);
-                                    if (document.getElementById('txtGBTownDist').value.length == 1 || document.getElementById('txtGBTownDist').value.length == 0) arr.push(`"GB Town Dist" is Required`);
-                                    if (document.getElementById('txtDocID').value.length == 1 || document.getElementById('txtDocID').value.length == 0) arr.push(`"Doc ID" is Required`);
-                                    if (txtMainSector.length == 1 || txtMainSector.length == 0) arr.push(`"Main Sector" is Required`);
-                                    
-                                    setButtonPopupFail(true)
-                                })
+                                    })
+                                    .catch(err=>{
+                                        console.log(err)
+                                        arr = []
+                                        if (document.getElementById('txtGBShortName').value.length == 1 || document.getElementById('txtGBShortName').value.length == 0) arr.push(`"GB Short Name" is Required`);
+                                        if (document.getElementById('txtGBFullName').value.length == 1 || document.getElementById('txtGBFullName').value.length == 0) arr.push(`"GB Full Name" is Required`);
+                                        if (document.getElementById('txtGBStreet').value.length == 1 || document.getElementById('txtGBStreet').value.length == 0) arr.push(`"GB Street" is Required`);
+                                        if (document.getElementById('txtGBTownDist').value.length == 1 || document.getElementById('txtGBTownDist').value.length == 0) arr.push(`"GB Town Dist" is Required`);
+                                        if (document.getElementById('txtDocID').value.length == 1 || document.getElementById('txtDocID').value.length == 0) arr.push(`"Doc ID" is Required`);
+                                        if (txtMainSector.length == 1 || txtMainSector.length == 0) arr.push(`"Main Sector" is Required`);
+                                        
+                                        setButtonPopupFail(true)
+                                    })
+                                }
+
+                                
                             }
                             
                         }
@@ -262,6 +281,13 @@ function OpenIndividualCustomer() {
                         >
                             
                         </Popup_Custom_Fail>
+                        <Notification_Custom
+                            trigger={buttonPopupNoti}
+                            setTrigger={setButtonPopupNoti}
+                            arr={arr}
+                        >
+
+                    </Notification_Custom>
                     </div>
                         
 

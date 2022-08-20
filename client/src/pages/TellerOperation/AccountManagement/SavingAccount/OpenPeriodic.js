@@ -61,7 +61,7 @@ function OpenPeriodic() {
     const [bioCustomer, setBioCustomer] = useState([]);
     useEffect(() => {
         const fetchDataCustomer = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/customer/get_all_customer`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/customer/get_all_customer`);
             const data = await response.json();
             setBioCustomer(data.data.customer);  
         };
@@ -71,7 +71,7 @@ function OpenPeriodic() {
     const [bioTerm, setBioTerm] = useState([]);
     useEffect(() => {
         const fetchDataTerm = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_saving_term`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_saving_term`);
             const data = await response.json();
             setBioTerm(data.rows);  
         };
@@ -81,7 +81,7 @@ function OpenPeriodic() {
     const [bioCurrency, setBioCurrency] = useState([]);
     useEffect(() => {
         const fetchDataCurrency = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_currency`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_currency`);
             const data = await response.json();
             setBioCurrency(data.rows);  
         };
@@ -90,7 +90,7 @@ function OpenPeriodic() {
     const [bioProductLine, setBioProductLine] = useState([]);
     useEffect(() => {
         const fetchDataCustomer = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_product_line`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_product_line`);
             const data = await response.json();
             setBioProductLine(data.rows);  
         };
@@ -99,7 +99,7 @@ function OpenPeriodic() {
     const [bioRelationCode, setBioRelationCode] = useState([]);
     useEffect(() => {
         const fetchDataRelationCode = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_relation`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_relation`);
             const data = await response.json();
             setBioRelationCode(data.rows);  
         };
@@ -108,7 +108,7 @@ function OpenPeriodic() {
     const [bioAccountOfficer, setBioAccountOfficer] = useState([]);
     useEffect(() => {
         const fetchDataAccountOfficer = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_account_officer`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_account_officer`);
             const data = await response.json();
             setBioAccountOfficer(data.rows);  
         };
@@ -282,7 +282,7 @@ function OpenPeriodic() {
 
                                 let txtPrincipal =  document.getElementById('txtPrincipal...').value
 
-                                axios.post('https://cb-be.azurewebsites.net/account/saving_account/open_periodic',{
+                                axios.post('https://api-newcore.vietvictory.vn/account/saving_account/open_periodic',{
                                     customerID: checkNameCustomerID(bioCustomer,txtCustomerID),
                                     category: 1,
                                     currency: checkName(bioCurrency, txtCurrency),

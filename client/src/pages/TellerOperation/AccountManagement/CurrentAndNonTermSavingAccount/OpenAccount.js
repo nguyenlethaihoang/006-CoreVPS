@@ -79,7 +79,7 @@ function OpenAccount() {
     const [bioCustomer, setBioCustomer] = useState([]);
     useEffect(() => {
         const fetchDataCustomer = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/customer/get_all_customer`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/customer/get_all_customer`);
             const data = await response.json();
             // console.log("data")
             // console.log(data.data.customer)
@@ -91,7 +91,7 @@ function OpenAccount() {
     const [bioRelationCode, setBioRelationCode] = useState([]);
     useEffect(() => {
         const fetchDataRelationCode = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_relation`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_relation`);
             const data = await response.json();
             // console.log("relation")
             // console.log(data.rows)
@@ -103,7 +103,7 @@ function OpenAccount() {
     const [bioProductLine, setBioProductLine] = useState([]);
     useEffect(() => {
         const fetchDataCustomer = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_product_line`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_product_line`);
             const data = await response.json();
             setBioProductLine(data.rows);  
         };
@@ -113,7 +113,7 @@ function OpenAccount() {
     const [bioChargeCode, setBioChargeCode] = useState([]);
     useEffect(() => {
         const fetchDataCustomer = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_charge_code`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_charge_code`);
             const data = await response.json();
             setBioChargeCode(data.rows);  
         };
@@ -123,7 +123,7 @@ function OpenAccount() {
     const [bioAccountOfficer, setBioAccountOfficer] = useState([]);
     useEffect(() => {
         const fetchDataAccountOfficer = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_account_officer`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_account_officer`);
             const data = await response.json();
             setBioAccountOfficer(data.rows);  
         };
@@ -210,7 +210,7 @@ function OpenAccount() {
                                 let txtRelationCode = document.getElementById('sltRelationCode').textContent.toString();
                                 let txtChargeCode = document.getElementById('sltChargeCode').textContent.toString();
 
-                                axios.post('https://cb-be.azurewebsites.net/account/debit_account/open',{
+                                axios.post('https://api-newcore.vietvictory.vn/account/debit_account/open',{
                                     accountTitle: document.getElementById('txtAccountTitle').value,
                                     shortTitle: document.getElementById('txtShortTitle').value,
                                     joinNotes: document.getElementById('txtJoinNotes').value,

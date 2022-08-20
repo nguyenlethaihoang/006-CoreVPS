@@ -84,7 +84,7 @@ function Capture() {
                             onClick={() => {
                                 // console.log(document.getElementById('imageInput').value)
                                 const fetchDataGetAll = async () => {
-                                    await axios.post('https://cb-be.azurewebsites.net/signature/upload', {
+                                    await axios.post('https://api-newcore.vietvictory.vn/signature/upload', {
                                         customerID: document.getElementById('txtCustomerID').value,
                                         image: document.getElementById('imageInput').value
 
@@ -115,7 +115,7 @@ function Capture() {
                         
                         }}
                     >
-                        <form method="post" action="https://cb-be.azurewebsites.net/signature/upload" enctype="multipart/form-data">
+                        <form method="post" action="https://api-newcore.vietvictory.vn/signature/upload" enctype="multipart/form-data">
                             <div class="form-group">
 
                             <div

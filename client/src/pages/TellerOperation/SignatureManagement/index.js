@@ -14,9 +14,9 @@ function SignatureManagement() {
 
             <Amend />
 
-            <Validate />
+            {/* <Validate /> */}
 
-            <Status />
+            {/* <Status /> */}
         </div>
     )
 }

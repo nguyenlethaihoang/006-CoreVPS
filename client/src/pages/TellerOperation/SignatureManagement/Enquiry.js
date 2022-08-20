@@ -5,6 +5,7 @@ import TextField_Custom from '../../../components/TextField_Custom'
 import Button_Custom from "../../../components/Button_Custom";
 import { useState } from "react";
 import axios from "axios";
+import TextField_Value_Custom from "../../../components/TextField_Value_Custom";
 
 function Enquiry() {
     const [valueImage, setValueImage] = useState("")
@@ -37,7 +38,7 @@ function Enquiry() {
                         }}
                     >
                         <TextField_Custom props1="Customer ID." props2="30" props3="NO"/>
-                        <TextField_Custom props1="Customer name" props2="30" props3="NO"/>
+                        <TextField_Value_Custom props1="Customer Name" props2="30" props3="NO" props4="_"/>
                     </div>
 
                     <div
@@ -53,11 +54,12 @@ function Enquiry() {
                             onClick={() => {
                                 const fetchDataGetAll = async () => {
                                     let valueId = document.getElementById('txtCustomerID.').value
-                                    await axios.get(`https://cb-be.azurewebsites.net/signature/get_by_customer/${valueId}`, {
+                                    await axios.get(`https://api-newcore.vietvictory.vn/signature/get_by_customer/${valueId}`, {
                                     }).then(response => {
                                         console.log("response image id")
                                         console.log(response)
                                         setValueImage(response.data.data.signature[0].URL)
+                                        document.getElementById('txtCustomerName').value = response.data.data.customer.GB_FullName.toString()
                                          
                                     })
                                     

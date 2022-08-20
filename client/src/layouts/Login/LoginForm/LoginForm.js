@@ -16,13 +16,13 @@ function LoginForm() {
                     style={{
                         paddingBottom : "40px",
                         paddingTop : "70px",
-                        marginLeft: "15px"
+                        marginLeft: "20px"
                     }}
              > 
                     <img 
                         src = {process.env.PUBLIC_URL + `/Imgs/logo.png`}
                         alt = "VietVictory"
-                        width= "216"
+                        width= "200"
                         height = "135"
                     />
                 </div>

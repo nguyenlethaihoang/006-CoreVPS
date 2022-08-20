@@ -12,6 +12,8 @@ import axios from "axios";
  
 const categoryData = [{id: 1, Name: "3000 - Tiền  gửi thanh toán" },{id: 2, Name: "3001 - Tiết kiệm không kỳ hạn"},]
 
+const productLineData = [{id: 1, Name: "5001 - Tiết kiệm lãi trả trước" }]
+
 let arr = []
 
 function checkName(a, b) {
@@ -61,7 +63,7 @@ function OpenDiscounted() {
     const [bioCustomer, setBioCustomer] = useState([]);
     useEffect(() => {
         const fetchDataCustomer = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/customer/get_all_customer`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/customer/get_all_customer`);
             const data = await response.json();
             setBioCustomer(data.data.customer);  
         };
@@ -71,7 +73,7 @@ function OpenDiscounted() {
     const [bioTerm, setBioTerm] = useState([]);
     useEffect(() => {
         const fetchDataTerm = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_saving_term`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_saving_term`);
             const data = await response.json();
             setBioTerm(data.rows);  
         };
@@ -81,7 +83,7 @@ function OpenDiscounted() {
     const [bioCurrency, setBioCurrency] = useState([]);
     useEffect(() => {
         const fetchDataCurrency = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_currency`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_currency`);
             const data = await response.json();
             setBioCurrency(data.rows);  
         };
@@ -90,7 +92,7 @@ function OpenDiscounted() {
     const [bioProductLine, setBioProductLine] = useState([]);
     useEffect(() => {
         const fetchDataCustomer = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_product_line`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_product_line`);
             const data = await response.json();
             setBioProductLine(data.rows);  
         };
@@ -99,7 +101,7 @@ function OpenDiscounted() {
     const [bioRelationCode, setBioRelationCode] = useState([]);
     useEffect(() => {
         const fetchDataRelationCode = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_relation`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_relation`);
             const data = await response.json();
             setBioRelationCode(data.rows);  
         };
@@ -108,7 +110,7 @@ function OpenDiscounted() {
     const [bioAccountOfficer, setBioAccountOfficer] = useState([]);
     useEffect(() => {
         const fetchDataAccountOfficer = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_account_officer`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_account_officer`);
             const data = await response.json();
             setBioAccountOfficer(data.rows);  
         };
@@ -144,15 +146,18 @@ function OpenDiscounted() {
 
                             }}
                     >
-                        <Select_Custom props1="Working account" props2="35" props3="city" props4={bioCustomer}/>
+                        <Select_Custom props1="Working Account*" props2="35" props3="city" props4={bioCustomer}/>
                         <DatePicker_Custom props1="Value Date" props2="350" props3="YES"/>
-                        <TextField_Custom props1="Amount LCY" props2="35" props3="NO"/>
-                        <TextField_Custom props1="Amount FCY" props2="35" props3="NO"/>
-                        <Select_Custom props1="Payment CCY" props2="35" props3="city" props4={bioCurrency}/>
-                        <Select_Custom props1="Product Line" props2="35" props3="city" props4={bioProductLine}/>
-                        <Select_Custom props1="Currency" props2="35" props3="city" props4={bioCurrency}/>
-                        <Select_Custom props1="Term" props2="35" props3="city" props4={bioTerm}/>
-                        <TextField_Custom props1="Amount LCY Interest" props2="35" props3="NO"/>
+                        <TextField_Custom props1="Amount LCY*" props2="35" props3="NO"/>
+                        <TextField_Custom props1="Narrative" props2="35" props3="NO"/>
+                        <TextField_Custom props1="Deal Rate" props2="35" props3="NO"/>
+                        <TextField_Custom props1="For Teller" props2="35" props3="NO"/>
+                        <Select_Custom props1="Payment Currency*" props2="35" props3="city" props4={bioCurrency}/>
+                        <Select_Custom props1="Currency*" props2="35" props3="city" props4={bioCurrency}/>
+                        <Select_Custom props1="Product Line*" props2="35" props3="city" props4={productLineData}/>
+                        <Select_Custom props1="Term*" props2="35" props3="city" props4={bioTerm}/>
+                        <Select_Custom props1="Account Officer" props2="35" props3="city" props4={bioAccountOfficer}/>
+                        <TextField_Custom props1="Amount LCY Interest*" props2="35" props3="NO"/>
 
 
                     </div>
@@ -172,25 +177,23 @@ function OpenDiscounted() {
                             size="large"
                             // href="https://google.com"
                             onClick={() => {
-                                let txtCustomerID = document.getElementById('sltCustomerID..').innerText.toString();
-                                let txtCategory = document.getElementById('sltCategory..').innerText.toString();
-                                let txtCurrency = document.getElementById('sltCurrency..').innerText.toString();
-                                let txtProduct = document.getElementById('sltProduct..').innerText.toString();
-                                let txtTerm = document.getElementById('sltTerm..').innerText.toString();
-                                let txtAccountTitle = document.getElementById('txtAccountTitle..').value;
+                                let txtCustomerID = document.getElementById('sltWorkingAccount*').innerText.toString();
+                                let txtPaymentCurrency = document.getElementById('sltPaymentCurrency*').innerText.toString();
+                                let txtCurrency = document.getElementById('sltCurrency*').innerText.toString();
+                                let txtProductLine = document.getElementById('sltProductLine*').innerText.toString();
+                                let txtTerm = document.getElementById('sltTerm*').innerText.toString();
+                                let txtAmountLCY = document.getElementById('txtAmountLCY*').value;
+                                let txtAmountLCYInterest =  document.getElementById('txtAmountLCYInterest*').value
 
-                                let txtPrincipal =  document.getElementById('txtPrincipal..').value
-
-                                axios.post('https://cb-be.azurewebsites.net/account/saving_account/open_arrear',{
+                                axios.post('https://api-newcore.vietvictory.vn/account/saving_account/open_discounted',{
                                     customerID: checkNameCustomerID(bioCustomer,txtCustomerID),
-                                    category: 1,
+                                    valueDate: "2022-06-24",
+                                    amountLCY: txtAmountLCY,
+                                    paymentCurrency: checkName(bioCurrency, txtPaymentCurrency),
                                     currency: checkName(bioCurrency, txtCurrency),
-                                    product: "product",
+                                    productLine: checkName(bioProductLine, txtProductLine),
                                     term: checkName(bioTerm, txtTerm),
-
-                                    accountTitle: txtAccountTitle,
-                                    // principalAmount: document.getElementById('txtPrincipal..').value.toString(),
-                                    principalAmount: txtPrincipal,
+                                    amountLCYInterest: txtAmountLCYInterest
 
                                 })
                                 .then(res => {
@@ -199,13 +202,13 @@ function OpenDiscounted() {
                                 })
                                 .catch(err=>{
                                     arr = []
-                                    if (txtCustomerID.length == 1 || txtCustomerID.length == 0) arr.push(`"Customer ID" is Required`);
-                                    if (txtCategory.length == 1 || txtCategory.length == 0) arr.push(`"Category" is Required`);
-                                    // if (txtProduct.length == 1 || txtProduct.length == 0) arr.push(`"Product" is Required`);
+                                    if (txtCustomerID.length == 1 || txtCustomerID.length == 0) arr.push(`"Working Account" is Required`);
+                                    if (txtPaymentCurrency.length == 1 || txtPaymentCurrency.length == 0) arr.push(`"Payment Currency" is Required`);
                                     if (txtCurrency.length == 1 || txtCurrency.length == 0) arr.push(`"Currency" is Required`);
+                                    if (txtProductLine.length == 1 || txtProductLine.length == 0) arr.push(`"Product Line" is Required`);
                                     if (txtTerm.length == 1 || txtTerm.length == 0) arr.push(`"Term" is Required`);
-                                    if (txtPrincipal.length == 1 || txtPrincipal.length == 0) arr.push(`"Principal" > 0`);
-                                    if (txtAccountTitle.length == 1 || txtAccountTitle.length == 0) arr.push(`"Account Title" is Required`);
+                                    if (txtAmountLCY.length == 1 || txtAmountLCY.length == 0) arr.push(`"AmountLCY" > 0`);
+                                    if (txtAmountLCYInterest.length == 1 || txtAmountLCYInterest.length == 0) arr.push(`"Amount LCY Interest" is Required`);
                                     console.log("err")
                                     console.log(err)
 

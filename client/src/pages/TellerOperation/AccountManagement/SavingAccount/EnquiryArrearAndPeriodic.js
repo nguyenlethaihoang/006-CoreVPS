@@ -29,7 +29,7 @@ function EnquiryArrearAndPeriodic() {
     const [bioGetAll, setBioGetAll] = useState([]);
     useEffect(() => {
         const fetchDataGetAll = async () => {
-            await axios.post(' https://cb-be.azurewebsites.net/account/debit_account/enquiry', {
+            await axios.post(' https://api-newcore.vietvictory.vn/account/debit_account/enquiry', {
 
             }).then(response => {
                 console.log("response Get all")
@@ -46,7 +46,7 @@ function EnquiryArrearAndPeriodic() {
     const [bioCategory, setBioCategory] = useState([]);
     useEffect(() => {
         const fetchDataCustomer = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_category`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_category`);
             const data = await response.json();
             // console.log("dataProductLine")
             // console.log(data)
@@ -58,7 +58,7 @@ function EnquiryArrearAndPeriodic() {
     const [bioProductLine, setBioProductLine] = useState([]);
     useEffect(() => {
         const fetchDataCustomer = async () => {
-            const response = await fetch(`https://cb-be.azurewebsites.net/storage/get_product_line`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_product_line`);
             const data = await response.json();
             // console.log("dataProductLine")
             // console.log(data)
@@ -114,17 +114,17 @@ function EnquiryArrearAndPeriodic() {
                             startIcon={<ManageSearchIcon />}
                             onClick={() => {
                                 rows = [];
-                                let url = "https://cb-be.azurewebsites.net/account/saving_account/enquiry_arrear"
+                                let url = "https://api-newcore.vietvictory.vn/account/saving_account/enquiry_arrear"
                                 if (document.getElementById('sltType').innerText.toString() != "Arrear") {
-                                    url = "https://cb-be.azurewebsites.net/account/saving_account/enquiry_periodic"
+                                    url = "https://api-newcore.vietvictory.vn/account/saving_account/enquiry_periodic"
                                 }
                                 const fetchDataGetAll = async () => {
                                     await axios.post(`${url}`, {
                                     }).then(response => {
-                                        console.log("enquiry areae ne")
-                                        console.log(response.data.data)
                                         const dataRes = response.data.data
                                         setBioGetAll(dataRes); 
+                                        console.log("dataEnquiryArreatPer")
+                                        console.log(dataRes)
                                          
                                     })
                                     

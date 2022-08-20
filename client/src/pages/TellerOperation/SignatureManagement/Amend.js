@@ -113,7 +113,7 @@ function Amend() {
                         
                         }}
                     >
-                        <form method="post" action="https://cb-be.azurewebsites.net/signature/upload" enctype="multipart/form-data">
+                        <form method="post" action="https://api-newcore.vietvictory.vn/signature/upload" enctype="multipart/form-data">
                             <div class="form-group">
 
                             <div
