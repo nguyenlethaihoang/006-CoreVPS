@@ -194,9 +194,6 @@ function OpenIndividualCustomer() {
                                 if (document.getElementById('txtLastName').value.length == 1 || document.getElementById('txtLastName').value.length == 0) arr.push(`"Last  Name" is Required`);
                                 if (document.getElementById('txtDocID').value.length == 1 || document.getElementById('txtDocID').value.length == 0) arr.push(`"Doc ID" is Required`);
                                 if (document.getElementById('txtMobilePhone').value.length == 1 || document.getElementById('txtMobilePhone').value.length == 0) arr.push(`"MobilePhone" is Required`);
-                                console.log("arr")
-                                console.log(arr)
-                                console.log(arr.length)
                                 if (arr.length != 0) {
                                     setButtonPopupNoti(true)
                                     
@@ -224,41 +221,15 @@ function OpenIndividualCustomer() {
                                         accountOfficer: checkName(bioAccountOfficer, txtAccountOfficer),
                                     })
                                     .then(res => {  
-                                        // document.getElementById('sltCityProvince').textContent = null;
-                                        // document.getElementById('sltNationality').textContent = null;
-                                        // document.getElementById('sltResidence').textContent = null;
-                                        // document.getElementById('sltDocType').textContent = null;
-                                        // document.getElementById('sltMainSector').textContent = null;
-                                        // document.getElementById('sltAccountOfficer').textContent = null;
-                                        
-                                        // document.getElementById('txtFirstName').value = null;
-                                        // document.getElementById('txtLastName').value = null;
-                                        // document.getElementById('txtMiddleName>').value = null;
-                                        // document.getElementById('txtGBShortName>').value = "_";
-                                        // document.getElementById('txtGBFullName>').value = "_";
-                                        // document.getElementById('txtGBStreet').value = null;
-                                        // document.getElementById('txtGBTownDist').value = null;
-                                        // document.getElementById('txtMobilePhone').value = null;
-                                        // document.getElementById('txtSex').value = null;
-                                        // document.getElementById('txtDocID').value = null;
-                                        // document.getElementById('txtEmailAddress').value = null;
-
-
-
                                         setButtonPopup(true)
 
                                     })
                                     .catch(err=>{
+                                        console.log("err")
                                         console.log(err)
                                         arr = []
-                                        if (document.getElementById('txtGBShortName').value.length == 1 || document.getElementById('txtGBShortName').value.length == 0) arr.push(`"GB Short Name" is Required`);
-                                        if (document.getElementById('txtGBFullName').value.length == 1 || document.getElementById('txtGBFullName').value.length == 0) arr.push(`"GB Full Name" is Required`);
-                                        if (document.getElementById('txtGBStreet').value.length == 1 || document.getElementById('txtGBStreet').value.length == 0) arr.push(`"GB Street" is Required`);
-                                        if (document.getElementById('txtGBTownDist').value.length == 1 || document.getElementById('txtGBTownDist').value.length == 0) arr.push(`"GB Town Dist" is Required`);
-                                        if (document.getElementById('txtDocID').value.length == 1 || document.getElementById('txtDocID').value.length == 0) arr.push(`"Doc ID" is Required`);
-                                        if (txtMainSector.length == 1 || txtMainSector.length == 0) arr.push(`"Main Sector" is Required`);
-                                        
-                                        setButtonPopupFail(true)
+                                        arr.push(`Customer existed`);
+                                        setButtonPopupNoti(true)
                                     })
                                 }
 

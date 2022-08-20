@@ -131,7 +131,6 @@ function OpenCorporateCustomer() {
                     >
                         <TextField_Custom props1="GB Short Name." props2="30" props3="YES" />
                         <TextField_Custom props1="GB Full Name." props2="30" props3="YES" />
-                        <DatePicker_Custom props1="Incorp Date." props2="30" props3="YES" />
                         <TextField_Custom props1="GB Street." props2="30" props3="YES" />
                         <TextField_Custom props1="GB Town/Dist." props2="30" props3="YES" />
 
@@ -141,7 +140,7 @@ function OpenCorporateCustomer() {
                         <Select_Custom props1="Residence." props2="25" props3="YES" props4={bioCountry}/>
                         {/* <Select_Custom props1="Doc Type." props2="25" props3="YES" props4={bioDoctype}/> */}
 
-                        <TextField_Custom props1="Doc ID." props2="30" props3="YES" />
+                        <TextField_Custom props1="Tax Identification Number." props2="30" props3="YES" />
                         <TextField_Custom props1="Doc Issue Place." props2="30" props3="YES" />
                         <DatePicker_Custom props1="Doc Issue Date" props2="30" props3="YES" />
                         <DatePicker_Custom props1="Doc Expiry Date" props2="30" props3="NO" />
@@ -175,30 +174,12 @@ function OpenCorporateCustomer() {
                             let txtMainSector = document.getElementById('sltMainSector.').textContent.toString();
                             let txtMainIndustry = document.getElementById('sltMainIndustry.').textContent.toString();
                             let txtAccountOfficer = document.getElementById('sltAccountOfficer.').textContent.toString();
-
-                            console.log(document.getElementById('txtGBShortName.').value)
-                            console.log(document.getElementById('txtGBFullName.').value)
-                            console.log(document.getElementById('txtGBStreet.').value)
-                            console.log(document.getElementById('txtGBTown/Dist.').value)
-                            console.log(document.getElementById('txtDocID.').value)
-                            console.log(document.getElementById('txtDocIssuePlace.').value)
-                            console.log(document.getElementById('txtContactPerson.').value)
-                            console.log(document.getElementById('txtPosition.').value)
-                            console.log(document.getElementById('txtTelephone.').value)
-                            console.log(checkName(bioCity, txtCity))
-                            console.log(checkCode(bioCountry, txtCountry))
-                            console.log(checkCode(bioCountry, txtNationality))
-                            console.log(checkCode(bioCountry, txtResidence))
-                            // console.log(checkName(bioDoctype, txtDoctype))
-                            console.log(checkName(bioMainSector, txtMainSector))
-                            console.log(checkName(bioAccountOfficer, txtAccountOfficer))
-
                             // console.log("check code")   
                             // console.log(checkCode(bioCountry, txtCountry))
                             arr = []
                             if (document.getElementById('txtGBShortName.').value.length == 1 || document.getElementById('txtGBShortName.').value.length == 0) arr.push(`"GB Short Name" is Required`);
                             if (document.getElementById('txtGBFullName.').value.length == 1 || document.getElementById('txtGBFullName.').value.length == 0) arr.push(`"GB Full Name" is Required`);
-                            if (document.getElementById('txtDocID.').value.length == 1 || document.getElementById('txtDocID.').value.length == 0) arr.push(`"Doc ID" is Required`);
+                            if (document.getElementById('txtTaxIdentificationNumber.').value.length == 1 || document.getElementById('txtTaxIdentificationNumber.').value.length == 0) arr.push(`"Tax Identification Number" is Required`);
                             if (document.getElementById('txtTelephone.').value.length == 1 || document.getElementById('txtTelephone.').value.length == 0) arr.push(`"Telephone" is Required`);
                             if (arr.length != 0) {
                                 setButtonPopupNoti(true)
@@ -210,7 +191,7 @@ function OpenCorporateCustomer() {
                                     GB_FullName: document.getElementById('txtGBFullName.').value,
                                     GB_Street: "",
                                     GB_Towndist: "",
-                                    docID: document.getElementById('txtDocID.').value,
+                                    docID: document.getElementById('txtTaxIdentificationNumber.').value,
                                     docIssuePlace: "",
                                     contactPerson: "",
                                     position: "",
@@ -237,7 +218,9 @@ function OpenCorporateCustomer() {
                                 .catch(err=>{
                                     console.log("err")
                                     console.log(err)
-                                    setButtonPopupFail(true)
+                                    arr = [] 
+                                    arr.push(`Customer existed`);
+                                    setButtonPopupNoti(true)
                                 })
                             }
                         }}

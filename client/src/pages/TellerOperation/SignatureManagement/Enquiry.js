@@ -1,14 +1,20 @@
 import { Accordion, AccordionDetails, AccordionSummary, Button, Typography } from "@mui/material"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import "./Enquiry.css"
 
 import TextField_Custom from '../../../components/TextField_Custom'             
 import Button_Custom from "../../../components/Button_Custom";
 import { useState } from "react";
 import axios from "axios";
 import TextField_Value_Custom from "../../../components/TextField_Value_Custom";
+import Notification_Custom from "../../../components/Notification_Custom";
+
+
+let arr = []
 
 function Enquiry() {
     const [valueImage, setValueImage] = useState("")
+    const [buttonPopupNoti, setButtonPopupNoti] = useState(false)
     return(
         <div>
             <Accordion >
@@ -58,9 +64,19 @@ function Enquiry() {
                                     }).then(response => {
                                         console.log("response image id")
                                         console.log(response)
-                                        setValueImage(response.data.data.signature[0].URL)
-                                        document.getElementById('txtCustomerName').value = response.data.data.customer.GB_FullName.toString()
+                                        if (response.data.data.signature[0].URL != undefined ) {
+                                            setValueImage(response.data.data.signature[0].URL)
+                                            document.getElementById('txtCustomerName').value = response.data.data.customer.GB_FullName.toString()
+                                        }
                                          
+                                    })
+                                    .catch(err=>{
+                                        console.log("err")
+                                        console.log(err)
+                                        arr = []
+                                        document.getElementById('txtCustomerName').value = ""
+                                        arr.push("Customer has no signature")
+                                        setButtonPopupNoti(true)
                                     })
                                     
                                 };
@@ -69,6 +85,13 @@ function Enquiry() {
                         >
                             Search
                         </Button>
+                        <Notification_Custom
+                            trigger={buttonPopupNoti}
+                            setTrigger={setButtonPopupNoti}
+                            arr={arr}
+                        >
+
+                    </Notification_Custom>
                     </div>
                     <div
                         style={{ 
@@ -79,7 +102,11 @@ function Enquiry() {
                         }}
                     >
                         <img 
+                            className = "imgEnquirySignature"
                             src={valueImage}
+                            style={{
+                                paddingTop: "20px"
+                            }}
                         />
                     </div>
 
