@@ -57,6 +57,18 @@ const individualCustomerController = {
             CityzenIdentify: req.body.cityzenIdentify
         }
 
+        // CHECK EXISTED
+        const customerDB = await customerModel.findOne({where: {
+            DocID: customerReq.DocID,
+            Doctype: customerReq.Doctype
+        }})
+
+        if(customerDB){
+            return res.status(400).json({
+                message: 'customer existed'
+            })
+        }
+
         /*if(!customerReq.GB_ShortName || !customerReq.GB_FullName || !customerReq.Birthday ||
             !customerReq.GB_Street || !customerReq.GB_Towndist || !customerReq.CityProvince || 
             !customerReq.Doctype || !customerReq.DocID || !customerReq.DocIssuePlace ||
