@@ -3,7 +3,6 @@ const route = express.Router()
 
 const signatureController = require('../controllers/signature/signature')
 const upload = require('../middlewares/upload')
-const resize = require('../utils/resize')
 const multer = require('multer')
 const inMemoryStorage = multer.memoryStorage()
 const uploadStrategy = multer({ storage: inMemoryStorage }).single('image')
