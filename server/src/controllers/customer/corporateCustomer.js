@@ -51,6 +51,17 @@ const corporateCustomerController = {
                 return next(new AppError("Enter required fields!", 404))
         }*/
 
+        const customerDB = await customerModel.findOne({where: {
+            DocID: customerReq.DocID,
+            Doctype: customerReq.Doctype
+        }})
+
+        if(customerDB){
+            return res.status(400).json({
+                message: 'customer existed'
+            })
+        }
+
         const newCustomer = await customerModel.create({
             GB_ShortName: customerReq.GB_ShortName,
             GB_FullName: customerReq.GB_FullName,
