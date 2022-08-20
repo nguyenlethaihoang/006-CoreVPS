@@ -178,7 +178,7 @@ function EnquiryCustomer() {
                             > 
                                 <TableHead>
                                 <TableRow>
-                                    <TableCell align="center">Customer ID</TableCell>
+                                    <TableCell align="center">CIF Number</TableCell>
                                     <TableCell align="center">Customer Type</TableCell>
                                     <TableCell align="center">GB Full Name</TableCell>
                                     <TableCell align="center">Doc ID</TableCell>
