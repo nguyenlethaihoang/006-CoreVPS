@@ -105,7 +105,7 @@ const signatureController = {
         }
 
         // CHECK CUSTOMERID
-        await customerModel.findByPk(signatureReq.customerID)
+        customerModel.findByPk(signatureReq.customerID)
         .catch(err => {
             console.log(err)
             return next(new appError("Customer not found", 404))
