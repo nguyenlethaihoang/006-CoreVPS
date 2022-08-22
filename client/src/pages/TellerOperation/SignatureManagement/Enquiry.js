@@ -43,7 +43,7 @@ function Enquiry() {
                             flexWrap: "wrap"
                         }}
                     >
-                        <TextField_Custom props1="Customer ID." props2="30" props3="NO"/>
+                        <TextField_Custom props1="DocID / Tax Identification Number" props2="40" props3="NO"/>
                         <TextField_Value_Custom props1="Customer Name" props2="30" props3="NO" props4="_"/>
                     </div>
 
@@ -58,8 +58,8 @@ function Enquiry() {
                         <Button
                             variant="contained"
                             onClick={() => {
-                                const fetchDataGetAll = async () => {
-                                    let valueId = document.getElementById('txtCustomerID.').value
+                                const fetchDataGetAll = async () => { 
+                                    let valueId = document.getElementById('txtDocID/TaxIdentificationNumber').value
                                     await axios.get(`https://api-newcore.vietvictory.vn/signature/get_by_customer/${valueId}`, {
                                     }).then(response => {
                                         console.log("response image id")
