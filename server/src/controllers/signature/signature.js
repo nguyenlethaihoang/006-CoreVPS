@@ -105,7 +105,7 @@ const signatureController = {
         }
 
         // CHECK CUSTOMERID
-        await customerModel.findByPk(signatureReq.customerID)
+        customerModel.findByPk(signatureReq.customerID)
         .catch(err => {
             console.log(err)
             return next(new appError("Customer not found", 404))
@@ -165,7 +165,8 @@ const signatureController = {
             return next(new appError("Error", 404))
         }
 
-        const customerDB = await customerModel.findByPk(customerIDReq, {
+        const customerDB = await customerModel.findOne({
+            where: {DocID: customerIDReq},
             attributes: ["id", "GB_ShortName", "GB_FullName"]
         })
         .catch(err => {
@@ -173,8 +174,9 @@ const signatureController = {
             return next(new appError("Customer not found", 404))
         })
 
+        const customerIDDB = customerDB.getDataValue("id")
         const {count, rows} = await signatureModel.findAndCountAll({
-            where: {CustomerID: customerIDReq}
+            where: {CustomerID: customerIDDB }
         })
         // .catch(err => {
         //     console.log(err)
