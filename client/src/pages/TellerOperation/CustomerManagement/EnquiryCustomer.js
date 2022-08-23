@@ -29,6 +29,9 @@ const customerTypeData = [
     {
     id: 2,
     Name: 'C - Corporate'},
+    {
+    id: 3,
+    Name: 'All'},
 ]
 
 function EnquiryCustomer() {
@@ -111,13 +114,20 @@ function EnquiryCustomer() {
                             startIcon={<ManageSearchIcon />}
                             onClick={() => {
                                 rows = [];
+                                let txtCustomerType = null
+                                if (document.getElementById('sltCustomerType').textContent.toString().length == 10)
+                                    txtCustomerType = 1;
+                                    if (document.getElementById('sltCustomerType').textContent.toString().length == 13)
+                                    txtCustomerType = 2;
                                 // setBioGetAll(rows)
                                 const fetchDataGetAll = async () => {
                                     await axios.post('https://api-newcore.vietvictory.vn/customer/enquiry_customer', {
-                                        // "customerType": 2
+                                        "customerType": txtCustomerType,
+                                        "customerID": null,
+                                        "docID": "987678401",
                                     }).then(response => {
-                                        // console.log("response")
-                                        // console.log(response)
+                                        console.log("enquiry test")
+                                        console.log(response)
                                         const dataRes = response.data.data
                                         setBioGetAll(dataRes); 
                                          

@@ -2,6 +2,7 @@ const depositModel = require('../../models/transaction/deposit')
 const debitAccountModel = require('../../models/account/debitAccount')
 const asyncHandler = require('../../utils/async')
 const appError = require('../../utils/appError')
+const AppError = require('../../utils/appError')
 
 // CREATE
 // VALIDATE => xong moi update gia tri Working Amount cua account
@@ -32,12 +33,20 @@ const depositController = {
         }
         const initialAmount = parseInt(accountDB.getDataValue('WorkingAmount'))
         
+        // Set DealRate
+        if(!depositReq.dealRate){
+            depositReq.dealRate = 1
+        }
+
+        const paidAmount = depositReq.amount * depositReq.dealRate
+        
         const newDeposit = await depositModel.create({
             AccountType: depositReq.accountType,
             Account: depositReq.account,
             InitialAmount: initialAmount,
             DepositAmount: depositReq.amount,
-            NewAmount: initialAmount + depositReq.amount,
+            PaidAmount: paidAmount,
+            NewAmount: initialAmount + paidAmount,
             DealRate: depositReq.dealRate,
             WaiveCharges: depositReq.waiveCharges,
             Narrrative: depositReq.narrative,
@@ -68,22 +77,33 @@ const depositController = {
         if(!depositDB){
             return next(new appError('Deposit not found', 404))
         }
-        const depositAmount = depositDB.getDataValue('DepositAmount')
+        
+        const paidAmount = parseInt(depositDB.getDataValue('PaidAmount'))
         const accountID = depositDB.getDataValue('Account')
         const accountDB = await debitAccountModel.findByPk(accountID)
         if(!accountDB){
             return next(new appError("Account error", 404))
         }
-        const WorkingAmountDB = accountDB.getDataValue('WorkingAmount')
-        const ActualBalanceDB = accountDB.getDataValue('ActualBalance')
+
         // UPDATE DEPOSIT STATUS
         const updatedDeposit = await depositDB.update({
             Status: depositReq.status
         })
+
+        if(depositReq.status != 2 ){
+            return res.status(200).json({
+                message: "updated",
+                data: updatedDeposit
+            })
+        }
+
         // UPDATE ACCOUNT
+        const WorkingAmountDB = parseInt(accountDB.getDataValue('WorkingAmount'))
+        const ActualBalanceDB = parseInt(accountDB.getDataValue('ActualBalance'))
+
         const updatedAccount = await accountDB.update({
-            WorkingAmount: WorkingAmountDB + depositAmount,
-            ActualBalance: ActualBalanceDB + depositAmount
+            WorkingAmount: WorkingAmountDB + paidAmount,
+            ActualBalance: ActualBalanceDB + paidAmount
         })
 
         return res.status(200).json({

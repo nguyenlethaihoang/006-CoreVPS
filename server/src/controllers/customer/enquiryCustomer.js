@@ -43,7 +43,7 @@ const enquiryCustomerController = {
                 enquiryString += ' AND '
             else
                 enquiryString += ' where '
-            enquiryString += ' id = "' + enquiryReq.customerType + '"'
+            enquiryString += ' id = "' + enquiryReq.customerID + '"'
             count++
         }
         if(enquiryReq.GB_FullName){
