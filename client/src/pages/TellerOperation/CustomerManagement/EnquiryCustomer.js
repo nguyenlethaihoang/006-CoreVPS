@@ -90,10 +90,10 @@ function EnquiryCustomer() {
                         
                         
                         <Select_Custom props1="Customer Type" props2="20" props3="NO" props4={customerTypeData}/>
-                        <TextField_Custom props1="Customer ID" props2="30" props3="NO"/>
-                        <TextField_Custom props1="Cell Phone/Office Num" props2="20" props3="NO"/>
-                        <TextField_Custom props1="GB Full Name" props2="30" props3="NO"/>
-                        <TextField_Custom props1="Doc ID" props2="20" props3="NO"/>
+                        <TextField_Custom props1="Customer ID.." props2="30" props3="NO"/>
+                        <TextField_Custom props1="Cell Phone/Office Num.." props2="20" props3="NO"/>
+                        <TextField_Custom props1="GB Full Name.." props2="30" props3="NO"/>
+                        <TextField_Custom props1="Doc ID.." props2="20" props3="NO"/>
                         <Select_Custom props1="Main Sector" props2="20" props3="NO"/>
                         <Select_Custom props1="SubSector" props2="20" props3="NO"/>
                         <Select_Custom props1="Main Industry" props2="20" props3="NO"/>
@@ -114,6 +114,8 @@ function EnquiryCustomer() {
                             startIcon={<ManageSearchIcon />}
                             onClick={() => {
                                 rows = [];
+                                console.log("cus ID")
+                                console.log(parseInt(document.getElementById('txtCustomerID..').value))
                                 let txtCustomerType = null
                                 if (document.getElementById('sltCustomerType').textContent.toString().length == 10)
                                     txtCustomerType = 1;
@@ -123,8 +125,11 @@ function EnquiryCustomer() {
                                 const fetchDataGetAll = async () => {
                                     await axios.post('https://api-newcore.vietvictory.vn/customer/enquiry_customer', {
                                         "customerType": txtCustomerType,
-                                        "customerID": null,
-                                        "docID": "987678401",
+                                        "customerID": parseInt(document.getElementById('txtCustomerID..').value),
+                                        "docID": document.getElementById('txtDocID..').value.toString(),
+                                        "phoneNumber": document.getElementById('txtCellPhone/OfficeNum..').value.toString(),
+                                        "GB_FullName": document.getElementById('txtGBFullName..').value.toString(),
+                                        
                                     }).then(response => {
                                         console.log("enquiry test")
                                         console.log(response)
