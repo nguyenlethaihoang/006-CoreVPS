@@ -19,6 +19,18 @@ function createData(AccountCode, CustomerID, CustomerName, DocID, Category, Prod
 
 let rows = [];
 
+function checkName(a, b) {
+    let temp = null
+    a.map((data, index) => {
+        if (data.Name == b)
+        {
+            temp = data.id.toString()
+            
+        }
+    })
+    return temp
+}
+
 function EnquiryAccount() {
     const [bioRow, setBioRow] = useState([]);
     useEffect(() => {
@@ -93,10 +105,10 @@ function EnquiryAccount() {
                             flexWrap: "wrap"
                         }}
                     >
-                        <TextField_Custom props1="Account Code" props2="35" props3="NO"/>
-                        <Select_Custom props1="Currency" props2="35" props3="city" props4={currencyData}/>
+                        <TextField_Custom props1="Account Code." props2="35" props3="NO"/>
+                        <Select_Custom props1="Currency." props2="35" props3="city" props4={currencyData}/>
                         <Select_Custom props1="Customer Type" props2="20" props3="NO" props4={customerTypeData}/>
-                        <TextField_Custom props1="Customer ID" props2="35" props3="NO"/>
+                        <TextField_Custom props1="Customer ID." props2="35" props3="NO"/>
                         <TextField_Custom props1="GB Full Name" props2="35" props3="NO"/>
                         <TextField_Custom props1="Doc ID" props2="35" props3="NO"/>
                         <Select_Custom props1="Category" props2="20" props3="NO" props4={bioCategory}/>
@@ -118,10 +130,15 @@ function EnquiryAccount() {
                             variant="outlined" 
                             startIcon={<ManageSearchIcon />}
                             onClick={() => {
+                                console.log("currency")
+                                // console.log(document.getElementById('sltCurrency.').textContent.toString())
+                                console.log(checkName( currencyData, document.getElementById('sltCurrency.').textContent.toString()))
                                 rows = [];
                                 const fetchDataGetAll = async () => {
                                     await axios.post(' https://api-newcore.vietvictory.vn/account/debit_account/enquiry', {
-                        
+                                        customerID: parseInt(document.getElementById('txtCustomerID.').value.toString()),
+                                        account: parseInt(document.getElementById('txtAccountCode.').value.toString()),
+                                        currency: checkName( currencyData, document.getElementById('sltCurrency.').textContent.toString()),
                                     }).then(response => {
                                         console.log("enquiry account")
                                         console.log(response.data)
