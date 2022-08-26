@@ -19,7 +19,7 @@ const closeOnlineData = [
 ]
 
 function Close_Custom(props1) {
-    let tmpURL = `http://localhost:5000/account/debit_account/get/${props1.AccountCode}`
+    let tmpURL = `https://api-newcore.vietvictory.vn/account/debit_account/get/${props1.AccountCode}`
     const [bioFilled, setBioFilled] = useState([]);
     useEffect(() => {
         const fetchDataFilled = async () => {

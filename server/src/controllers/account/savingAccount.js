@@ -373,6 +373,7 @@ const savingAccountController = {
         const newDiscountedAccount = await discountedSAModel.create({
             ValueDate: accountReq.valueDate,
             FinalDate: finalDate,
+            Amount: amount,
             InterestRate: interestRate,
             WorkingAccount: accountReq.workingAccount,
             AmountLCY: accountReq.amountLCY,

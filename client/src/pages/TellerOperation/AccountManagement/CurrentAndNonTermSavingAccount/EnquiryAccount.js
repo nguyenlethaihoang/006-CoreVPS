@@ -9,9 +9,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Actions from "./Actions";
 
-const customerTypeData = [{id: 1,Name: 'P - Person' },{id: 2,Name: 'C - Corporate'},]
+const customerTypeData = [{id: 0, Name: 'All'}, {id: 1,Name: 'P - Person' },{id: 2,Name: 'C - Corporate'},]
 
-const currencyData = [{id: 1,Name: 'USD' },{id: 2,Name: 'EUR'},{id: 3,Name: 'GBP'},{id: 4,Name: 'JPY'},{id: 5,Name: 'VND'},]
+const currencyData = [{id: 0, Name: 'None'}, {id: 1,Name: 'EUR' },{id: 2,Name: 'USD'},{id: 3,Name: 'GBP'},{id: 4,Name: 'JPY'},{id: 5,Name: 'VND'},]
 
 function createData(AccountCode, CustomerID, CustomerName, DocID, Category, ProductLine, Currency, ActualBallance, WorkingAmount, LockedAmount) {
     return { AccountCode, CustomerID, CustomerName, DocID, Category, ProductLine, Currency , ActualBallance, WorkingAmount, LockedAmount};
@@ -22,7 +22,7 @@ let rows = [];
 function checkName(a, b) {
     let temp = null
     a.map((data, index) => {
-        if (data.Name == b)
+        if (data.Name == b && b != 'None')
         {
             temp = data.id.toString()
             
@@ -107,12 +107,12 @@ function EnquiryAccount() {
                     >
                         <TextField_Custom props1="Account Code." props2="35" props3="NO"/>
                         <Select_Custom props1="Currency." props2="35" props3="city" props4={currencyData}/>
-                        <Select_Custom props1="Customer Type" props2="20" props3="NO" props4={customerTypeData}/>
+                        <Select_Custom props1="Customer Type." props2="20" props3="NO" props4={customerTypeData}/>
                         <TextField_Custom props1="Customer ID." props2="35" props3="NO"/>
-                        <TextField_Custom props1="GB Full Name" props2="35" props3="NO"/>
-                        <TextField_Custom props1="Doc ID" props2="35" props3="NO"/>
-                        <Select_Custom props1="Category" props2="20" props3="NO" props4={bioCategory}/>
-                        <Select_Custom props1="Product Line" props2="35" props3="city" props4={bioProductLine}/>
+                        <TextField_Custom props1="GB Full Name." props2="35" props3="NO"/>
+                        <TextField_Custom props1="Doc ID." props2="35" props3="NO"/>
+                        <Select_Custom props1="Category." props2="20" props3="NO" props4={bioCategory}/>
+                        <Select_Custom props1="Product Line." props2="35" props3="city" props4={bioProductLine}/>
 
 
                     </div>
@@ -134,14 +134,25 @@ function EnquiryAccount() {
                                 // console.log(document.getElementById('sltCurrency.').textContent.toString())
                                 console.log(checkName( currencyData, document.getElementById('sltCurrency.').textContent.toString()))
                                 rows = [];
+                                let valueCustomerType = null;
+                                let txtCustomerType = document.getElementById('sltCustomerType.').textContent.toString();
+                                
+                                if (txtCustomerType.length == 10)
+                                    valueCustomerType = 1;
+                                else if (txtCustomerType.length == 13)
+                                    valueCustomerType = 2;
+                                    console.log("customertype Log")
+                                    console.log(txtCustomerType)
+                                    console.log(valueCustomerType)
                                 const fetchDataGetAll = async () => {
                                     await axios.post(' https://api-newcore.vietvictory.vn/account/debit_account/enquiry', {
                                         customerID: parseInt(document.getElementById('txtCustomerID.').value.toString()),
                                         account: parseInt(document.getElementById('txtAccountCode.').value.toString()),
                                         currency: checkName( currencyData, document.getElementById('sltCurrency.').textContent.toString()),
+                                        customerType: valueCustomerType,
                                     }).then(response => {
-                                        console.log("enquiry account")
-                                        console.log(response.data)
+                                        // console.log("enquiry account")
+                                        // console.log(response.data)
                                         const dataRes = response.data.data
                                         setBioGetAll(dataRes); 
                                          

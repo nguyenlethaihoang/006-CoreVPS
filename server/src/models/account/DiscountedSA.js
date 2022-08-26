@@ -4,7 +4,10 @@ const sequelize = require('../../database/sequelize')
 class DiscountedSA extends Model {}
 
 DiscountedSA.init({
-    Amount: DataTypes.INTEGER,
+    Amount:{
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
     ValueDate: {
         type: DataTypes.DATEONLY,
         defaultValue: DataTypes.NOW
@@ -16,10 +19,22 @@ DiscountedSA.init({
     InterestRate: DataTypes.INTEGER,
     TotalIntAmount: DataTypes.INTEGER,
     WorkingAccount: DataTypes.TEXT,
-    AmountLCY: DataTypes.INTEGER,
-    AmountFCY: DataTypes.INTEGER,
-    AmountLCYInterest: DataTypes.INTEGER,
-    AmountFCYInterest: DataTypes.INTEGER,
+    AmountLCY: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
+    AmountFCY:{
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
+    AmountLCYInterest: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
+    AmountFCYInterest: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
     NarrativeInterest: DataTypes.TEXT,
     Narrative: DataTypes.TEXT,
     DealRate: DataTypes.FLOAT,

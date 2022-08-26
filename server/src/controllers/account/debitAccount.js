@@ -106,12 +106,13 @@ const debitAccountController = {
 
         let enquiryObject = {
             subObject: [],
-            condition: {}
+            condition: {},
+            customerCondition: {}
         }
         if(enquiryReq.account){
             // count++
             // enquiryString += 'Account = ' + enquiryReq.account
-            enquiryObject.condition.Account= enquiryReq.account
+            enquiryObject.condition.id = enquiryReq.account
         }
         if(enquiryReq.productLine){
             enquiryObject.condition.ProductLine= enquiryReq.productLine
@@ -155,19 +156,21 @@ const debitAccountController = {
             //     enquiryString += ' AND '
             // enquiryString += ' CustomerType = ' + enquiryReq.customerType
             // count++
-            //enquiryObject.condition.CustomerType = enquiryReq.customerType
+            enquiryObject.customerCondition.CustomerType = enquiryReq.customerType
         }
         if(enquiryReq.docID){
             // if(count != 0)
             //     enquiryString += ' AND '
             // enquiryString += ' DocID = ' + enquiryReq.docID
             // count++
+            enquiryObject.customerCondition.DocID = enquiryReq.docID
         }
         if(enquiryReq.GB_FullName){
             // if(count != 0)
             //     enquiryString += ' AND '
             // enquiryString += ' GB_FullName = ' + enquiryReq.GB_FullName
             // count++
+            enquiryObject.customerCondition.GB_FullName = enquiryReq.GB_FullName
         }
 
         // console.log(enquiryString)
@@ -181,7 +184,8 @@ const debitAccountController = {
         const accountsDB = await debitAccountModel.findAll({
             where: enquiryObject.condition,
             include: [{
-                model: customerModel, attributes: ['GB_ShortName', 'GB_FullName', 'DocID'], as: 'Customer'
+                model: customerModel, attributes: ['GB_ShortName', 'GB_FullName', 'DocID'], as: 'Customer', 
+                where: enquiryObject.customerCondition
             }, {
                 model: categoryModel, attributes: ['Name']
             }, {

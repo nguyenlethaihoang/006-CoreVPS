@@ -48,7 +48,7 @@ function Check_Custom(props1) {
     const [buttonPopup, setButtonPopup] = useState(false) 
     const [buttonPopupFail, setButtonPopupFail] = useState(false)
     const [buttonPopupNoti, setButtonPopupNoti] = useState(false)
-    let tmpURL = `http://localhost:5000/account/debit_account/get/${props1.AccountCode}`
+    let tmpURL = `https://api-newcore.vietvictory.vn/account/debit_account/get/${props1.AccountCode}`
     const [bioFilled, setBioFilled] = useState([]);
     useEffect(() => {
         const fetchDataFilled = async () => {
@@ -62,7 +62,7 @@ function Check_Custom(props1) {
     const [bioCustomer, setBioCustomer] = useState([]);
     useEffect(() => {
         const fetchDataCustomer = async () => {
-            const response = await fetch(`http://localhost:5000/customer/get_all_customer`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/customer/get_all_customer`);
             const data = await response.json();
             // console.log("data")
             // console.log(data.data.customer)
@@ -74,7 +74,7 @@ function Check_Custom(props1) {
     const [bioRelationCode, setBioRelationCode] = useState([]);
     useEffect(() => {
         const fetchDataRelationCode = async () => {
-            const response = await fetch(`http://localhost:5000/storage/get_relation`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_relation`);
             const data = await response.json();
             console.log("relation")
             console.log(data.rows)
@@ -86,7 +86,7 @@ function Check_Custom(props1) {
     const [bioProductLine, setBioProductLine] = useState([]);
     useEffect(() => {
         const fetchDataCustomer = async () => {
-            const response = await fetch(`http://localhost:5000/storage/get_product_line`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_product_line`);
             const data = await response.json();
             // console.log("dataProductLine")
             // console.log(data)
@@ -98,7 +98,7 @@ function Check_Custom(props1) {
     const [bioChargeCode, setBioChargeCode] = useState([]);
     useEffect(() => {
         const fetchDataCustomer = async () => {
-            const response = await fetch(`http://localhost:5000/storage/get_charge_code`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_charge_code`);
             const data = await response.json();
             setBioChargeCode(data.rows);  
         };
@@ -108,7 +108,7 @@ function Check_Custom(props1) {
     const [bioAccountOfficer, setBioAccountOfficer] = useState([]);
     useEffect(() => {
         const fetchDataAccountOfficer = async () => {
-            const response = await fetch(`http://localhost:5000/storage/get_account_officer`);
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_account_officer`);
             const data = await response.json();
             setBioAccountOfficer(data.rows);  
         };
@@ -228,7 +228,7 @@ function Check_Custom(props1) {
                         console.log("account title")
                         console.log(document.getElementById('txtAccountTitle.').value)
 
-                        axios.put(`http://localhost:5000/account/debit_account/update/${props1.AccountCode}`,{
+                        axios.put(`https://api-newcore.vietvictory.vn/account/debit_account/update/${props1.AccountCode}`,{
                             accountTitle: document.getElementById('txtAccountTitle.').value,
                             joinNotes: document.getElementById('txtJoinNotes.').value,
                             shortTitle: document.getElementById('txtShortTitle.').value,

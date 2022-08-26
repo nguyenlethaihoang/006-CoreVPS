@@ -9,6 +9,7 @@ DepositTrans.init({
     DepositAmount: DataTypes.INTEGER,
     PaidAmount: DataTypes.INTEGER,
     NewAmount: DataTypes.INTEGER,
+    CashAccount: DataTypes.INTEGER,
     DealRate: {
         type: DataTypes.FLOAT,
         defaultValue: 0
