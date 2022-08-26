@@ -130,9 +130,6 @@ function EnquiryAccount() {
                             variant="outlined" 
                             startIcon={<ManageSearchIcon />}
                             onClick={() => {
-                                console.log("currency")
-                                // console.log(document.getElementById('sltCurrency.').textContent.toString())
-                                console.log(checkName( currencyData, document.getElementById('sltCurrency.').textContent.toString()))
                                 rows = [];
                                 let valueCustomerType = null;
                                 let txtCustomerType = document.getElementById('sltCustomerType.').textContent.toString();
@@ -141,15 +138,20 @@ function EnquiryAccount() {
                                     valueCustomerType = 1;
                                 else if (txtCustomerType.length == 13)
                                     valueCustomerType = 2;
-                                    console.log("customertype Log")
-                                    console.log(txtCustomerType)
-                                    console.log(valueCustomerType)
+                                console.log("category Log")
+                                console.log(document.getElementById('sltCategory.').textContent.toString())
+                                console.log(checkName( bioCategory, document.getElementById('sltCategory.').textContent.toString()))
+                                console.log('con khi')
                                 const fetchDataGetAll = async () => {
                                     await axios.post(' https://api-newcore.vietvictory.vn/account/debit_account/enquiry', {
                                         customerID: parseInt(document.getElementById('txtCustomerID.').value.toString()),
                                         account: parseInt(document.getElementById('txtAccountCode.').value.toString()),
                                         currency: checkName( currencyData, document.getElementById('sltCurrency.').textContent.toString()),
                                         customerType: valueCustomerType,
+                                        GB_FullName: document.getElementById('txtGBFullName.').value.toString(),
+                                        docID: document.getElementById('txtDocID.').value.toString(),
+                                        category: checkName( bioCategory, document.getElementById('sltCategory.').textContent.toString()),
+                                        productLine: checkName(bioProductLine, document.getElementById('sltProductLine.').textContent.toString())
                                     }).then(response => {
                                         // console.log("enquiry account")
                                         // console.log(response.data)
