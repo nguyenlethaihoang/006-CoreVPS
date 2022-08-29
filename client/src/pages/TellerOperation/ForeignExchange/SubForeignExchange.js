@@ -6,14 +6,15 @@ import axios from "axios";
 import Popup_Custom from "../../../components/Popup_Custom";
 import Popup_Custom_Fail from "../../../components/Popup_Custom_Fail";
 import Notification_Custom from "../../../components/Notification_Custom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const currencyData = [{id: 1,Name: 'USD' },{id: 2,Name: 'EUR'},{id: 3,Name: 'GBP'},{id: 4,Name: 'JPY'},{id: 5,Name: 'VND'},] 
+const currencyData = [{id: 1,Name: 'EUR' },{id: 2,Name: 'USD'},{id: 3,Name: 'GBP'},{id: 4,Name: 'JPY'},{id: 5,Name: 'VND'},]
+
 const debitAccountData = [{id: 1,Name: 'VND - 1001-1126-2002' },{id: 2,Name: 'AUD - 1001-1127-2002'},{id: 3,Name: 'CAD - 1001-1133-2002'},{id: 4,Name: 'EUR - 1001-1122-2002'},{id: 5,Name: 'GBP - 1001-1129-2002'}, {id: 6,Name: 'HKD - 1001-1130-2002'}] 
 const creditAccountData = [{id: 1,Name: 'VND - 1001-1126-2002' },{id: 2,Name: 'AUD - 1001-1127-2002'},{id: 3,Name: 'CAD - 1001-1133-2002'},{id: 4,Name: 'EUR - 1001-1122-2002'},{id: 5,Name: 'GBP - 1001-1129-2002'}, {id: 6,Name: 'HKD - 1001-1130-2002'}] 
 
 let arr = []
-
+ 
 function checkName(a, b) {
     let temp = null
     a.map((data, index) => {
@@ -46,6 +47,15 @@ function SubForeignExchange() {
     const [buttonPopupFail, setButtonPopupFail] = useState(false)
     const [buttonPopupNoti, setButtonPopupNoti] = useState(false)
 
+    const [bioAccountOfficer, setBioAccountOfficer] = useState([]);
+    useEffect(() => {
+        const fetchDataAccountOfficer = async () => {
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_account_officer`);
+            const data = await response.json();
+            setBioAccountOfficer(data.rows);  
+        };
+        fetchDataAccountOfficer();
+    }, []);
 
     return (
         <div>
@@ -90,7 +100,8 @@ function SubForeignExchange() {
 
                         }}
                     >
-                        <TextField_Custom props1="Teller ID*" props2="25" props3="NO" />
+                        <Select_Custom props1="Teller ID*" props2="30" props3="YES" props4={bioAccountOfficer}/>
+                        {/* <TextField_Custom props1="Teller ID*" props2="25" props3="NO" /> */}
                         <Select_Custom props1="Debit Currency" props2="20" props3="YES" props4={currencyData}/>
                         <Select_Custom props1="Debit Account" props2="25" props3="YES" props4={debitAccountData}/>
                         <TextField_Custom props1="Debit Amount FCY" props2="25" props3="NO" />
@@ -109,7 +120,8 @@ function SubForeignExchange() {
                         }}
                     >
                         <Select_Custom props1="Currency Paid" props2="20" props3="YES" props4={currencyData}/>
-                        <TextField_Custom props1="Teller ID" props2="25" props3="NO" />
+                        <Select_Custom props1="Teller ID" props2="30" props3="YES" props4={bioAccountOfficer}/>
+                        {/* <TextField_Custom props1="Teller ID" props2="25" props3="NO" /> */}
                         <Select_Custom props1="Credit Account" props2="25" props3="YES" props4={creditAccountData}/>
                         <TextField_Custom props1="Credit Deal Rate" props2="25" props3="NO" />
 
@@ -147,7 +159,7 @@ function SubForeignExchange() {
 
                                 let txtCustomerName = document.getElementById('txtCustomerName').value 
                                 let txtAddress = document.getElementById('txtAddress').value 
-                                let txtTellerID = document.getElementById('txtTellerID*').value
+                                let txtTellerID = document.getElementById('sltTellerID*').innerText.toString()
 
                                 let txtDebitAmountFCY = document.getElementById('txtDebitAmountFCY').value
                                 let txtCreditDealRate = document.getElementById('txtCreditDealRate').value
