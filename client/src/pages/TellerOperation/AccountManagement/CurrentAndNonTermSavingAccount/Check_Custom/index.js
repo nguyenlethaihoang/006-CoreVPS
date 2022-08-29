@@ -12,7 +12,7 @@ import axios from 'axios';
 
 const categoryData = [
     {id: 1,
-    Name: '1000 - Tiền  gửi thanh toán' },
+    Name: '1000 - Tiền  gửi tiết kiệm' },
     {
     id: 2,
     Name: '2000 - Tiết kiệm không kỳ hạn'},

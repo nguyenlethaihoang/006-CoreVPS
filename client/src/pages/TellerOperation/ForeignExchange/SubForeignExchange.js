@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Button, Divider, Typography } from "@mui/material"
+import { Accordion, AccordionDetails, AccordionSummary, Button, Divider, FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TextField_Custom from "../../../components/TextField_Custom";
 import Select_Custom from "../../../components/Select_Custom";
@@ -57,6 +57,13 @@ function SubForeignExchange() {
         fetchDataAccountOfficer();
     }, []);
 
+    const [age, setAge] = useState('');
+    const handleChange = (event) => {
+        setAge(event.target.value);
+      };
+
+    let a = "Debit Currency"
+    let b = "Debit Account"
     return (
         <div>
             <Accordion >
@@ -102,8 +109,76 @@ function SubForeignExchange() {
                     >
                         <Select_Custom props1="Teller ID*" props2="30" props3="YES" props4={bioAccountOfficer}/>
                         {/* <TextField_Custom props1="Teller ID*" props2="25" props3="NO" /> */}
-                        <Select_Custom props1="Debit Currency" props2="20" props3="YES" props4={currencyData}/>
-                        <Select_Custom props1="Debit Account" props2="25" props3="YES" props4={debitAccountData}/>
+                        {/* <Select_Custom props1="Debit Currency" props2="20" props3="YES" props4={currencyData}/> */}
+                        {/* <Select_Custom props1="Debit Account" props2="25" props3="YES" props4={debitAccountData}/> */}
+                        <div
+                             style={{ 
+                                marginRight: "30px",
+                                marginBottom: "20px"
+    
+                            }}
+                        >
+                            <FormControl sx={{ m: 0, minWidth: "20ch" }}>
+                                <InputLabel id="idlblDebitCurrency">{a}</InputLabel>
+                                <Select
+                                    labelId="idlblDebitCurrency"
+                                    id="sltDebitCurrency"
+                                    value={age}
+                                    onChange={handleChange}
+                                    label={a}
+                                    >
+                                        <MenuItem value="">
+                                            <em>None</em>
+                                        </MenuItem>
+                                        <MenuItem value={1}>AUD</MenuItem>
+                                        <MenuItem value={2}>CAD</MenuItem>
+                                        <MenuItem value={3}>CNY</MenuItem>
+                                        <MenuItem value={4}>EUR</MenuItem>
+                                        <MenuItem value={5}>GBP</MenuItem>
+                                        <MenuItem value={6}>GOLD</MenuItem>
+                                        <MenuItem value={7}>HKD</MenuItem>
+                                        <MenuItem value={8}>JPY</MenuItem>
+                                        <MenuItem value={9}>NZD</MenuItem>
+                                        <MenuItem value={10}>SGD</MenuItem>
+                                        <MenuItem value={11}>USD</MenuItem>
+                                        <MenuItem value={12}>VND</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <div
+                            style={{ 
+                                marginRight: "30px",
+                                marginBottom: "20px" 
+    
+                            }}
+                        >
+                            <FormControl sx={{ m: 0, minWidth: "20ch" }}>
+                                    <InputLabel id="idlblDebitAccount">{b}</InputLabel>
+                                    <Select
+                                        labelId="idlblDebitAccount"
+                                        label={b}
+                                        id="sltDebitAccount"
+                                        value={age}
+                                        onChange={handleChange}
+                                        >
+                                        <MenuItem value="">
+                                            <em>None</em>
+                                        </MenuItem>
+                                        <MenuItem value={1}>AUD - 1001-1127-2002</MenuItem>
+                                        <MenuItem value={2}>CAD - 1001-1133-2002</MenuItem>
+                                        <MenuItem value={3}>CNY - 1001-1128-2002</MenuItem>
+                                        <MenuItem value={4}>EUR - 1001-1122-2002</MenuItem>
+                                        <MenuItem value={5}>GBP - 1001-1129-2002</MenuItem>
+                                        <MenuItem value={6}>GOLD</MenuItem>
+                                        <MenuItem value={7}>HKD - 1001-1130-2002</MenuItem>
+                                        <MenuItem value={8}>JPY - 1001-1124-2002</MenuItem>
+                                        <MenuItem value={9}>NZD - 1001-1131-2002</MenuItem>
+                                        <MenuItem value={10}>SGD - 1001-1132-2002</MenuItem>
+                                        <MenuItem value={11}>USD - 1001-1125-2002</MenuItem>
+                                        <MenuItem value={12}>VND - 1001-1126-2002</MenuItem>
+                                    </Select>
+                                </FormControl>
+                        </div>
                         <TextField_Custom props1="Debit Amount FCY" props2="25" props3="NO" />
 
                         
@@ -166,6 +241,12 @@ function SubForeignExchange() {
                                 
                                 let txtDebitCurrency = document.getElementById('sltDebitCurrency').innerText.toString()
                                 let txtDebitAccount = document.getElementById('sltDebitAccount').innerText.toString()
+
+                                console.log("sltDebitCurrency")
+                                console.log(txtDebitCurrency)
+                                console.log("sltDebitAccount")
+                                console.log(txtDebitAccount)
+                                
                                 let txtCurrencyPaid = document.getElementById('sltCurrencyPaid').innerText.toString()
                                 let txtCreditAccount = document.getElementById('sltCreditAccount').innerText.toString()
 
@@ -188,7 +269,7 @@ function SubForeignExchange() {
                                      if (txtCustomerName.length == 1 || txtCustomerName.length == 0) arr.push(`"Customer Name" is Required`);
                                      if (txtAddress.length == 1 || txtAddress.length == 0) arr.push(`"Address" is Required`);
                                      if (txtTellerID.length == 0) arr.push(`"Teller ID" is Required`);
-                                     if (txtDebitCurrency.length == 1 || txtDebitCurrency.length == 0) arr.push(`"Debit Currency" is Required`);
+                                     if (txtDebitCurrency.length == 0) arr.push(`"Debit Currency" is Required`);
                                      if (txtCurrencyPaid.length == 1 || txtCurrencyPaid.length == 0) arr.push(`"Currency Paid" is Required`);
                                      if (txtDebitAmountFCY.length == 1 || txtDebitAmountFCY.length == 0) arr.push(`"Debit Amount FCY" is Required`);
                                      if (txtCreditDealRate.length == 1 || txtCreditDealRate.length == 0) arr.push(`"Credit Deal Rate" is Required`);
