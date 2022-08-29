@@ -8,6 +8,7 @@ import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Actions from "./Actions";
+import { te } from "date-fns/locale";
 
 const customerTypeData = [{id: 0, Name: 'All'}, {id: 1,Name: 'P - Person' },{id: 2,Name: 'C - Corporate'},]
 
@@ -171,6 +172,7 @@ function EnquiryAccount() {
                                     if (value.PRODUCTLINE != null) tempProductLine = value.PRODUCTLINE.Name
                                     if (value.CATEGORY != null) tempCategory = value.CATEGORY.Name
                                     if (value.CURRENCY != null) tempCurrency = value.CURRENCY.Name
+                                    if (tempCategory == "Tiền gửi tiết kiệm") tempCategory = "Tiền gửi thanh toán"
                                     rows.push(createData(value.id ,
                                                         value.CustomerID, 
                                                         value.Customer.GB_FullName, 
