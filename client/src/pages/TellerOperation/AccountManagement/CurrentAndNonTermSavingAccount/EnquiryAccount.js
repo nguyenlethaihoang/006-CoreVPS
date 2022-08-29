@@ -163,14 +163,21 @@ function EnquiryAccount() {
                                 };
 
                                 fetchDataGetAll();
+                                console.log(bioGetAll)
                                 bioGetAll.map((value, index) => {
+                                    let tempProductLine = ""
+                                    let tempCategory = ""
+                                    let tempCurrency = ""
+                                    if (value.PRODUCTLINE != null) tempProductLine = value.PRODUCTLINE.Name
+                                    if (value.CATEGORY != null) tempCategory = value.CATEGORY.Name
+                                    if (value.CURRENCY != null) tempCurrency = value.CURRENCY.Name
                                     rows.push(createData(value.id ,
                                                         value.CustomerID, 
                                                         value.Customer.GB_FullName, 
                                                         value.Customer.DocID, 
-                                                        value.CATEGORY.Name, 
-                                                        value.PRODUCTLINE.Name, 
-                                                        value.CURRENCY.Name, 
+                                                        tempCategory, 
+                                                        tempProductLine, 
+                                                        tempCurrency, 
                                                         value.ActualBalance,
                                                         value.WorkingAmount, 
                                                         <Actions AccountCode={value.id}/>, 

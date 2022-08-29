@@ -6,9 +6,9 @@ import axios from "axios";
 import Popup_Custom from "../../../components/Popup_Custom";
 import Popup_Custom_Fail from "../../../components/Popup_Custom_Fail";
 import Notification_Custom from "../../../components/Notification_Custom";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";                                                                                                            
 
-const currencyData = [{id: 1,Name: 'EUR' },{id: 2,Name: 'USD'},{id: 3,Name: 'GBP'},{id: 4,Name: 'JPY'},{id: 5,Name: 'VND'},]
+const currencyData = [{id: 1,Name: 'AUD' },{id: 2,Name: 'CAD'},{id: 3,Name: 'CNY'},{id: 4,Name: 'EUR'},{id: 5,Name: 'GBP'},{id: 6,Name: 'GOLD'},{id: 7,Name: 'HKD'},{id: 8,Name: 'JPY'},{id: 9,Name: 'NZD'},{id: 10,Name: 'SGD'},{id: 11,Name: 'USD'}, {id: 12,Name: 'VND'},]
 
 const debitAccountData = [{id: 1,Name: 'VND - 1001-1126-2002' },{id: 2,Name: 'AUD - 1001-1127-2002'},{id: 3,Name: 'CAD - 1001-1133-2002'},{id: 4,Name: 'EUR - 1001-1122-2002'},{id: 5,Name: 'GBP - 1001-1129-2002'}, {id: 6,Name: 'HKD - 1001-1130-2002'}] 
 const creditAccountData = [{id: 1,Name: 'VND - 1001-1126-2002' },{id: 2,Name: 'AUD - 1001-1127-2002'},{id: 3,Name: 'CAD - 1001-1133-2002'},{id: 4,Name: 'EUR - 1001-1122-2002'},{id: 5,Name: 'GBP - 1001-1129-2002'}, {id: 6,Name: 'HKD - 1001-1130-2002'}] 
@@ -127,9 +127,9 @@ function SubForeignExchange() {
                                     onChange={handleChange}
                                     label={a}
                                     >
-                                        <MenuItem value="">
+                                        <MenuItem value={0}>
                                             <em>None</em>
-                                        </MenuItem>
+                                        </MenuItem> 
                                         <MenuItem value={1}>AUD</MenuItem>
                                         <MenuItem value={2}>CAD</MenuItem>
                                         <MenuItem value={3}>CNY</MenuItem>
@@ -241,13 +241,17 @@ function SubForeignExchange() {
                                 
                                 let txtDebitCurrency = document.getElementById('sltDebitCurrency').innerText.toString()
                                 let txtDebitAccount = document.getElementById('sltDebitAccount').innerText.toString()
+                                let txtCurrencyPaid = document.getElementById('sltCurrencyPaid').innerText.toString()
 
                                 console.log("sltDebitCurrency")
                                 console.log(txtDebitCurrency)
+                                console.log(checkName(currencyData, txtDebitCurrency))
                                 console.log("sltDebitAccount")
                                 console.log(txtDebitAccount)
+                                console.log(checkName(currencyData, txtCurrencyPaid))
+
                                 
-                                let txtCurrencyPaid = document.getElementById('sltCurrencyPaid').innerText.toString()
+                                
                                 let txtCreditAccount = document.getElementById('sltCreditAccount').innerText.toString()
 
                                 axios.post('https://api-newcore.vietvictory.vn/exchange/create',{
