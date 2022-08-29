@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Button, Typography } from "@mui/material"
+import { Accordion, AccordionDetails, AccordionSummary, Autocomplete, Button, TextField, Typography } from "@mui/material"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"; 
 import Select_Custom from "../../../../components/Select_Custom";
 import { useEffect, useRef, useState } from "react";
@@ -10,9 +10,12 @@ import Popup_Custom_Fail from "../../../../components/Popup_Custom_Fail";
 import Notification_Custom from "../../../../components/Notification_Custom";
 import axios from "axios";
  
-const categoryData = [{id: 1, Name: "3000 - Tiền  gửi thanh toán" },{id: 2, Name: "3001 - Tiết kiệm không kỳ hạn"},]
+const categoryData = [{id: 1, Name: "3000 - Tiền gửi tiết kiệm" },{id: 2, Name: "3001 - Tiết kiệm không kỳ hạn"},]
+const productData = [{id: 1, Name: "Traditional FD - Arrers - Ind" },{id: 2, Name: "Arrer- Tuần năng động"}, {id: 3, Name: "Term Deposit - Arrers - Org"}]
+const rollData = [{id: 1, Name: "Yes"}, {id: 2, Name: "No"}]
 
 let arr = []
+let arrSearchCustomer = []
 
 function checkName(a, b) {
     let temp = null
@@ -64,6 +67,15 @@ function OpenArrear() {
         const fetchDataCustomer = async () => {
             const response = await fetch(`https://api-newcore.vietvictory.vn/customer/get_all_customer`);
             const data = await response.json();
+            arrSearchCustomer = []
+            bioCustomer.map((dataMap, i) => {
+                let resObj = {
+                    index: i,
+                    id: dataMap.id,
+                    label: `${dataMap.id} - ${dataMap.GB_FullName}`
+                }
+                arrSearchCustomer.push(resObj)
+            })
             setBioCustomer(data.data.customer);  
         };
         fetchDataCustomer();
@@ -115,6 +127,16 @@ function OpenArrear() {
         };
         fetchDataAccountOfficer();
     }, []);
+    let temp = bioCustomer
+    arrSearchCustomer = []
+            bioCustomer.map((dataMap, i) => {
+                let resObj = {
+                    index: i,
+                    id: dataMap.id,
+                    label: `${dataMap.id} - ${dataMap.GB_FullName}`
+                }
+                arrSearchCustomer.push(resObj)
+    })
     return (
         <div>
             <Accordion >
@@ -159,7 +181,18 @@ function OpenArrear() {
 
                             }}
                         >
-                            <Select_Custom props1="Customer ID.." props2="35" props3="city" props4={bioCustomer}/>
+                            <Autocomplete
+                                disablePortal
+                                id="sltCustomerID.."
+                                options={arrSearchCustomer}
+                                sx={{ 
+                                    width: 400,
+                                    paddingBottom: "25px",
+                                    paddingRight: "25px"
+                                }}
+                                renderInput={(params) => <TextField {...params} label="Customer ID" />}
+                            />
+                            {/* <Select_Custom props1="Customer ID.." props2="35" props3="city" props4={bioCustomer}/> */}
                             <Select_Custom props1="Category.." props2="35" props3="city" props4={categoryData}/>
                             <TextField_Custom props1="Account Title.." props2="35" props3="YES"/>
                             <TextField_Custom props1="Short Title.." props2="35" props3="NO"/>
@@ -218,7 +251,18 @@ function OpenArrear() {
 
                             }}
                     >
-                        <Select_Custom props1="Product.." props2="35" props3="account_officer" props4={bioCustomer}/>
+                        {/* <Autocomplete
+                                disablePortal
+                                id="sltProduct.."
+                                options={arrSearchCustomer}
+                                sx={{ 
+                                    width: 400,
+                                    paddingBottom: "25px",
+                                    paddingRight: "25px"
+                                }}
+                                renderInput={(params) => <TextField {...params} label="Product" />}
+                        /> */}
+                        <Select_Custom props1="Product.." props2="35" props3="account_officer" props4={productData}/>
                         <TextField_Custom props1="Principal.." props2="35" props3="YES"/>
                         <DatePicker_Custom props1="Value Date.." props2="350" props3="YES"/>
                         <Select_Custom props1="Term.." props2="35" props3="account_officer" props4={bioTerm}/>
@@ -236,8 +280,19 @@ function OpenArrear() {
 
                             }}
                     >
-                        <Select_Custom props1="Woriking Account" props2="35" props3="account_officer" props4={bioCustomer}/>                        
-                        <Select_Custom props1="Rollover PR only?" props2="18" props3="account_officer" props4={bioCustomer}/>                        
+                        <Autocomplete
+                                disablePortal
+                                id="sltWorikingAccount"
+                                options={arrSearchCustomer}
+                                sx={{ 
+                                    width: 400,
+                                    paddingBottom: "25px",
+                                    paddingRight: "25px"
+                                }}
+                                renderInput={(params) => <TextField {...params} label="Woriking Account" />}
+                        />
+                        {/* <Select_Custom props1="Woriking Account" props2="35" props3="account_officer" props4={bioCustomer}/>                         */}
+                        <Select_Custom props1="Rollover PR only?" props2="18" props3="account_officer" props4={rollData}/>                        
                     </div>
                     <hr/>
                     <div style={{ width: "100%", paddingBottom: "20px", textAlign: "center"}}><Typography variant="h6" >NEW DEPOSIT - TERM SAVINGS</Typography></div>
@@ -274,7 +329,7 @@ function OpenArrear() {
                             size="large"
                             // href="https://google.com"
                             onClick={() => {
-                                let txtCustomerID = document.getElementById('sltCustomerID..').innerText.toString();
+                                let txtCustomerID = document.getElementById('sltCustomerID..').value.toString();
                                 let txtCategory = document.getElementById('sltCategory..').innerText.toString();
                                 let txtCurrency = document.getElementById('sltCurrency..').innerText.toString();
                                 let txtProduct = document.getElementById('sltProduct..').innerText.toString();

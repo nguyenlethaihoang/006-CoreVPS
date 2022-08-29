@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Button, Typography } from "@mui/material"
+import { Accordion, AccordionDetails, AccordionSummary, Autocomplete, Button, TextField, Typography } from "@mui/material"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"; 
 import Select_Custom from "../../../../components/Select_Custom";
 import { useEffect, useRef, useState } from "react";
@@ -11,10 +11,16 @@ import Notification_Custom from "../../../../components/Notification_Custom";
 import axios from "axios";
  
 const categoryData = [{id: 1, Name: "3000 - Tiền  gửi thanh toán" },{id: 2, Name: "3001 - Tiết kiệm không kỳ hạn"},]
+const productData = [{id: 1, Name: "Traditional FD - Arrers - Ind" },{id: 2, Name: "Arrer- Tuần năng động"}, {id: 3, Name: "Term Deposit - Arrers - Org"}]
+const rollData = [{id: 1, Name: "Yes"}, {id: 2, Name: "No"}]
+const currencyData = [{id: 1,Name: 'EUR' },{id: 2,Name: 'USD'},{id: 3,Name: 'GBP'},{id: 4,Name: 'JPY'},{id: 5,Name: 'VND'},]
+
 
 const productLineData = [{id: 1, Name: "5001 - Tiết kiệm lãi trả trước" }]
 
 let arr = []
+let arrSearchCustomer = []
+
 
 function checkName(a, b) {
     let temp = null
@@ -116,6 +122,16 @@ function OpenDiscounted() {
         };
         fetchDataAccountOfficer();
     }, []);
+    let temp = bioCustomer
+    arrSearchCustomer = []
+            bioCustomer.map((dataMap, i) => {
+                let resObj = {
+                    index: i,
+                    id: dataMap.id,
+                    label: `${dataMap.id} - ${dataMap.GB_FullName}`
+                }
+                arrSearchCustomer.push(resObj)
+    })
     return (
         <div>
             <Accordion >
@@ -146,7 +162,18 @@ function OpenDiscounted() {
 
                             }}
                     >
-                        <Select_Custom props1="Working Account*" props2="35" props3="city" props4={bioCustomer}/>
+                        <Autocomplete
+                                disablePortal
+                                id="sltWorkingAccount*"
+                                options={arrSearchCustomer}
+                                sx={{ 
+                                    width: 400,
+                                    paddingBottom: "25px",
+                                    paddingRight: "25px"
+                                }}
+                                renderInput={(params) => <TextField {...params} label="Working Account" />}
+                        />
+                        {/* <Select_Custom props1="Working Account*" props2="35" props3="city" props4={bioCustomer}/> */}
                         <DatePicker_Custom props1="Value Date" props2="350" props3="YES"/>
                         <TextField_Custom props1="Amount LCY*" props2="35" props3="NO"/>
                         <TextField_Custom props1="Narrative" props2="35" props3="NO"/>
@@ -177,7 +204,7 @@ function OpenDiscounted() {
                             size="large"
                             // href="https://google.com"
                             onClick={() => {
-                                let txtCustomerID = document.getElementById('sltWorkingAccount*').innerText.toString();
+                                let txtCustomerID = document.getElementById('sltWorkingAccount*').value.toString();
                                 let txtPaymentCurrency = document.getElementById('sltPaymentCurrency*').innerText.toString();
                                 let txtCurrency = document.getElementById('sltCurrency*').innerText.toString();
                                 let txtProductLine = document.getElementById('sltProductLine*').innerText.toString();

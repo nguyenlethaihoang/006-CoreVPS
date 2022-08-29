@@ -53,8 +53,6 @@ function EnquiryDiscounted() {
             await axios.post(' https://api-newcore.vietvictory.vn/account/debit_account/enquiry', {
 
             }).then(response => {
-                console.log("response Get all")
-                console.log(response.data.data)
                 const dataRes = response.data.data
                 setBioGetAll(dataRes); 
                  
@@ -146,8 +144,6 @@ function EnquiryDiscounted() {
                                     })
                                     
                                 }; 
-                                
-
                                 fetchDataGetAll();
                                 bioGetAll.map((value, index) => {
                                     rows.push(createData(
@@ -155,7 +151,8 @@ function EnquiryDiscounted() {
                                                         `LD/${value.SAVINGACCOUNT.CustomerID}${value.id}/${value.Account}`, 
                                                         "Default", 
                                                         value.SAVINGACCOUNT.id, 
-                                                        getNameCustomerID(bioCustomer,value.SAVINGACCOUNT.CustomerID), 
+                                                        // "", 
+                                                        getNameCustomerID(bioCustomer,value.SAVINGACCOUNT.CustomerID),
                                                         value.PaymentCurrencyT.Name, 
                                                         value.AmountLCY,
                                                         ))

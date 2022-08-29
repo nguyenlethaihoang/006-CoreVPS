@@ -205,10 +205,28 @@ const depositController = {
                 return next(new appError("Account error", 404))
             }
 
-            const workingAmountDB = parseInt(accountDB.getDataValue('Amount'))
-            updatedAccount = await accountDB.update({
-                Amount: workingAmountDB + paidAmount
-            })
+            const amountDB = parseInt(accountDB.getDataValue('Amount'))
+            const amountLCY = parseInt(accountDB.getDataValue('AmountLCY'))
+            const amountFCY = parseInt(accountDB.getDataValue('AmountFCY'))
+            if (amountLCY != 0){
+                updatedAccount = await accountDB.update({
+                    Amount: amountDB + paidAmount,
+                    AmountLCY: amountLCY + paidAmount
+                })
+                .catch(err => {
+                    return next(new appError(err, 404))
+                })
+            }else if(amountFCY != 0){
+                updatedAccount = await accountDB.update({
+                    Amount: amountDB + paidAmount,
+                    AmountFCY: amountFCY + paidAmount
+                })
+                .catch(err => {
+                    return next(new appError(err, 404))
+                })
+            }else{
+                return next(new appError('Discounted Saving Account error', 404))
+            }
         }else{
             return next(new appError('Account not found!', 404))
         }

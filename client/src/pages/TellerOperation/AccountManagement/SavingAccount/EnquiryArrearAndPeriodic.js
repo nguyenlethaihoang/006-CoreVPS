@@ -12,7 +12,8 @@ const customerTypeData = [{id: 1,Name: 'P - Person' },{id: 2,Name: 'C - Corporat
 
 const typeData = [{id: 1,Name: 'Arrear' },{id: 2,Name: 'Periodic'},]
 
-const currencyData = [{id: 1,Name: 'USD' },{id: 2,Name: 'EUR'},{id: 3,Name: 'GBP'},{id: 4,Name: 'JPY'},{id: 5,Name: 'VND'},]
+const currencyData = [{id: 1,Name: 'EUR' },{id: 2,Name: 'USD'},{id: 3,Name: 'GBP'},{id: 4,Name: 'JPY'},{id: 5,Name: 'VND'},]
+
 
 function createData(RefID, Starts, CustomerID, Category, CCY, ProductLine, Principal) {
     return { RefID, Starts, CustomerID, Category, CCY, ProductLine, Principal};

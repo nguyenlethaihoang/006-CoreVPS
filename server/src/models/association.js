@@ -30,6 +30,8 @@ const savingTerm = require('./account/savingTerm')
 const creditAccount = require('./account/creditAccount')
 const foreignExchange = require('./exchange/foreignExchange')
 
+const withdrawalTrans = require('./transaction/withdrawal')
+
 const association = () => {
     // CUSTOMER 
     // -- FkCustomer_CityProvinceId
@@ -405,6 +407,25 @@ const association = () => {
         foreignKey: 'CreditAccount'
     })
     foreignExchange.belongsTo(statusType, {
+        foreignKey: 'Status'
+    })
+
+    //WITHDRAWAL
+    withdrawalTrans.belongsTo(accountType, {
+        foreignKey: 'AccountType'
+    })
+    withdrawalTrans.hasMany(deposit, {
+        foreignKey: 'AccountType'
+    })
+    withdrawalTrans.belongsTo(currency, {
+        foreignKey: 'Currency',
+        as: 'Currencyt'
+    })
+    withdrawalTrans.belongsTo(currency, {
+        foreignKey: 'CurrencyPaid',
+        as: 'CurrencyPaidt'
+    })
+    withdrawalTrans.belongsTo(statusType, {
         foreignKey: 'Status'
     })
 }

@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Button, Typography } from "@mui/material"
+import { Accordion, AccordionDetails, AccordionSummary, Autocomplete, Button, TextField, Typography } from "@mui/material"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";    
 import { useEffect, useState } from "react";
 import Select_Custom from "../../../../components/Select_Custom";
@@ -17,28 +17,13 @@ const categoryData = [
     Name: '2000 - Tiết kiệm không kỳ hạn'},
 ]
 
-const currencyData = [
-    {
-        id: 1,
-        Name: 'USD' 
-    },
-    {
-        id: 2,
-        Name: 'EUR'
-    },
-    {
-        id: 3,
-        Name: 'GBP'
-    },
-    {
-        id: 4,
-        Name: 'JPY'
-    },
-    {
-        id: 5,
-        Name: 'VND'},]
+const currencyData = [{id: 1,Name: 'EUR' },{id: 2,Name: 'USD'},{id: 3,Name: 'GBP'},{id: 4,Name: 'JPY'},{id: 5,Name: 'VND'},]
 
 let arr = []
+
+let arrSearchCustomer = [
+
+]
 
 function checkName(a, b) {
     let temp = null
@@ -67,7 +52,6 @@ function checkNameCustomerID(a, b) {
     })
     return temp
 }
-
 function OpenAccount() {
 
     const [buttonPopup, setButtonPopup] = useState(false) 
@@ -83,6 +67,16 @@ function OpenAccount() {
             const data = await response.json();
             // console.log("data")
             // console.log(data.data.customer)
+            // createSearchCustomer(data.data.customer)
+            arrSearchCustomer = []
+            bioCustomer.map((dataMap, i) => {
+                let resObj = {
+                    index: i,
+                    id: dataMap.id,
+                    label: `${dataMap.id} - ${dataMap.GB_FullName}`
+                }
+                arrSearchCustomer.push(resObj)
+            })
             setBioCustomer(data.data.customer);  
         };
         fetchDataCustomer();
@@ -130,6 +124,16 @@ function OpenAccount() {
         fetchDataAccountOfficer();
     }, []);
 
+    let temp = bioCustomer
+    arrSearchCustomer = []
+            bioCustomer.map((dataMap, i) => {
+                let resObj = {
+                    index: i,
+                    id: dataMap.id,
+                    label: `${dataMap.id} - ${dataMap.GB_FullName}`
+                }
+                arrSearchCustomer.push(resObj)
+    })
     return (
         <div>
             <Accordion >
@@ -158,7 +162,19 @@ function OpenAccount() {
                             flexWrap: "wrap"
                         }}
                     >
-                        <Select_Custom props1="Customer ID" props2="35" props3="city" props4={bioCustomer}/>
+                        
+                        <Autocomplete
+                            disablePortal
+                            id="sltCustomerID"
+                            options={arrSearchCustomer}
+                            sx={{ 
+                                width: 400,
+                                paddingBottom: "25px",
+                                paddingRight: "25px"
+                            }}
+                            renderInput={(params) => <TextField {...params} label="Customer ID" />}
+                        />
+                        {/* <Select_Custom props1="Customer ID" props2="35" props3="city" props4={bioCustomer}/> */}
                         <Select_Custom props1="Category" props2="35" props3="city" props4={categoryData}/>
                         <Select_Custom props1="Product Line" props2="35" props3="city" props4={bioProductLine}/>
                         <Select_Custom props1="Currency" props2="35" props3="city" props4={currencyData}/>
@@ -201,7 +217,9 @@ function OpenAccount() {
                             size="large"
                             // href="https://google.com"
                             onClick={() => {
-                                let txtCustomerID = document.getElementById('sltCustomerID').textContent.toString();
+                                let txtCustomerID = document.getElementById('sltCustomerID').value.toString();
+                                console.log("temp")
+                                console.log(temp)
                                 let txtCategory = document.getElementById('sltCategory').textContent.toString();
                                 let txtProductLine = document.getElementById('sltProductLine').textContent.toString();
                                 let txtCurrency = document.getElementById('sltCurrency').textContent.toString();    
