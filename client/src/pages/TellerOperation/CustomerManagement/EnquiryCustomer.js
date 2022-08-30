@@ -1,10 +1,11 @@
 import { Accordion, AccordionDetails, AccordionSummary, Button, Typography } from "@mui/material"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";    
-
+import SearchIcon from '@mui/icons-material/Search';
 import TextField_Custom from '../../../components/TextField_Custom'
 import Select_Custom from "../../../components/Select_Custom";
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+import { useLocation } from 'react-router-dom';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,10 +16,12 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Individual_Custom from "./Individual_Custom";
+import Corporate_Custom from "./Corporate_Custom";
 
-
-function createData(CustomerID, CustomerType, GBFullName, DocID, CellPhoneOfficeNum) {
-    return { CustomerID, CustomerType, GBFullName, DocID, CellPhoneOfficeNum };
+let AccountCode 
+function createData(CustomerID, CustomerType, GBFullName, DocID, CellPhoneOfficeNum, Detail) {
+    return { CustomerID, CustomerType, GBFullName, DocID, CellPhoneOfficeNum, Detail };
   }
 
 let rows = [];
@@ -35,6 +38,9 @@ const customerTypeData = [
 ]
 
 function EnquiryCustomer() {
+    const [buttonPopup, setButtonPopup] = useState(false)
+    const [buttonPopupCorporate, setButtonPopupCorporate] = useState(false)
+
 
     const [bioRow, setBioRow] = useState([]);
     useEffect(() => {
@@ -48,15 +54,39 @@ function EnquiryCustomer() {
                 // https://api-newcore.vietvictory.vn/customer/get_all_customer
                 // "customerType": 2
             }).then(response => {
-                console.log("response")
-                console.log(response)
+                // console.log("response")
+                // console.log(response)
                 const dataRes = response.data.data
                 setBioGetAll(dataRes); 
+                console.log("bioGetAll")
+                console.log(bioGetAll)
                  
             })
             
         };
         fetchDataGetAll();
+    }, []);
+
+    const [bioGetHet, setBioGetHet] = useState([]);
+    useEffect(() => {
+        const fetchDataGetHet = async () => {
+            await axios.get('https://api-newcore.vietvictory.vn/customer/get_all_customer', {
+                // https://api-newcore.vietvictory.vn/customer/enquiry_customer
+                // https://api-newcore.vietvictory.vn/customer/get_all_customer
+                // "customerType": 2
+            }).then(response => {
+                // console.log("response")
+                // console.log(response)
+                const dataRes = response.data.data.customer
+                console.log("bioGetHet")
+                console.log(response.data.data.customer)
+                setBioGetHet(dataRes); 
+                
+                 
+            })
+            
+        };
+        fetchDataGetHet();
     }, []);
 
     return(
@@ -141,7 +171,10 @@ function EnquiryCustomer() {
                                 };
                                 fetchDataGetAll();
                                 bioGetAll.map((value, index) => {
-                                    rows.push(createData(value.id, value.CustomerType, value.GB_FullName, value.DocID, value.PhoneNumber))
+                                    let txtType = "";
+                                    if (value.CustomerType == 1) txtType = "P"
+                                    else txtType = "C"
+                                    rows.push(createData(value.id, txtType, value.GB_FullName, value.DocID, value.PhoneNumber))
                                 })
                                 setBioRow(rows)
                                 
@@ -198,6 +231,7 @@ function EnquiryCustomer() {
                                     <TableCell align="center">GB Full Name</TableCell>
                                     <TableCell align="center">Doc ID</TableCell>
                                     <TableCell align="center">Cell Phone/Office Num</TableCell>
+                                    <TableCell align="center">Detail</TableCell>
                                 </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -213,9 +247,30 @@ function EnquiryCustomer() {
                                         <TableCell align="center">{row.GBFullName}</TableCell>
                                         <TableCell align="center">{row.DocID}</TableCell>
                                         <TableCell align="center">{row.CellPhoneOfficeNum}</TableCell>
+                                        <TableCell align="center"><SearchIcon 
+                                            onClick={() => {     
+                                                if (row.CustomerType == 'P') {
+                                                    AccountCode = bioGetHet[index]
+                                                    setButtonPopup(true) 
+                                                } else {
+                                                    AccountCode = bioGetHet[index]
+                                                    setButtonPopupCorporate(true)
+                                                }
+                                            }}
+                                        /></TableCell>
                                     </TableRow>
           ))}
                                 </TableBody>
+                                <Individual_Custom 
+                                    trigger={buttonPopup}
+                                    setTrigger={setButtonPopup}
+                                    AccountCode={AccountCode}
+                                ></Individual_Custom>
+                                <Corporate_Custom 
+                                    trigger={buttonPopupCorporate}
+                                    setTrigger={setButtonPopupCorporate}
+                                    AccountCode={AccountCode}
+                                ></Corporate_Custom>
                             </Table>
     </TableContainer>
 

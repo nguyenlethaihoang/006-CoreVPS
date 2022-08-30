@@ -139,10 +139,6 @@ function EnquiryAccount() {
                                     valueCustomerType = 1;
                                 else if (txtCustomerType.length == 13)
                                     valueCustomerType = 2;
-                                console.log("category Log")
-                                console.log(document.getElementById('sltCategory.').textContent.toString())
-                                console.log(checkName( bioCategory, document.getElementById('sltCategory.').textContent.toString()))
-                                console.log('con khi')
                                 const fetchDataGetAll = async () => {
                                     await axios.post(' https://api-newcore.vietvictory.vn/account/debit_account/enquiry', {
                                         customerID: parseInt(document.getElementById('txtCustomerID.').value.toString()),

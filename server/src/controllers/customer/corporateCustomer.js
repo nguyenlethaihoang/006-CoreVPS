@@ -4,6 +4,10 @@ const asyncHandler = require('../../utils/async')
 const AppError = require('../../utils/appError')
 const constValue = require('../const')
 
+const countryModel = require('../../models/storage/country')
+const cityModel = require('../../models/storage/cityProvince')
+const docTypeModel = require('../../models/storage/doctype')
+
 const corporateCustomerController = {
     create: asyncHandler( async (req, res, next) => {
         const customerReq = {
@@ -124,7 +128,17 @@ const corporateCustomerController = {
         console.log(customerIDReq)
         const corporateCustomerDB = await corporateCustomerModel.findOne({
             where: {CustomerID: customerIDReq},
-            include: [customerModel]
+            include: [{
+                model: customerModel, 
+                include: [{
+                    model: countryModel, attributes: ['Name']
+                }, {
+                    model: cityModel, attributes: ['Name']
+                }, {
+                    model: docTypeModel, attributes: ['Name']
+                }]
+            }]
+            
         })
         if( !corporateCustomerDB) {
             return next(new AppError("Customer not found!", 404))

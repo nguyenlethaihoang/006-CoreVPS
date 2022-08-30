@@ -5,13 +5,13 @@ import { useEffect, useState } from "react";
 // const arr = Array()
 
 function Select_Value_Custom({props1, props2, props3, props4, props5, props6}) {
-    console.log("props5: bioFilled")
-    console.log(props5)
-    // console.log(`props5.${props6}.toString()`)
-    console.log("props6")
-    console.log(props6)
-    console.log("props5.props6")
-    console.log(props5[props6])
+    // console.log("props5: bioFilled")
+    // console.log(props5)
+    // // console.log(`props5.${props6}.toString()`)
+    // console.log("props6")
+    // console.log(props6)
+    // console.log("props5.props6")
+    // console.log(props5[props6])
 
 
     let idLabelTemp = "lbl" + props1.toString().replace(/\s/g, '');
