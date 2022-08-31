@@ -152,7 +152,28 @@ const individualCustomerController = {
         const customerIDReq = req.params.id
         const customerDB = await individualCustomerModel.findOne({
             where: {CustomerID: customerIDReq },
-            include: [customerModel]
+            include: [{
+                model: customerModel, 
+                include: [{
+                    model: countryModel, attributes: ['Name']
+                }, {
+                    model: cityModel, attributes: ['Name']
+                }, {
+                    model: docTypeModel, attributes: ['Name']
+                }, {
+                    model: sectorModel, attributes: ['Name']
+                }, {
+                    model: subSectorModel, attributes: ['Name']
+                }, {
+                    model: industryModel, attributes: ['Name']
+                }, {
+                    model: subIndustryModel, attributes: ['Name']
+                }, {
+                    model: accountOfficerModel, attributes: ['Name']
+                }, {
+                    model: relationCodeModel, attributes: ['Name']
+                }]
+            }]
         }).catch(err=> {
             console.log(err)
         })

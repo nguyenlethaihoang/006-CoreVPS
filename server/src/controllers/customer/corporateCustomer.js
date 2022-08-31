@@ -7,6 +7,12 @@ const constValue = require('../const')
 const countryModel = require('../../models/storage/country')
 const cityModel = require('../../models/storage/cityProvince')
 const docTypeModel = require('../../models/storage/doctype')
+const sectorModel = require('../../models/storage/sector')
+const subSectorModel = require('../../models/storage/subSector')
+const industryModel = require('../../models/storage/industry')
+const subIndustryModel = require('../../models/storage/industry')
+const accountOfficerModel = require('../../models/storage/accountOfficer')
+const relationCodeModel = require('../../models/storage/relation')
 
 const corporateCustomerController = {
     create: asyncHandler( async (req, res, next) => {
@@ -136,6 +142,18 @@ const corporateCustomerController = {
                     model: cityModel, attributes: ['Name']
                 }, {
                     model: docTypeModel, attributes: ['Name']
+                }, {
+                    model: sectorModel, attributes: ['Name']
+                }, {
+                    model: subSectorModel, attributes: ['Name']
+                }, {
+                    model: industryModel, attributes: ['Name']
+                }, {
+                    model: subIndustryModel, attributes: ['Name']
+                }, {
+                    model: accountOfficerModel, attributes: ['Name']
+                }, {
+                    model: relationCodeModel, attributes: ['Name']
                 }]
             }]
             
