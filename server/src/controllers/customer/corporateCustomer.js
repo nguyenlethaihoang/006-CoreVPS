@@ -137,7 +137,7 @@ const corporateCustomerController = {
             include: [{
                 model: customerModel, 
                 include: [{
-                    model: countryModel, attributes: ['Name']
+                    model: countryModel, attributes: ['Name', 'Code']
                 }, {
                     model: cityModel, attributes: ['Name']
                 }, {

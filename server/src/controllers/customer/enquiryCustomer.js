@@ -122,7 +122,7 @@ const enquiryCustomerController = {
 
         const customersDB = await customerModel.findAll({
             include: [{
-                model: countryModel, attributes: ['Name']
+                model: countryModel, attributes: ['Name', 'Code']
             }, {
                 model: cityModel, attributes: ['Name']
             }, {
@@ -156,7 +156,7 @@ const enquiryCustomerController = {
     getAll: asyncHandler( async (req, res, next) => {
         const {count, rows} = await customerModel.findAndCountAll({
             include: [{
-                model: countryModel, attributes: ['Name']
+                model: countryModel, attributes: ['Name', 'Code']
             }, {
                 model: cityModel, attributes: ['Name']
             }, {
