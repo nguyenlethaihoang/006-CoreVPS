@@ -6,6 +6,16 @@ const asyncHandler = require('../../utils/async')
 const appError = require('../../utils/appError')
 const AppError = require('../../utils/appError')
 
+const countryModel = require('../../models/storage/country')
+const cityModel = require('../../models/storage/cityProvince')
+const docTypeModel = require('../../models/storage/doctype')
+const sectorModel = require('../../models/storage/sector')
+const subSectorModel = require('../../models/storage/subSector')
+const industryModel = require('../../models/storage/industry')
+const subIndustryModel = require('../../models/storage/industry')
+const accountOfficerModel = require('../../models/storage/accountOfficer')
+const relationCodeModel = require('../../models/storage/relation')
+
 // gtri request(Name) => BE: search ID => luu tru foreignKey = id
 // gtri request(ID) => FE: lay value cho <option> la ID + hien thi <option> la Name
 const individualCustomerController = {
