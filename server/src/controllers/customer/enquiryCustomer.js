@@ -5,6 +5,16 @@ const asyncHandler = require('../../utils/async')
 const sequelize = require('../../database/sequelize')
 const appError = require('../../utils/appError')
 
+const countryModel = require('../../models/storage/country')
+const cityModel = require('../../models/storage/cityProvince')
+const docTypeModel = require('../../models/storage/doctype')
+const sectorModel = require('../../models/storage/sector')
+const subSectorModel = require('../../models/storage/subSector')
+const industryModel = require('../../models/storage/industry')
+const subIndustryModel = require('../../models/storage/industry')
+const accountOfficerModel = require('../../models/storage/accountOfficer')
+const relationCodeModel = require('../../models/storage/relation')
+
 // customerType
 // customerID
 // GBFullName
@@ -27,90 +37,114 @@ const enquiryCustomerController = {
             subIndustry: req.body.subIndustry
         }
 
-        /*const enquiryCondition = {}
-        if(!customerType)*/   
-        
-        let count = 0
-        let enquiryString = 'Select * from CUSTOMER'
+        let enquiryCondition = {} 
+    
         if(enquiryReq.customerType){
-            if(count == 0)
-                enquiryString += ' where '
-            count++
-            enquiryString += 'CustomerType = ' + enquiryReq.customerType
+            // if(count == 0)
+            //     enquiryString += ' where '
+            // count++
+            // enquiryString += 'CustomerType = ' + enquiryReq.customerType
+            enquiryCondition.CustomerType = enquiryReq.customerType
         }
         if(enquiryReq.customerID){
-            if(count != 0)
-                enquiryString += ' AND '
-            else
-                enquiryString += ' where '
-            enquiryString += ' id = ' + enquiryReq.customerID + ''
-            count++
+            // if(count != 0)
+            //     enquiryString += ' AND '
+            // else
+            //     enquiryString += ' where '
+            // enquiryString += ' id = ' + enquiryReq.customerID + ''
+            // count++
+            enquiryCondition.id = enquiryReq.customerID
         }
         if(enquiryReq.GB_FullName){
-            if(count != 0)
-                enquiryString += ' AND '
-            else
-                enquiryString += ' where '
-            enquiryString += ' GB_FullName = "' + enquiryReq.GB_FullName + '"'
-            count++
+            // if(count != 0)
+            //     enquiryString += ' AND '
+            // else
+            //     enquiryString += ' where '
+            // enquiryString += ' GB_FullName = "' + enquiryReq.GB_FullName + '"'
+            // count++
+            enquiryCondition.GB_FullName = enquiryReq.GB_FullName
         }
         if(enquiryReq.phoneNumber){
-            if(count != 0)
-                enquiryString += ' AND '
-            else
-                enquiryString += ' where '
-            enquiryString += ' PhoneNumber = "' + enquiryReq.phoneNumber + '"'
-            count++
+            // if(count != 0)
+            //     enquiryString += ' AND '
+            // else
+            //     enquiryString += ' where '
+            // enquiryString += ' PhoneNumber = "' + enquiryReq.phoneNumber + '"'
+            // count++
+            enquiryCondition.PhoneNumber = enquiryReq.phoneNumber
         }
         if(enquiryReq.docID){
-            if(count != 0)
-                enquiryString += ' AND '
-            else
-                enquiryString += ' where '
-            enquiryString += ' DocID = "' + enquiryReq.docID + '"'
-            count++
+            // if(count != 0)
+            //     enquiryString += ' AND '
+            // else
+            //     enquiryString += ' where '
+            // enquiryString += ' DocID = "' + enquiryReq.docID + '"'
+            // count++
+            enquiryCondition.DocID = enquiryReq.docID
         }
         if(enquiryReq.mainSector){
-            if(count != 0)
-                enquiryString += ' AND '
-            else
-                enquiryString += ' where '
-            enquiryString += ' MainSector = ' + enquiryReq.mainSector 
-            count++
+            // if(count != 0)
+            //     enquiryString += ' AND '
+            // else
+            //     enquiryString += ' where '
+            // enquiryString += ' MainSector = ' + enquiryReq.mainSector 
+            // count++
+            enquiryCondition.MainSector = enquiryReq.mainSector
         }
         if(enquiryReq.subSector){
-            if(count != 0)
-                enquiryString += ' AND '
-            else
-                enquiryString += ' where '
-            enquiryString += ' SubSector = ' + enquiryReq.subSector
-            count++
+            // if(count != 0)
+            //     enquiryString += ' AND '
+            // else
+            //     enquiryString += ' where '
+            // enquiryString += ' SubSector = ' + enquiryReq.subSector
+            // count++
+            enquiryCondition.SubSector = enquiryReq.subSector
         }
         if(enquiryReq.mainIndustry){
-            if(count != 0)
-                enquiryString += ' AND '
-            else
-                enquiryString += ' where '
-            enquiryString += ' MainIndustry = ' + enquiryReq.mainIndustry
-            count++
+            // if(count != 0)
+            //     enquiryString += ' AND '
+            // else
+            //     enquiryString += ' where '
+            // enquiryString += ' MainIndustry = ' + enquiryReq.mainIndustry
+            // count++
+            enquiryCondition.MainIndustry = enquiryReq.mainIndustry
         }
         if(enquiryReq.subIndustry){
-            if(count != 0)
-                enquiryString += ' AND '
-            else
-                enquiryString += ' where '
-            enquiryString += ' Industry = ' + enquiryReq.customerType
-            count++
+            // if(count != 0)
+            //     enquiryString += ' AND '
+            // else
+            //     enquiryString += ' where '
+            // enquiryString += ' Industry = ' + enquiryReq.customerType
+            // count++
+            enquiryCondition.Industry = enquiryReq.subIndustry
         }
         
-        console.log(enquiryString)
 
-        const customersDB = await sequelize.query(enquiryString,{
-            model: customerModel
+        const customersDB = await customerModel.findAll({
+            include: [{
+                model: countryModel, attributes: ['Name']
+            }, {
+                model: cityModel, attributes: ['Name']
+            }, {
+                model: docTypeModel, attributes: ['Name']
+            }, {
+                model: sectorModel, attributes: ['Name']
+            }, {
+                model: subSectorModel, attributes: ['Name']
+            }, {
+                model: industryModel, attributes: ['Name']
+            }, {
+                model: subIndustryModel, attributes: ['Name']
+            }, {
+                model: accountOfficerModel, attributes: ['Name']
+            }, {
+                model: relationCodeModel, attributes: ['Name']
+            }]
         })
         .catch(err => {
-            console.log(err)
+            return next(new appError(err, 404))
         })
+
 
 
         return res.status(200).json({
@@ -120,7 +154,27 @@ const enquiryCustomerController = {
     }),
 
     getAll: asyncHandler( async (req, res, next) => {
-        const {count, rows} = await customerModel.findAndCountAll()
+        const {count, rows} = await customerModel.findAndCountAll({
+            include: [{
+                model: countryModel, attributes: ['Name']
+            }, {
+                model: cityModel, attributes: ['Name']
+            }, {
+                model: docTypeModel, attributes: ['Name']
+            }, {
+                model: sectorModel, attributes: ['Name']
+            }, {
+                model: subSectorModel, attributes: ['Name']
+            }, {
+                model: industryModel, attributes: ['Name']
+            }, {
+                model: subIndustryModel, attributes: ['Name']
+            }, {
+                model: accountOfficerModel, attributes: ['Name']
+            }, {
+                model: relationCodeModel, attributes: ['Name']
+            }]
+        })
 
         return res.status(200).json({
             message: "get all customer",
