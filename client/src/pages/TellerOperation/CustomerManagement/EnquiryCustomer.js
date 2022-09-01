@@ -18,13 +18,17 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Individual_Custom from "./Individual_Custom";
 import Corporate_Custom from "./Corporate_Custom";
+import TempComponent from "./tempComponent"
 
 let AccountCode 
+let component
 function createData(CustomerID, CustomerType, GBFullName, DocID, CellPhoneOfficeNum, Detail) {
     return { CustomerID, CustomerType, GBFullName, DocID, CellPhoneOfficeNum, Detail };
   }
 
 let rows = [];
+
+
 
 const customerTypeData = [
     {id: 1,
@@ -37,10 +41,15 @@ const customerTypeData = [
     Name: 'All'},
 ]
 
+
+
+
+
+
 function EnquiryCustomer() {
+
     const [buttonPopup, setButtonPopup] = useState(false)
     const [buttonPopupCorporate, setButtonPopupCorporate] = useState(false)
-
 
     const [bioRow, setBioRow] = useState([]);
     useEffect(() => {
@@ -88,8 +97,8 @@ function EnquiryCustomer() {
         };
         fetchDataGetHet();
     }, []);
-
     return(
+        
         <div>
             <Accordion >
                 <AccordionSummary
@@ -197,7 +206,7 @@ function EnquiryCustomer() {
                                 rows = [];
                                 // setBioGetAll(rows)
                                 setBioRow(rows)
-                                
+                            
                               }}
                         >
                             Hide
@@ -252,16 +261,18 @@ function EnquiryCustomer() {
                                                 if (row.CustomerType == 'P') {
                                                     AccountCode = bioGetHet[index]
                                                     setButtonPopup(true) 
+                                                    component = 1
                                                 } else {
                                                     AccountCode = bioGetHet[index]
                                                     setButtonPopupCorporate(true)
+                                                    component = 2
                                                 }
                                             }}
                                         /></TableCell>
                                     </TableRow>
           ))}
                                 </TableBody>
-                                <Individual_Custom 
+                                {/* <Individual_Custom 
                                     trigger={buttonPopup}
                                     setTrigger={setButtonPopup}
                                     AccountCode={AccountCode}
@@ -270,9 +281,17 @@ function EnquiryCustomer() {
                                     trigger={buttonPopupCorporate}
                                     setTrigger={setButtonPopupCorporate}
                                     AccountCode={AccountCode}
-                                ></Corporate_Custom>
+                                ></Corporate_Custom> */}
+                                <TempComponent
+                                    trigger={buttonPopupCorporate}
+                                    setTrigger={setButtonPopupCorporate}
+                                    AccountCode={AccountCode}
+                                    component={component}
+                                >
+                                    
+                                </TempComponent>
                             </Table>
-    </TableContainer>
+                        </TableContainer>
 
                     </div>
                 

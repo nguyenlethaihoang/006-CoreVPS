@@ -53,8 +53,10 @@ function Corporate_Custom(props1) {
     const [buttonPopupFail, setButtonPopupFail] = useState(false)
     const [buttonPopupNoti, setButtonPopupNoti] = useState(false)
 
-    console.log("props")
-    console.log(props1)
+
+    console.log("props AccountCode")
+    console.log(props1.AccountCode)
+
     
     const [bioCity, setBioCity] = useState([]);
     useEffect(() => {
@@ -138,10 +140,13 @@ function Corporate_Custom(props1) {
         fetchDataAccountOfficer();
     }, []);
 
-    const [country, setCountry] = useState(`${props1.AccountCode.COUNTRY.Name}`);
+    
+
+    const [country, setCountry] = useState(parseInt(props1.AccountCode?.GB_Country));
     const handleChangeCountry = (event) => {
         setCountry(event.target.value);
     };
+    
 
     const [nationality, setNationality] = useState(`${props1.AccountCode?.Nationality}`);
     const handleChangeNationality = (event) => {
@@ -183,7 +188,8 @@ function Corporate_Custom(props1) {
         setAccountOfficer(event.target.value);
     };
 
-    console.log(props1.AccountCode)
+    console.log("country name")
+    console.log(props1.AccountCode?.COUNTRY?.Code)
     
   return (props1.trigger) ? 
   (
@@ -192,7 +198,7 @@ function Corporate_Custom(props1) {
         <div className='popup-inner-c'>
             
             <h1>
-                Corporate - {props1.AccountCode.id}
+                Corporate - {props1.AccountCode?.id}
             </h1>
             <div
                 style={{ 
@@ -287,9 +293,9 @@ function Corporate_Custom(props1) {
                             labelId="lblCountry.."
                             id="txtCountry.."
                             label="GB Country.."
-                            defaultValue={props1.AccountCode.COUNTRY.Name}
-                            onChange={handleChangeCountry}
-                            value = {country}
+                            defaultValue={props1.AccountCode?.GB_Country}
+                            //onChange={handleChangeCountry}  
+                            //value={country}
                         >
                             {
                                 bioCountry.map((data, index) => {
@@ -542,6 +548,7 @@ function Corporate_Custom(props1) {
                         marginRight: "30px"
                     }}
                     
+
                 >
                     Save
                 </Button>
@@ -553,7 +560,9 @@ function Corporate_Custom(props1) {
                     onClick={() => 
                         
                         {
-                            props1.setTrigger(false)}
+                            props1.setTrigger(false)
+                            props1.resetComponent(props1)
+                        }
                     }
                 >
                     Cancel
