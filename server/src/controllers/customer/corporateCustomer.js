@@ -240,7 +240,7 @@ const corporateCustomerController = {
             MainSector: customerReq.MainSector,
             MainIndustry: customerReq.MainIndustry,
             Industry: customerReq.Industry,
-            Sector: customerReq.Sector,
+            SubSector: customerReq.Sector,
             AccountOfficer: customerReq.AccountOfficer,
             RelationCode: customerReq.RelationCode,
             GB_ShortName: customerReq.GB_ShortName,

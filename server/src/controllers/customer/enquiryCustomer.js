@@ -176,6 +176,32 @@ const enquiryCustomerController = {
             }]
         })
 
+
+        rows.map(async value => {
+            let typeDB = parseInt(value.getDataValue("CustomerType"))
+            let cusIDDB = parseInt(value.getDataValue("id"))
+            let detailCus
+            if(typeDB==1){
+                detailCus = await individualCustomerModel.findOne({
+                    where: {CustomerID: cusIDDB}
+                })
+                .catch(err => {
+                    return next(new appError(err, 404))
+                })
+            }else if(typeDB == 2){
+                detailCus = await corporateCustomerModel.findOne({
+                    where: {CustomerID: cusIDDB}
+                })
+                .catch(err => {
+                    return next(new appError(err, 404))
+                })
+            }else{
+                return next(new appError('Find detail Error', 404))
+            }
+            rows.detailCus = detailCus
+
+        })
+
         return res.status(200).json({
             message: "get all customer",
             data:{
