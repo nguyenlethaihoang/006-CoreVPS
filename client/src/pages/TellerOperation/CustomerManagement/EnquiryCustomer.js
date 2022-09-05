@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Button, Typography } from "@mui/material"
+import { Accordion, AccordionDetails, AccordionSummary, Button, IconButton, Typography } from "@mui/material"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";    
 import SearchIcon from '@mui/icons-material/Search';
 import TextField_Custom from '../../../components/TextField_Custom'
@@ -21,6 +21,7 @@ import Corporate_Custom from "./Corporate_Custom";
 import TempComponent from "./tempComponent"
 
 let AccountCode 
+let AccountCode01
 let component
 function createData(CustomerID, CustomerType, GBFullName, DocID, CellPhoneOfficeNum, Detail) {
     return { CustomerID, CustomerType, GBFullName, DocID, CellPhoneOfficeNum, Detail };
@@ -96,6 +97,28 @@ function EnquiryCustomer() {
             
         };
         fetchDataGetHet();
+    }, []);
+
+    const [bioGetHet01, setBioGetHet01] = useState([]);
+    useEffect(() => {
+        const fetchDataGetHet01 = async () => {
+            await axios.get('https://api-newcore.vietvictory.vn/customer/get_all_customer', {
+                // https://api-newcore.vietvictory.vn/customer/enquiry_customer
+                // https://api-newcore.vietvictory.vn/customer/get_all_customer
+                // "customerType": 2
+            }).then(response => {
+                // console.log("response")
+                // console.log(response)
+                const dataRes = response.data.data.customer.detail
+                console.log("bioGetHet01")
+                console.log(response.data.data.customer.detail)
+                setBioGetHet01(dataRes); 
+                
+                 
+            })
+            
+        };
+        fetchDataGetHet01();
     }, []);
     return(
         
@@ -256,19 +279,25 @@ function EnquiryCustomer() {
                                         <TableCell align="center">{row.GBFullName}</TableCell>
                                         <TableCell align="center">{row.DocID}</TableCell>
                                         <TableCell align="center">{row.CellPhoneOfficeNum}</TableCell>
-                                        <TableCell align="center"><SearchIcon 
-                                            onClick={() => {     
-                                                if (row.CustomerType == 'P') {
-                                                    AccountCode = bioGetHet[index]
-                                                    setButtonPopup(true) 
-                                                    component = 1
-                                                } else {
-                                                    AccountCode = bioGetHet[index]
-                                                    setButtonPopupCorporate(true)
-                                                    component = 2
-                                                }
-                                            }}
-                                        /></TableCell>
+                                        <TableCell align="center">
+                                            <IconButton color="primary" aria-label="information details" component="label">
+                                                <SearchIcon  
+                                                    onClick={() => {     
+                                                        if (row.CustomerType == 'P') {
+                                                            AccountCode = bioGetHet[index].customer
+                                                            AccountCode01 = bioGetHet[index].detail
+                                                            setButtonPopup(true) 
+                                                            component = 1
+                                                        } else {
+                                                            AccountCode = bioGetHet[index].customer
+                                                            AccountCode01 = bioGetHet[index].detail
+                                                            setButtonPopupCorporate(true)
+                                                            component = 2
+                                                        }
+                                                    }}
+                                                />
+                                            </IconButton>
+                                            </TableCell>
                                     </TableRow>
           ))}
                                 </TableBody>
@@ -286,6 +315,7 @@ function EnquiryCustomer() {
                                     trigger={buttonPopupCorporate}
                                     setTrigger={setButtonPopupCorporate}
                                     AccountCode={AccountCode}
+                                    AccountCode01={AccountCode01}
                                     component={component}
                                 >
                                     

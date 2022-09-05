@@ -6,6 +6,8 @@ import PrintIcon from '@mui/icons-material/Print';
 import axios from 'axios';
 import Select_Value_Custom from '../../../../components/Select_Value_Custom';
 import TextField_Value_Custom from '../../../../components/TextField_Value_Custom';
+import Popup_Custom from '../../../../components/Popup_Custom';
+import Notification_Custom from '../../../../components/Notification_Custom'; 
 
 
 const categoryData = [
@@ -24,10 +26,22 @@ const countryData = [
     },
 ]
 
+let arr = []
 function checkName(a, b) {
     let temp = null
     a.map((data, index) => {
         if (data.Name == b)
+        {
+            temp = data.id.toString()
+            
+        }
+    })
+    return temp
+}
+function checkCode(a, b) {
+    let temp = null
+    a.map((data, index) => {
+        if (data.Code == b)
         {
             temp = data.id.toString()
             
@@ -148,49 +162,52 @@ function Corporate_Custom(props1) {
     };
     
 
-    const [nationality, setNationality] = useState(`${props1.AccountCode?.Nationality}`);
-    const handleChangeNationality = (event) => {
-        setNationality(event.target.value);
-    };
+    // const [nationality, setNationality] = useState(`${props1.AccountCode?.Nationality}`);
+    // const handleChangeNationality = (event) => {
+    //     setNationality(event.target.value);
+    // };
 
-    const [residence, setResidence] = useState(`${props1.AccountCode?.Residence}`);
-    const handleChangeResidence = (event) => {
-        setResidence(event.target.value);
-    };
+    // const [residence, setResidence] = useState(`${props1.AccountCode?.Residence}`);
+    // const handleChangeResidence = (event) => {
+    //     setResidence(event.target.value);
+    // };
 
-    const [docType, setDocType] = useState(`${props1.AccountCode?.Doctype}`);
-    const handleChangeDocType = (event) => {
-        setDocType(event.target.value);
-    };
+    // const [docType, setDocType] = useState(`${props1.AccountCode?.Doctype}`);
+    // const handleChangeDocType = (event) => {
+    //     setDocType(event.target.value);
+    // };
 
-    const [mainSector, setMainSector] = useState(`${props1.AccountCode?.MainSector}`);
-    const handleChangeMainSector = (event) => {
-        setMainSector(event.target.value);
-    };
+    // const [mainSector, setMainSector] = useState(`${props1.AccountCode?.MainSector}`);
+    // const handleChangeMainSector = (event) => {
+    //     setMainSector(event.target.value);
+    // };
 
-    const [subSector, setSubSector] = useState(`${props1.AccountCode?.SubSector}`);
-    const handleChangeSubSector = (event) => {
-        setSubSector(event.target.value);
-    };
+    // const [subSector, setSubSector] = useState(`${props1.AccountCode?.SubSector}`);
+    // const handleChangeSubSector = (event) => {
+    //     setSubSector(event.target.value);
+    // };
 
-    const [mainIndustry, setMainIndustry] = useState(`${props1.AccountCode?.MainIndustry}`);
-    const handleChangeMainIndustry = (event) => {
-        setMainIndustry(event.target.value);
-    };
+    // const [mainIndustry, setMainIndustry] = useState(`${props1.AccountCode?.MainIndustry}`);
+    // const handleChangeMainIndustry = (event) => {
+    //     setMainIndustry(event.target.value);
+    // };
 
-    const [subIndustry, setSubIndustry] = useState(`${props1.AccountCode?.Industry}`);
-    const handleChangeSubIndustry = (event) => {
-        setSubIndustry(event.target.value);
-    };
+    // const [subIndustry, setSubIndustry] = useState(`${props1.AccountCode?.Industry}`);
+    // const handleChangeSubIndustry = (event) => {
+    //     setSubIndustry(event.target.value);
+    // };
 
-    const [accountOfficer, setAccountOfficer] = useState(`${props1.AccountCode?.AccountOfficer}`);
-    const handleChangeAccountOfficer = (event) => {
-        setAccountOfficer(event.target.value);
-    };
+    // const [accountOfficer, setAccountOfficer] = useState(`${props1.AccountCode?.AccountOfficer}`);
+    // const handleChangeAccountOfficer = (event) => {
+    //     setAccountOfficer(event.target.value);
+    // };
 
-    console.log("country name")
-    console.log(props1.AccountCode?.COUNTRY?.Code)
+    console.log("detaillllll")
+    console.log(props1.AccountCode01)
     
+
+
+
   return (props1.trigger) ? 
   (
 
@@ -198,7 +215,7 @@ function Corporate_Custom(props1) {
         <div className='popup-inner-c'>
             
             <h1>
-                Corporate - {props1.AccountCode?.id}
+                Customer Info - Corporate
             </h1>
             <div
                 style={{ 
@@ -211,10 +228,6 @@ function Corporate_Custom(props1) {
                 <IconButton>
                     <EditIcon 
                         onClick={()=> {
-                            // const element = document.getElementById('foo');
-                            // element.css({
-                            //     'backgroundColor':'red',
-                            // })
                             document.getElementById("foo").style['pointer-events'] = 'auto';
                             document.getElementById("foo").style['opacity'] = '1';
                             document.getElementById("bar").style['pointer-events'] = 'auto';
@@ -246,41 +259,36 @@ function Corporate_Custom(props1) {
                     flexWrap: "wrap"
                 }}
             >
-                 
-                {/* <Select_Value_Custom props1="Customer ID." props2="35" props3="city" props4={bioCustomer} props5={bioFilled} props6="CustomerID"/>
-                <Select_Value_Custom props1="Category." props2="35" props3="city" props4={categoryData} props5={bioFilled} props6="Category"/>
-                <Select_Value_Custom  props1="Product Line." props2="35" props3="city" props4={bioProductLine} props5={bioFilled} props6="ProductLine"/>
-                <Select_Value_Custom props1="Currency." props2="15" props3="city" props4={currencyData} props5={bioFilled} props6="Currency"/>
-                <TextField_Value_Custom props1="Account Title." props2="40" props3="YES" props4={bioFilled.AccountTitle}/>
-                <TextField_Value_Custom props1="Short Title." props2="40" props3="YES" props4={bioFilled.ShortTitle}/>
-                <Select_Value_Custom props1="Account Officer." props2="25" props3="account_officer" props4={bioAccountOfficer} props5={bioFilled} props6="AccountOfficer"/>
-                <Select_Value_Custom props1="Charge Code." props2="25" props3="account_officer" props4={bioChargeCode} props5={bioFilled} props6="ChargeCode"/> */}
-                <TextField_Value_Custom props1="GB Short Name.." props2="20" props3="YES" props4={props1.AccountCode["GB_ShortName"]}/>
-                <TextField_Value_Custom props1="GB Full Name.." props2="30" props3="YES" props4={props1.AccountCode["GB_FullName"]}/>
+                <TextField_Value_Custom props1="GB Short Name..." props2="20" props3="YES" props4={props1.AccountCode.GB_ShortName}/>
+                <TextField_Value_Custom props1="GB Full Name..." props2="30" props3="YES" props4={props1.AccountCode["GB_FullName"]}/>
                 {/* Incorp Date(*) */}
-                <TextField_Value_Custom props1="GB Street.." props2="25" props3="YES" props4={props1.AccountCode["GB_Street"]}/>
-                <TextField_Value_Custom props1="GB Town/Dist.." props2="25" props3="YES" props4={props1.AccountCode["GB_Towndist"]}/>
+                <TextField_Value_Custom props1="GB Street..." props2="25" props3="YES" props4={props1.AccountCode["GB_Street"]}/>
+                <TextField_Value_Custom props1="GB Town/Dist..." props2="25" props3="YES" props4={props1.AccountCode["GB_Towndist"]}/>
                 {/* <Select_Value_Custom props1="City/Province.." props2="35" props3="city" props4={bioCity} props5={bioCity} props6="Category"/> */}
-                {/* <div
+                <div
                     style={{
                         marginRight: "30px",
                         marginBottom: "20px" 
                     }}
                 >
                     <FormControl sx={{ m: 0, minWidth: `30ch` }}>
-                    <InputLabel id="lblCity/Province..">City/Province..</InputLabel>
+                    <InputLabel id="lblCity/Province...">City/Province..</InputLabel>
                         <Select
-                            labelId="lblCity/Province.."
-                            id="txtCity/Province.."
-                            value={props1.AccountCode.CityProvince}
-                            label="City/Province.."
+                            labelId="lblCity/Province..."
+                            id="txtCity/Province..."
+                            defaultValue={props1.AccountCode.CityProvince}
+                            label="City/Province..."
                         >
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
+                            {
+                                bioCity.map((data, index) => {
+                                    return (
+                                        <MenuItem key={index} value={data.id}>{data.Name}</MenuItem>
+                                    )
+                                })
+                            }
                         </Select>
                     </FormControl>
-                </div> */}
+                </div>
                 <div
                     style={{
                         marginRight: "30px",
@@ -288,11 +296,11 @@ function Corporate_Custom(props1) {
                     }}
                 >
                     <FormControl sx={{ m: 0, minWidth: `25ch` }}>
-                    <InputLabel id="lblCountry..">GB Country</InputLabel>
-                        <Select
-                            labelId="lblCountry.."
-                            id="txtCountry.."
-                            label="GB Country.."
+                    <InputLabel id="lblCountry...">GB Country</InputLabel>
+                        <Select 
+                            labelId="lblCountry..."
+                            id="txtCountry..."
+                            label="GB Country..."
                             defaultValue={props1.AccountCode?.GB_Country}
                             //onChange={handleChangeCountry}  
                             //value={country}
@@ -314,14 +322,14 @@ function Corporate_Custom(props1) {
                     }}
                 >
                     <FormControl sx={{ m: 0, minWidth: `25ch` }}>
-                    <InputLabel id="lblNationality..">Nationality</InputLabel>
+                    <InputLabel id="lblNationality...">Nationality</InputLabel>
                         <Select
-                            labelId="lblNationality.."
-                            id="txtNationality.."
-                            label="Nationality.."
+                            labelId="lblNationality..."
+                            id="txtNationality..."
+                            label="Nationality..."
                             defaultValue={props1.AccountCode.Nationality}
-                            onchange={handleChangeNationality}
-                            value={nationality} 
+                            // onchange={handleChangeNationality}
+                            // value={nationality} 
                         >
                             {
                                 bioCountry.map((data, index) => {
@@ -340,14 +348,14 @@ function Corporate_Custom(props1) {
                     }}
                 >
                     <FormControl sx={{ m: 0, minWidth: `30ch` }}>
-                    <InputLabel id="lblResidence..">Residence</InputLabel>
+                    <InputLabel id="lblResidence...">Residence</InputLabel>
                         <Select
-                            labelId="lblResidence.."
-                            id="txtResidence.."
-                            value={residence}
+                            labelId="lblResidence..."
+                            id="txtResidence..."
+                            // value={residence}
                             defaultValue={props1.AccountCode.Residence}
-                            label="Residence.."
-                            onchange={handleChangeResidence}
+                            label="Residence..."
+                            // onchange={handleChangeResidence}
                         >
                             {
                                 bioCountry.map((data, index) => {
@@ -366,14 +374,14 @@ function Corporate_Custom(props1) {
                     }}
                 >
                     <FormControl sx={{ m: 0, minWidth: `20ch` }}>
-                    <InputLabel id="lblDocType..">Doc Type</InputLabel>
+                    <InputLabel id="lblDocType...">Doc Type</InputLabel>
                         <Select
-                            labelId="lblDocType.."
-                            id="txtDocType.."
-                            value={docType}
+                            labelId="lblDocType..."
+                            id="txtDocType..."
+                            // value={docType}
                             defaultValue={props1.AccountCode.Doctype}
-                            label="DocType.."
-                            onchange={handleChangeDocType}
+                            label="DocType..."
+                            // onchange={handleChangeDocType}
                         >
                             {
                                 bioDoctype.map((data, index) => {
@@ -386,14 +394,14 @@ function Corporate_Custom(props1) {
                     </FormControl>
                 </div>  
 
-                <TextField_Value_Custom props1="Tax Identification Number.." props2="18" props3="YES" props4={props1.AccountCode.DocID}/>
-                <TextField_Value_Custom props1="Doc Issue Place.." props2="25" props3="YES" props4={props1.AccountCode.DocIssuePlace}/>
+                <TextField_Value_Custom props1="Tax Identification Number..." props2="18" props3="YES" props4={props1.AccountCode.DocID}/>
+                <TextField_Value_Custom props1="Doc Issue Place..." props2="25" props3="YES" props4={props1.AccountCode.DocIssuePlace}/>
                 {/* Doc Issue Date: (*)	 */}
-                <TextField_Value_Custom props1="Contact Person.." props2="20" props3="YES" props4={props1.AccountCode.ContactPerson}/>
-                <TextField_Value_Custom props1="Position.." props2="20" props3="YES" props4={props1.AccountCode.Position}/>
-                <TextField_Value_Custom props1="Telephone.." props2="15" props3="YES" props4={props1.AccountCode.ContactPerson}/>
-                <TextField_Value_Custom props1="Email Address.." props2="20" props3="YES" props4={props1.AccountCode.EmailAddress}/>
-                <TextField_Value_Custom props1="Remarks.." props2="30" props3="YES" props4={props1.AccountCode.Remarks}/>
+                <TextField_Value_Custom props1="Contact Person..." props2="20" props3="YES" props4={props1.AccountCode01.ContactPerson}/>
+                <TextField_Value_Custom props1="Position..." props2="20" props3="YES" props4={props1.AccountCode01.Position}/>
+                <TextField_Value_Custom props1="Telephone..." props2="15" props3="YES" props4={props1.AccountCode.PhoneNumber}/>
+                <TextField_Value_Custom props1="Email Address..." props2="20" props3="YES" props4={props1.AccountCode.EmailAddress}/>
+                <TextField_Value_Custom props1="Remarks..." props2="30" props3="YES" props4={props1.AccountCode.Remarks}/>
                 
                 <div
                     style={{
@@ -402,14 +410,14 @@ function Corporate_Custom(props1) {
                     }}
                 >
                     <FormControl sx={{ m: 0, minWidth: `30ch` }}>
-                    <InputLabel id="lblMainSector..">Main Sector</InputLabel>
+                    <InputLabel id="lblMainSector...">Main Sector</InputLabel>
                         <Select
-                            labelId="lblMainSector.."
-                            id="txtMainSector.."
-                            value={mainSector}
+                            labelId="lblMainSector..."
+                            id="txtMainSector..."
+                            // value={mainSector}
                             defaultValue={props1.AccountCode.MainSector}
-                            label="MainSector.."
-                            onchange={handleChangeMainSector}
+                            label="MainSector..."
+                            // onchange={handleChangeMainSector}
                         >
                             {
                                 bioMainSector.map((data, index) => {
@@ -428,14 +436,14 @@ function Corporate_Custom(props1) {
                     }}
                 >
                     <FormControl sx={{ m: 0, minWidth: `30ch` }}>
-                    <InputLabel id="lblSubSector..">Sub Sector</InputLabel>
+                    <InputLabel id="lblSubSector...">Sub Sector</InputLabel>
                         <Select
-                            labelId="lblSubSector.."
-                            id="txtSubSector.."
-                            value={subSector}
+                            labelId="lblSubSector..."
+                            id="txtSubSector..."
+                            // value={subSector}
                             defaultValue={props1.AccountCode.SubSector}
-                            label="SubSector.."
-                            onchange={handleChangeSubSector}
+                            label="SubSector..."
+                            // onchange={handleChangeSubSector}
                         >
                             {
                                 bioSubSector.map((data, index) => {
@@ -454,14 +462,14 @@ function Corporate_Custom(props1) {
                     }}
                 >
                     <FormControl sx={{ m: 0, minWidth: `30ch` }}>
-                    <InputLabel id="lblMainIndustry..">Main Industry</InputLabel>
+                    <InputLabel id="lblMainIndustry...">Main Industry</InputLabel>
                         <Select
-                            labelId="lblMainIndustry.."
-                            id="txtMainIndustry.."
-                            value={mainIndustry}
+                            labelId="lblMainIndustry..."
+                            id="txtMainIndustry..."
+                            // value={mainIndustry}
                             defaultValue={props1.AccountCode.MainIndustry}
-                            label="MainIndustry.."
-                            onchange={handleChangeMainIndustry}
+                            label="MainIndustry..."
+                            // onchange={handleChangeMainIndustry}
                         >
                             {
                                 bioMainIndustry.map((data, index) => {
@@ -480,14 +488,14 @@ function Corporate_Custom(props1) {
                     }}
                 >
                     <FormControl sx={{ m: 0, minWidth: `30ch` }}>
-                    <InputLabel id="lblSubIndustry..">Industry</InputLabel>
+                    <InputLabel id="lblSubIndustry...">Industry</InputLabel>
                         <Select
-                            labelId="lblSubIndustry.."
-                            id="txtSubIndustry.."
-                            value={subIndustry}
+                            labelId="lblSubIndustry..."
+                            id="txtSubIndustry..."
+                            // value={subIndustry}
                             defaultValue={props1.AccountCode.subIndustry}
-                            label="SubIndustry.."
-                            onchange={handleChangeSubIndustry}
+                            label="SubIndustry..."
+                            // onchange={handleChangeSubIndustry}
                         >
                             {
                                 bioSubIndustry.map((data, index) => {
@@ -507,14 +515,14 @@ function Corporate_Custom(props1) {
                     }}
                 >
                     <FormControl sx={{ m: 0, minWidth: `30ch` }}>
-                    <InputLabel id="lblAccountOfficer..">Account Officer</InputLabel>
+                    <InputLabel id="lblAccountOfficer...">Account Officer</InputLabel>
                         <Select
-                            labelId="lblAccountOfficer.."
-                            id="txtAccountOfficer.."
-                            value={accountOfficer}
+                            labelId="lblAccountOfficer..."
+                            id="txtAccountOfficer..."
+                            // value={accountOfficer}
                             defaultValue={props1.AccountCode.AccountOfficer}
-                            label="AccountOfficer.."
-                            onchange={handleChangeAccountOfficer}
+                            label="AccountOfficer..."
+                            // onchange={handleChangeAccountOfficer}
                         >
                             {
                                 bioAccountOfficer.map((data, index) => {
@@ -526,7 +534,7 @@ function Corporate_Custom(props1) {
                         </Select>
                     </FormControl>
                 </div>
-                <TextField_Value_Custom props1="Company Book.." props2="30" props3="YES" props4="CHI NHANH TAN BINH"/>
+                <TextField_Value_Custom props1="Company Book..." props2="30" props3="YES" props4="CHI NHANH TAN BINH"/>
             </div>
  
             <hr/>
@@ -547,11 +555,92 @@ function Corporate_Custom(props1) {
                     sx={{
                         marginRight: "30px"
                     }}
-                    
+                    onClick={() => {
+                        console.log("hihihe")
+                        console.log(document.getElementById('txtGBFullName...').value)
+                        let txtCity = document.getElementById("txtCity/Province...").textContent.toString();
+                        let txtCountry = document.getElementById('txtCountry...').textContent.toString();
+                        let txtNationality = document.getElementById('txtNationality...').textContent.toString();
+                        let txtResidence = document.getElementById('txtResidence...').textContent.toString();
+                        let txtDoctype = document.getElementById('txtDocType...').textContent.toString();
+                        let txtMainSector = document.getElementById('txtMainSector...').textContent.toString(); 
+                        let txtSubSector =  document.getElementById('txtSubSector...').textContent.toString();  
+                        let txtMainIndustry = document.getElementById('txtMainIndustry...').textContent.toString();
+                        let txtSubIndustry = document.getElementById('txtSubIndustry...').textContent.toString();
+                        let txtAccountOfficer = document.getElementById('txtAccountOfficer...').textContent.toString();
+                        arr = []
+                        if (document.getElementById('txtGBShortName...').value.length == 1 || document.getElementById('txtGBShortName...').value.length == 0) arr.push(`"GB Short Name" is Required`);
+                        if (document.getElementById('txtGBFullName...').value.length == 1 || document.getElementById('txtGBFullName...').value.length == 0) arr.push(`"GB Full Name" is Required`);
+                        if (document.getElementById('txtTaxIdentificationNumber...').value.length == 1 || document.getElementById('txtTaxIdentificationNumber...').value.length == 0) arr.push(`"Tax Identification Number" is Required`);
+                        if (document.getElementById('txtTelephone...').value.length == 1 || document.getElementById('txtTelephone...').value.length == 0) arr.push(`"Telephone" is Required`);
+                        
+                        if (arr.length != 0) {
+                            setButtonPopupNoti(true)
+                            
+                        }
+                        else {
+                            axios.put(`https://api-newcore.vietvictory.vn/customer/update_corporate_customer/${props1.AccountCode.id}`,{
+                                GB_ShortName: document.getElementById('txtGBShortName...').value.toString(),
+                                GB_FullName: document.getElementById('txtGBFullName...').value,
+                                GB_Street: document.getElementById('txtGBStreet...').value,
+                                GB_Towndist: document.getElementById('txtGBTown/Dist...').value,
+                                docID: document.getElementById('txtTaxIdentificationNumber...').value,
+                                docIssuePlace: document.getElementById('txtDocIssuePlace...').value,
+                                // docIssueDate:  document.getElementById('dpDocIssueDate...').value,
+                                // docExpiryDate:  document.getElementById('dpDocExpiryDate...').value,
+                                contactPerson: document.getElementById('txtContactPerson...').value,
+                                position: document.getElementById('txtPosition...').value,
+                                officeNumber: document.getElementById('txtTelephone...').value,
+                                emailAddress: document.getElementById('txtEmailAddress...').value, 
+                                remarks: document.getElementById('txtRemarks...').value,
+                                
+                                cityProvince: checkName(bioCity,txtCity),
+                                GB_Country: checkCode(bioCountry, txtCountry),
+                                nationality: checkCode(bioCountry, txtNationality),
+                                residence: checkCode(bioCountry, txtResidence),
+                                doctype: checkName(bioDoctype, txtDoctype),
+                                mainSector: checkName(bioMainSector, txtMainSector),
+                                sector: checkName(bioSubSector, txtSubSector),
+                                mainIndustry: checkName(bioMainIndustry, txtMainIndustry),
+                                industry: checkName(bioSubIndustry, txtSubIndustry),
+                                accountOfficer: checkName(bioAccountOfficer, txtAccountOfficer),
+                            })
+                            .then(res => {
+                                console.log("res: update corporate")
+                                console.log(res)
+                                console.log("hihihe lan 2")
+                                console.log(document.getElementById('txtGBFullName...').value)
+                                console.log(document.getElementById('txtGBShortName...').value.toString())
+                                console.log(document.getElementById('txtEmailAddress...').value)
+                                setButtonPopup(true)
 
+                            })
+                            .catch(err=>{
+                                console.log("err")
+                                console.log(err)
+                                arr = [] 
+                                arr.push(`Customer existed`);
+                                setButtonPopupNoti(true)
+                            })
+                            }
+                        
+                    }}
                 >
                     Save
                 </Button>
+                <Popup_Custom 
+                            trigger={buttonPopup}
+                            setTrigger={setButtonPopup}
+                        >
+                            
+                </Popup_Custom>
+                <Notification_Custom
+                    trigger={buttonPopupNoti}
+                    setTrigger={setButtonPopupNoti}
+                    arr={arr}
+                >
+
+                </Notification_Custom>
 
                 <Button 
                     className="close-btn"

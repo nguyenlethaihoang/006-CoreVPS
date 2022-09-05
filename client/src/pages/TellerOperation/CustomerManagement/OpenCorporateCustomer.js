@@ -12,7 +12,7 @@ import Popup_Custom_Fail from "../../../components/Popup_Custom_Fail";
 import Notification_Custom from "../../../components/Notification_Custom";
 
 function checkName(a, b) {
-    let temp = ""
+    let temp = null
     a.map((data, index) => {
         if (data.Name == b)
         {
@@ -24,7 +24,7 @@ function checkName(a, b) {
 }
 let arr = []
 function checkCode(a, b) {
-    let temp = ""
+    let temp = null
     a.map((data, index) => {
         if (data.Code == b)
         {
@@ -81,6 +81,17 @@ function OpenCorporateCustomer() {
         fetchDataMainSector();
     }, []);
 
+    const [bioSubSector, setBioSubSector] = useState([]);
+    useEffect(() => {
+        const fetchDataSubSector = async () => {
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_subsector`);
+            const data = await response.json();
+            setBioSubSector(data.data.subsector);  
+        };
+        fetchDataSubSector();
+    }, []);
+
+
     const [bioMainIndustry, setBioMainIndustry] = useState([]);
     useEffect(() => {
         const fetchDataMainIndustry = async () => {
@@ -89,6 +100,16 @@ function OpenCorporateCustomer() {
             setBioMainIndustry(data.rows);  
         };
         fetchDataMainIndustry();
+    }, []); 
+
+    const [bioSubIndustry, setBioSubIndustry] = useState([]);
+    useEffect(() => {
+        const fetchDataSubIndustry = async () => {
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_subindustry`);
+            const data = await response.json();
+            setBioSubIndustry(data.data.subIndustry);  
+        };
+        fetchDataSubIndustry();
     }, []);
 
     const [bioAccountOfficer, setBioAccountOfficer] = useState([]);
@@ -138,12 +159,12 @@ function OpenCorporateCustomer() {
                         <Select_Custom props1="GB Country." props2="25" props3="YES" props4={bioCountry}/>
                         <Select_Custom props1="Nationality." props2="25" props3="YES" props4={bioCountry}/>
                         <Select_Custom props1="Residence." props2="25" props3="YES" props4={bioCountry}/>
-                        {/* <Select_Custom props1="Doc Type." props2="25" props3="YES" props4={bioDoctype}/> */}
+                        <Select_Custom props1="Doc Type." props2="25" props3="YES" props4={bioDoctype}/>
 
                         <TextField_Custom props1="Tax Identification Number." props2="30" props3="YES" />
                         <TextField_Custom props1="Doc Issue Place." props2="30" props3="YES" />
-                        <DatePicker_Custom props1="Doc Issue Date" props2="30" props3="YES" />
-                        <DatePicker_Custom props1="Doc Expiry Date" props2="30" props3="NO" />
+                        <DatePicker_Custom props1="Doc Issue Date." props2="30" props3="YES" />
+                        <DatePicker_Custom props1="Doc Expiry Date." props2="30" props3="NO" />
                         <TextField_Custom props1="Contact Person." props2="30" props3="NO" />
                         <TextField_Custom props1="Position." props2="20" props3="NO" />
                         <TextField_Custom props1="Telephone." props2="20" props3="NO" />
@@ -151,9 +172,9 @@ function OpenCorporateCustomer() {
                         <TextField_Custom props1="Remarks." props2="30" props3="NO" />
 
                         <Select_Custom props1="Main Sector." props2="30" props3="YES" props4={bioMainSector}/>
-                        <Select_Custom props1="Sector." props2="30" props3="YES" props4={bioMainSector}/> 
+                        <Select_Custom props1="Sector." props2="30" props3="YES" props4={bioSubSector}/> 
                         <Select_Custom props1="Main Industry." props2="30" props3="NO" props4={bioMainIndustry}/>
-                        <Select_Custom props1="Industry." props2="30" props3="NO" props4={bioMainIndustry}/>
+                        <Select_Custom props1="Industry." props2="30" props3="NO" props4={bioSubIndustry}/>
                         <Select_Custom props1="Account Officer." props2="30" props3="NO" props4={bioAccountOfficer}/>
 
                     </div>
@@ -170,12 +191,12 @@ function OpenCorporateCustomer() {
                             let txtCountry = document.getElementById('sltGBCountry.').textContent.toString();
                             let txtNationality = document.getElementById('sltNationality.').textContent.toString();
                             let txtResidence = document.getElementById('sltResidence.').textContent.toString();
-                            // let txtDoctype = document.getElementById('sltDocType.').textContent.toString();
-                            let txtMainSector = document.getElementById('sltMainSector.').textContent.toString();
+                            let txtDoctype = document.getElementById('sltDocType.').textContent.toString();
+                            let txtMainSector = document.getElementById('sltMainSector.').textContent.toString(); 
+                            let txtSubSector =  document.getElementById('sltSector.').textContent.toString(); 
                             let txtMainIndustry = document.getElementById('sltMainIndustry.').textContent.toString();
+                            let txtSubIndustry = document.getElementById('sltIndustry.').textContent.toString();
                             let txtAccountOfficer = document.getElementById('sltAccountOfficer.').textContent.toString();
-                            // console.log("check code")   
-                            // console.log(checkCode(bioCountry, txtCountry))
                             arr = []
                             if (document.getElementById('txtGBShortName.').value.length == 1 || document.getElementById('txtGBShortName.').value.length == 0) arr.push(`"GB Short Name" is Required`);
                             if (document.getElementById('txtGBFullName.').value.length == 1 || document.getElementById('txtGBFullName.').value.length == 0) arr.push(`"GB Full Name" is Required`);
@@ -186,28 +207,33 @@ function OpenCorporateCustomer() {
                                 
                             }
                             else {
+                               
                                 axios.post('https://api-newcore.vietvictory.vn/customer/create_corporate_customer',{
                                     GB_ShortName: document.getElementById('txtGBShortName.').value,
                                     GB_FullName: document.getElementById('txtGBFullName.').value,
-                                    GB_Street: "",
-                                    GB_Towndist: "",
+                                    GB_Street: document.getElementById('txtGBStreet.').value,
+                                    GB_Towndist: document.getElementById('txtGBTown/Dist.').value,
                                     docID: document.getElementById('txtTaxIdentificationNumber.').value,
-                                    docIssuePlace: "",
-                                    contactPerson: "",
-                                    position: "",
+                                    docIssuePlace: document.getElementById('txtDocIssuePlace.').value,
+                                    docIssueDate:  document.getElementById('dpDocIssueDate.').value,
+                                    docExpiryDate:  document.getElementById('dpDocExpiryDate.').value,
+                                    contactPerson: document.getElementById('txtContactPerson.').value,
+                                    position: document.getElementById('txtPosition.').value,
                                     officeNumber: document.getElementById('txtTelephone.').value,
-                                    emailAddress: "",
-                                    remarks: "",
+                                    emailAddress: document.getElementById('txtEmailAddress.').value,
+                                    remarks: document.getElementById('txtRemarks.').value,
                                     
-                                    cityProvince: null,
-                                    GB_Country: null,
-                                    nationality: null,
-                                    residence: null,
-                                    doctype: null,
-                                    mainSector:null,
-                                    sector: null,
-                                    // mainIndustry: checkName(bioMainIndustry, txtMainIndustry),
-                                    accountOfficer: null,
+                                    cityProvince: checkName(bioCity,txtCity),
+                                    GB_Country: checkCode(bioCountry, txtCountry),
+                                    nationality: checkCode(bioCountry, txtNationality),
+                                    residence: checkCode(bioCountry, txtResidence),
+                                    doctype: checkName(bioDoctype, txtDoctype),
+                                    // doctype: null,
+                                    mainSector: checkName(bioMainSector, txtMainSector),
+                                    sector: checkName(bioSubSector, txtSubSector),
+                                    mainIndustry: checkName(bioMainIndustry, txtMainIndustry),
+                                    industry: checkName(bioSubIndustry, txtSubIndustry),
+                                    accountOfficer: checkName(bioAccountOfficer, txtAccountOfficer),
                                 })
                                 .then(res => {
                                     console.log("res")

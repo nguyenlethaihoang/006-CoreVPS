@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 
 function DatePicker_Custom({props1, props2, props3}) {
     // const [value, setValue] = React.useState<Date | null>(null);
-    const [value, setValue] = React.useState(new Date());
+    const [value, setValue] = React.useState(null);
 
     const handleChange = (newValue) => {
         setValue(newValue);
@@ -33,13 +33,15 @@ function DatePicker_Custom({props1, props2, props3}) {
         >
             <LocalizationProvider 
                 dateAdapter={AdapterDateFns}
+                // id={idTemp}
+                
             >
                 <DatePicker
                     label={props1}
-                    value={value}
+                    value={value}   
                     onChange={handleChange}
-                    
-                    renderInput={(params) => <TextField {...params} />}
+                    inputFormat="yyyy/MM/dd"
+                    renderInput={(params) => <TextField {...params} id={idTemp} />}
                 />
             </LocalizationProvider>
         </div>

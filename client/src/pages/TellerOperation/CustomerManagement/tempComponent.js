@@ -19,6 +19,7 @@ function TempComponent(props){
             trigger={props.trigger}
             setTrigger={props.setTrigger}
             AccountCode={props.AccountCode}
+            AccountCode01={props.AccountCode01}
         >
             
         </Individual_Custom>)
@@ -29,6 +30,7 @@ function TempComponent(props){
             setTrigger={props.setTrigger}
             AccountCode={props.AccountCode}
             resetComponent={resetComponent}
+            AccountCode01={props.AccountCode01}
         >
             
         </Corporate_Custom>)
