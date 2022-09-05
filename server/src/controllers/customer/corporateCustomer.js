@@ -240,6 +240,7 @@ const corporateCustomerController = {
             MainSector: customerReq.MainSector,
             MainIndustry: customerReq.MainIndustry,
             Industry: customerReq.Industry,
+            Sector: customerReq.Sector,
             AccountOfficer: customerReq.AccountOfficer,
             RelationCode: customerReq.RelationCode,
             GB_ShortName: customerReq.GB_ShortName,
@@ -264,8 +265,7 @@ const corporateCustomerController = {
             OfficeNumber: customerReq.OfficeNumber,
             TotalAssets: customerReq.TotalAssets,
             TotalRevenue: customerReq.TotalRevenue,
-            EmployeesNo: customerReq.EmployeesNo,
-            Sector: customerReq.Sector,
+            EmployeesNo: customerReq.EmployeesNo
         })
 
         return res.status(200).json({
