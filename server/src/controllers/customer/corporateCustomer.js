@@ -242,6 +242,8 @@ const corporateCustomerController = {
             Industry: customerReq.Industry,
             AccountOfficer: customerReq.AccountOfficer,
             RelationCode: customerReq.RelationCode,
+            GB_ShortName: customerReq.GB_ShortName,
+            GB_FullName: customerReq.GB_FullName
         })
 
         const customerID = customerDB.getDataValue('id')
@@ -252,8 +254,6 @@ const corporateCustomerController = {
             return next(new AppError("error", 400))
         }
         const corporateCustomerUpdate = await corporateCustomerDB.update({
-            GB_ShortName: customerReq.GB_ShortName,
-            GB_FullName: customerReq.GB_FullName,
             IncorpDate: customerReq.IncorpDate,
             ContactPerson: customerReq.ContactPerson,
             Position: customerReq.Position,
