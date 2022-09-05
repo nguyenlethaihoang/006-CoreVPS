@@ -286,11 +286,18 @@ function EnquiryCustomer() {
                                                         if (row.CustomerType == 'P') {
                                                             AccountCode = bioGetHet[index].customer
                                                             AccountCode01 = bioGetHet[index].detail
+                                                            console.log("index individual")
+                                                            console.log(index)
+                                                            console.log(AccountCode.id)
                                                             setButtonPopup(true) 
                                                             component = 1
                                                         } else {
                                                             AccountCode = bioGetHet[index].customer
                                                             AccountCode01 = bioGetHet[index].detail
+                                                            console.log("index corporate")
+                                                            console.log(index)
+                                                            console.log(AccountCode.id)
+
                                                             setButtonPopupCorporate(true)
                                                             component = 2
                                                         }
