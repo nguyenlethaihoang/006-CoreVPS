@@ -176,7 +176,10 @@ const enquiryCustomerController = {
             }]
         })
 
-
+        let customerRes = {
+            customer: [],
+            detail: []
+        }
         rows.map(async value => {
             let typeDB = parseInt(value.getDataValue("CustomerType"))
             let cusIDDB = parseInt(value.getDataValue("id"))
@@ -198,7 +201,8 @@ const enquiryCustomerController = {
             }else{
                 return next(new appError('Find detail Error', 404))
             }
-            rows.detailCus = detailCus
+            customerRes.customer.push(rows)
+            customerRes.detail.push(detailCus)
 
         })
 
@@ -206,7 +210,7 @@ const enquiryCustomerController = {
             message: "get all customer",
             data:{
                 quantity: count,
-                customer: rows
+                customer: customerRes
             }
         })
     }),
