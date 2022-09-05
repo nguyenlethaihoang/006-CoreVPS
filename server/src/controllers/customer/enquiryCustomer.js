@@ -201,7 +201,7 @@ const enquiryCustomerController = {
             }else{
                 return next(new appError('Find detail Error', 404))
             }
-            customerRes.customer.push(rows)
+            customerRes.customer.push(value)
             customerRes.detail.push(detailCus)
 
         })
