@@ -6,6 +6,7 @@ const discountedSAModel = require('../../models/account/DiscountedSA')
 const appError = require('../../utils/appError')
 const asyncHandler = require('../../utils/async')
 
+// KTRA SO TIEN RUT
 const withdrawalController = {
     create: asyncHandler(async (req, res, next) => {
         const withdrawalReq = {
@@ -75,8 +76,12 @@ const withdrawalController = {
 
 
         //CALCULATE
-        const paidAmount = withdrawalReq.amount * withdrawalReq.account
-        const newAmount = balanceDB + paidAmount
+        const paidAmount = withdrawalReq.amount * withdrawalReq.dealRate
+        //CHECK WITHDRAWAL AMOUNT
+        if(paidAmount > balanceDB ){
+            return next(new appError('Invalid Withdrawal Amount', 404))
+        }
+        const newAmount = balanceDB - paidAmount
 
         const newWithdrawalTrans = await withdrawalTransModel.create({
             Account: withdrawalReq.account,
@@ -107,9 +112,10 @@ const withdrawalController = {
 
 
     // SET STATUS + WITHDRAWAL
+    // DISCOUNTED SA - Update lai thong tin lien quan
     validate: asyncHandler(async (req, res, next) => {
         const withdrawalIDReq = req.params.withdrawal
-        const statusReq = req.body.statusReq
+        const statusReq = req.body.status
         if(!statusReq){
             return next(new appError("Status is required!", 404))
         }
@@ -206,7 +212,7 @@ const withdrawalController = {
                 if (amountLCY != 0){
                     updatedAccount = await accountDB.update({
                         Amount: amountDB - paidAmountDB,
-                        AmountLCY: amountLCY - paidAmountDB
+                        AmountLCY: amountLCY - paidAmountDB,
                     })
                     .catch(err => {
                         return next(new appError(err, 404))

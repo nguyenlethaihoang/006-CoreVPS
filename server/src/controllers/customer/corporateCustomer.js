@@ -93,7 +93,8 @@ const corporateCustomerController = {
             AccountOfficer: customerReq.AccountOfficer,
             RelationCode: customerReq.RelationCode,
             PhoneNumber: customerReq.OfficeNumber,
-            CustomerType: constValue.customer.corporateCustomer
+            CustomerType: constValue.customer.corporateCustomer,
+            SubSector: customerReq.Sector
         })
         .catch(err => {
             return next(new AppError(err, 404))
@@ -113,7 +114,6 @@ const corporateCustomerController = {
             TotalAssets: customerReq.TotalAssets,
             TotalRevenue: customerReq.TotalRevenue,
             EmployeesNo: customerReq.EmployeesNo,
-            Sector: customerReq.Sector,
             CustomerID: newCustomerID
         })
         .catch(err => {

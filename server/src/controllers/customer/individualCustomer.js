@@ -108,7 +108,8 @@ const individualCustomerController = {
             AccountOfficer: customerReq.AccountOffice,
             CustomerType: constValue.customer.individualCustomer,
             RelationCode: customerReq.RelationCode,
-            PhoneNumber: customerReq.MobilePhone
+            PhoneNumber: customerReq.MobilePhone,
+            SubSector: customerReq.SubSector,
         })
         .catch(err => {
             console.log(err)
@@ -123,7 +124,6 @@ const individualCustomerController = {
             MobilePhone: customerReq.MobilePhone,
             EmailAddress: customerReq.EmailAddress,
             CustomerID: customerID,
-            SubSector: customerReq.SubSector,
             Currency: customerReq.Currency,
             CityzenIdentify: customerReq.CityzenIdentify
         })

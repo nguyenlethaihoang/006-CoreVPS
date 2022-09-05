@@ -31,7 +31,7 @@ const creditAccount = require('./account/creditAccount')
 const foreignExchange = require('./exchange/foreignExchange')
 
 const withdrawalTrans = require('./transaction/withdrawal')
-
+const transferTrans = require('./transaction/transfer')
 const association = () => {
     // CUSTOMER 
     // -- FkCustomer_CityProvinceId
@@ -426,6 +426,14 @@ const association = () => {
         as: 'CurrencyPaidt'
     })
     withdrawalTrans.belongsTo(statusType, {
+        foreignKey: 'Status'
+    })
+
+    //TRANSFER
+    transferTrans.belongsTo(accountType, {
+        foreignKey: 'AccountType'
+    })
+    transferTrans.belongsTo(statusType, {
         foreignKey: 'Status'
     })
 }
