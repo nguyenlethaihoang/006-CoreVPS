@@ -36,7 +36,7 @@ const depositController = {
             //     return next(new appError(err, 404))
             // })
 
-            if(!accountDB){
+            if(!debitAccountDB){
                 return next(new appError("Account not found", 404))
             }
 
