@@ -69,6 +69,7 @@ function OpenAccount() {
             // console.log(data.data.customer)
             // createSearchCustomer(data.data.customer)
             arrSearchCustomer = []
+            
             bioCustomer.map((dataMap, i) => {
                 let resObj = {
                     index: i,
