@@ -14,7 +14,10 @@ const resetComponent = (props) => {
 function TempComponent(props){
     console.log("temp props")
     console.log(props.component)
+
+    console.log(props)
     if(props.component == 1){
+
         return (<Individual_Custom
             trigger={props.trigger}
             setTrigger={props.setTrigger}
@@ -26,8 +29,8 @@ function TempComponent(props){
     }
     else if(props.component == 2){
         return (<Corporate_Custom
-            trigger={props.trigger}
-            setTrigger={props.setTrigger}
+            trigger={props.trigger01}
+            setTrigger={props.setTrigger01}
             AccountCode={props.AccountCode}
             resetComponent={resetComponent}
             AccountCode01={props.AccountCode01}

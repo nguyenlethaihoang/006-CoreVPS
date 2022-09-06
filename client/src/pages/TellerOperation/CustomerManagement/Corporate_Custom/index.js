@@ -650,7 +650,7 @@ function Corporate_Custom(props1) {
                         
                         {
                             props1.setTrigger(false)
-                            props1.resetComponent(props1)
+                            props1=null
                         }
                     }
                 >

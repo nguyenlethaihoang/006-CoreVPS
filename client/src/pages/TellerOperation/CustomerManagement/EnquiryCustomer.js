@@ -23,6 +23,8 @@ import TempComponent from "./tempComponent"
 let AccountCode 
 let AccountCode01
 let component
+let triggerTemp
+let setTriggerTemp
 function createData(CustomerID, CustomerType, GBFullName, DocID, CellPhoneOfficeNum, Detail) {
     return { CustomerID, CustomerType, GBFullName, DocID, CellPhoneOfficeNum, Detail };
   }
@@ -312,8 +314,11 @@ function EnquiryCustomer() {
                                     AccountCode={AccountCode}
                                 ></Corporate_Custom> */}
                                 <TempComponent
-                                    trigger={buttonPopupCorporate}
-                                    setTrigger={setButtonPopupCorporate}
+                                    trigger01={buttonPopupCorporate}
+                                    setTrigger01={setButtonPopupCorporate}
+                                    trigger={buttonPopup}
+                                    setTrigger={setButtonPopup}
+                                    
                                     AccountCode={AccountCode}
                                     AccountCode01={AccountCode01}
                                     component={component}
