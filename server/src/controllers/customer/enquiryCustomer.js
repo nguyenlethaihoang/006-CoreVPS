@@ -147,46 +147,46 @@ const enquiryCustomerController = {
         // })
 
 
-        rowsRes = []
-        await Promise.all(customersDB.map(async (value, i) => {
-            let typeDB = parseInt(value.getDataValue("CustomerType"))
-            let cusIDDB = parseInt(value.getDataValue("id"))
-            let detailCus
-            if(typeDB==1){
-                detailCus = await individualCustomerModel.findOne({
-                    where: {CustomerID: cusIDDB}
-                })
-                .catch(err => {
-                    return next(new appError(err, 404))
-                })
-            }else if(typeDB == 2){
-                detailCus = await corporateCustomerModel.findOne({
-                    where: {CustomerID: cusIDDB}
-                })
-                .catch(err => {
-                    return next(new appError(err, 404))
-                })
-            }else{
-                return next(new appError('Find detail Error', 404))
-            }
-            let cusRes = {customer: customersDB[i], detail: detailCus}
-            rowsRes.push(cusRes)
+        // rowsRes = []
+        // await Promise.all(customersDB.map(async (value, i) => {
+        //     let typeDB = parseInt(value.getDataValue("CustomerType"))
+        //     let cusIDDB = parseInt(value.getDataValue("id"))
+        //     let detailCus
+        //     if(typeDB==1){
+        //         detailCus = await individualCustomerModel.findOne({
+        //             where: {CustomerID: cusIDDB}
+        //         })
+        //         .catch(err => {
+        //             return next(new appError(err, 404))
+        //         })
+        //     }else if(typeDB == 2){
+        //         detailCus = await corporateCustomerModel.findOne({
+        //             where: {CustomerID: cusIDDB}
+        //         })
+        //         .catch(err => {
+        //             return next(new appError(err, 404))
+        //         })
+        //     }else{
+        //         return next(new appError('Find detail Error', 404))
+        //     }
+        //     let cusRes = {customer: customersDB[i], detail: detailCus}
+        //     rowsRes.push(cusRes)
 
-        }))
-
-        return res.status(200).json({
-            message: "get all customer",
-            data:{
-                customer: rowsRes
-            }
-        })
-
-
+        // }))
 
         // return res.status(200).json({
-        //     message: "customers result",
-        //     data: customersDB
+        //     message: "get all customer",
+        //     data:{
+        //         customer: rowsRes
+        //     }
         // })
+
+
+
+        return res.status(200).json({
+            message: "customers result",
+            data: customersDB
+        })
     }),
 
     getAll: asyncHandler( async (req, res, next) => {
