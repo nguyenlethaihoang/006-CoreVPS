@@ -265,7 +265,9 @@ const individualCustomerController = {
             Industry: customerReq.Industry,
             AccountOfficer: customerReq.AccountOffice,
             CustomerType: constValue.customer.individualCustomer,
-            RelationCode: customerReq.RelationCode
+            RelationCode: customerReq.RelationCode,
+            GB_ShortName: customerReq.GB_ShortName,
+            GB_FullName: customerReq.GB_FullName,
         })
 
         const individualCustomerDB = await individualCustomerModel.findOne({where: {CustomerID: customerIDReq}})
@@ -276,8 +278,6 @@ const individualCustomerController = {
             FirstName: customerReq.FirstName,
             LastName: customerReq.LastName,
             MiddleName: customerReq.MiddleName,
-            GB_ShortName: customerReq.GB_ShortName,
-            GB_FullName: customerReq.GB_FullName,
             Birthday: customerReq.Birthday,
             MobilePhone: customerReq.MobilePhone,
             EmailAddress: customerReq.EmailAddress,
