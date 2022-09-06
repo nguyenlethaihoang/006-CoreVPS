@@ -154,54 +154,6 @@ function Corporate_Custom(props1) {
         fetchDataAccountOfficer();
     }, []);
 
-    
-
-    const [country, setCountry] = useState(parseInt(props1.AccountCode?.GB_Country));
-    const handleChangeCountry = (event) => {
-        setCountry(event.target.value);
-    };
-    
-
-    // const [nationality, setNationality] = useState(`${props1.AccountCode?.Nationality}`);
-    // const handleChangeNationality = (event) => {
-    //     setNationality(event.target.value);
-    // };
-
-    // const [residence, setResidence] = useState(`${props1.AccountCode?.Residence}`);
-    // const handleChangeResidence = (event) => {
-    //     setResidence(event.target.value);
-    // };
-
-    // const [docType, setDocType] = useState(`${props1.AccountCode?.Doctype}`);
-    // const handleChangeDocType = (event) => {
-    //     setDocType(event.target.value);
-    // };
-
-    // const [mainSector, setMainSector] = useState(`${props1.AccountCode?.MainSector}`);
-    // const handleChangeMainSector = (event) => {
-    //     setMainSector(event.target.value);
-    // };
-
-    // const [subSector, setSubSector] = useState(`${props1.AccountCode?.SubSector}`);
-    // const handleChangeSubSector = (event) => {
-    //     setSubSector(event.target.value);
-    // };
-
-    // const [mainIndustry, setMainIndustry] = useState(`${props1.AccountCode?.MainIndustry}`);
-    // const handleChangeMainIndustry = (event) => {
-    //     setMainIndustry(event.target.value);
-    // };
-
-    // const [subIndustry, setSubIndustry] = useState(`${props1.AccountCode?.Industry}`);
-    // const handleChangeSubIndustry = (event) => {
-    //     setSubIndustry(event.target.value);
-    // };
-
-    // const [accountOfficer, setAccountOfficer] = useState(`${props1.AccountCode?.AccountOfficer}`);
-    // const handleChangeAccountOfficer = (event) => {
-    //     setAccountOfficer(event.target.value);
-    // };
-
     console.log("detaillllll")
     console.log(props1.AccountCode01)
     
@@ -215,7 +167,7 @@ function Corporate_Custom(props1) {
         <div className='popup-inner-c'>
             
             <h1>
-                Customer Info - Corporate
+                Customer Info - Corporate - {props1.AccountCode.id}
             </h1>
             <div
                 style={{ 
@@ -400,8 +352,8 @@ function Corporate_Custom(props1) {
                 <TextField_Value_Custom props1="Contact Person..." props2="20" props3="YES" props4={props1.AccountCode01.ContactPerson}/>
                 <TextField_Value_Custom props1="Position..." props2="20" props3="YES" props4={props1.AccountCode01.Position}/>
                 <TextField_Value_Custom props1="Telephone..." props2="15" props3="YES" props4={props1.AccountCode.PhoneNumber}/>
-                <TextField_Value_Custom props1="Email Address..." props2="20" props3="YES" props4={props1.AccountCode.EmailAddress}/>
-                <TextField_Value_Custom props1="Remarks..." props2="30" props3="YES" props4={props1.AccountCode.Remarks}/>
+                <TextField_Value_Custom props1="Email Address..." props2="20" props3="YES" props4={props1.AccountCode01.EmailAddress}/>
+                <TextField_Value_Custom props1="Remarks..." props2="30" props3="YES" props4={props1.AccountCode01.Remarks}/>
                 
                 <div
                     style={{
@@ -493,7 +445,7 @@ function Corporate_Custom(props1) {
                             labelId="lblSubIndustry..."
                             id="txtSubIndustry..."
                             // value={subIndustry}
-                            defaultValue={props1.AccountCode.subIndustry}
+                            defaultValue={props1.AccountCode.Industry}
                             label="SubIndustry..."
                             // onchange={handleChangeSubIndustry}
                         >
