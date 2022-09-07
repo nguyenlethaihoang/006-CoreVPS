@@ -9,7 +9,7 @@ import TextField_Value_Custom from '../../../../components/TextField_Value_Custo
 import Popup_Custom from '../../../../components/Popup_Custom';
 import Notification_Custom from '../../../../components/Notification_Custom'; 
 
-
+ 
 const categoryData = [
     {id: 1,
     Name: '1000 - Tiền  gửi tiết kiệm' },
@@ -167,7 +167,7 @@ function Corporate_Custom(props1) {
         <div className='popup-inner-c'>
             
             <h1>
-                Customer Info - Corporate - {props1.AccountCode.id}
+                Customer Info - Corporate
             </h1>
             <div
                 style={{ 

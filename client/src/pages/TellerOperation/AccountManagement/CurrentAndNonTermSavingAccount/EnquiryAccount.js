@@ -140,7 +140,7 @@ function EnquiryAccount() {
                                 else if (txtCustomerType.length == 13)
                                     valueCustomerType = 2;
                                 const fetchDataGetAll = async () => {
-                                    await axios.post(' https://api-newcore.vietvictory.vn/account/debit_account/enquiry', {
+                                    await axios.post('https://api-newcore.vietvictory.vn/account/debit_account/enquiry', {
                                         customerID: parseInt(document.getElementById('txtCustomerID.').value.toString()),
                                         account: parseInt(document.getElementById('txtAccountCode.').value.toString()),
                                         currency: checkName( currencyData, document.getElementById('sltCurrency.').textContent.toString()),
@@ -252,7 +252,7 @@ function EnquiryAccount() {
                                             <TableCell align="center" component="right" scope="row">
                                                 {row.AccountCode}
                                             </TableCell>
-                                            <TableCell align="center">{row.CustomerID}</TableCell>
+                                            <TableCell align="center">{row.CustomerID}+100000</TableCell>
                                             <TableCell align="center">{row.CustomerName}</TableCell>
                                             <TableCell align="center">{row.DocID}</TableCell>
                                             <TableCell align="center">{row.Category}</TableCell>

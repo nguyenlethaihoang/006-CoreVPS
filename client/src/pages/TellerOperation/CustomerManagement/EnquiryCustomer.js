@@ -23,6 +23,10 @@ import TempComponent from "./tempComponent"
 let AccountCode 
 let AccountCode01
 let component
+let arrCP = []
+arrCP['P'] = 1;
+arrCP['C'] = 3;
+let cusTemp
 let triggerTemp
 let setTriggerTemp
 function createData(CustomerID, CustomerType, GBFullName, DocID, CellPhoneOfficeNum, Detail) {
@@ -178,25 +182,35 @@ function EnquiryCustomer() {
                             startIcon={<ManageSearchIcon />}
                             onClick={() => {
                                 rows = [];
-                                console.log("cus ID")
-                                console.log(parseInt(document.getElementById('txtCustomerID..').value))
                                 let txtCustomerType = null
+                                cusTemp = 0;
                                 if (document.getElementById('sltCustomerType').textContent.toString().length == 10)
-                                    txtCustomerType = 1;
-                                    if (document.getElementById('sltCustomerType').textContent.toString().length == 13)
+                                    {
+                                        txtCustomerType = 1;
+                                        cusTemp = 100000;
+                                    }
+                                if (document.getElementById('sltCustomerType').textContent.toString().length == 13)
+                                {
                                     txtCustomerType = 2;
+                                    cusTemp = 300000;
+                                }
+                                else {
+                                    if  (parseInt(document.getElementById('txtCustomerID..').value) > 100000 && parseInt(document.getElementById('txtCustomerID..').value) < 200000)
+                                        cusTemp = 100000;
+                                    else if (parseInt(document.getElementById('txtCustomerID..').value) > 200000 && parseInt(document.getElementById('txtCustomerID..').value) < 300000)
+                                        cusTemp = 200000;
+                                    else cusTemp = 300000;
+                                }
                                 // setBioGetAll(rows)
                                 const fetchDataGetAll = async () => {
                                     await axios.post('https://api-newcore.vietvictory.vn/customer/enquiry_customer', {
                                         "customerType": txtCustomerType,
-                                        "customerID": parseInt(document.getElementById('txtCustomerID..').value),
+                                        "customerID": parseInt(document.getElementById('txtCustomerID..').value)-cusTemp,
                                         "docID": document.getElementById('txtDocID..').value.toString(),
                                         "phoneNumber": document.getElementById('txtCellPhone/OfficeNum..').value.toString(),
                                         "GB_FullName": document.getElementById('txtGBFullName..').value.toString(),
                                         
                                     }).then(response => {
-                                        console.log("enquiry test")
-                                        console.log(response)
                                         const dataRes = response.data.data
                                         setBioGetAll(dataRes); 
                                          
@@ -275,7 +289,7 @@ function EnquiryCustomer() {
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
                                         <TableCell align="center" component="right" scope="row">
-                                            {row.CustomerID}
+                                            {row.CustomerID+100000*arrCP[row.CustomerType]}
                                         </TableCell>
                                         <TableCell align="center">{row.CustomerType}</TableCell>
                                         <TableCell align="center">{row.GBFullName}</TableCell>
@@ -288,18 +302,11 @@ function EnquiryCustomer() {
                                                         if (row.CustomerType == 'P') {
                                                             AccountCode = bioGetHet[index].customer
                                                             AccountCode01 = bioGetHet[index].detail
-                                                            console.log("index individual")
-                                                            console.log(index)
-                                                            console.log(AccountCode.id)
                                                             setButtonPopup(true) 
                                                             component = 1
                                                         } else {
                                                             AccountCode = bioGetHet[index].customer
                                                             AccountCode01 = bioGetHet[index].detail
-                                                            console.log("index corporate")
-                                                            console.log(index)
-                                                            console.log(AccountCode.id)
-
                                                             setButtonPopupCorporate(true)
                                                             component = 2
                                                         }
@@ -334,6 +341,7 @@ function EnquiryCustomer() {
                                 </TempComponent>
                             </Table>
                         </TableContainer>
+                        
 
                     </div>
                 
