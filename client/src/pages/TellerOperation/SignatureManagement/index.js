@@ -12,7 +12,7 @@ function SignatureManagement() {
 
             <Enquiry />
 
-            {/* <Amend /> */}
+            <Amend />
 
             {/* <Validate /> */}
 

@@ -252,7 +252,7 @@ function EnquiryAccount() {
                                             <TableCell align="center" component="right" scope="row">
                                                 {row.AccountCode}
                                             </TableCell>
-                                            <TableCell align="center">{row.CustomerID}+100000</TableCell>
+                                            <TableCell align="center">{row.CustomerID}</TableCell>
                                             <TableCell align="center">{row.CustomerName}</TableCell>
                                             <TableCell align="center">{row.DocID}</TableCell>
                                             <TableCell align="center">{row.Category}</TableCell>
