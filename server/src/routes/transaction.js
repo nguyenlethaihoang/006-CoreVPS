@@ -4,6 +4,7 @@ const route = express.Router()
 const depositController = require('../controllers/transaction/deposit')
 const withdrawalController = require('../controllers/transaction/withdrawal')
 const transferController = require('../controllers/transaction/transfer')
+const enquiryController = require('../controllers/transaction/enquiry')
 
 //DEPOSIT
 route.post('/create_deposit', depositController.create)
@@ -18,4 +19,6 @@ route.put('/validate_withdrawal/:withdrawal', withdrawalController.validate)
 route.post('/create_transfer', transferController.create)
 route.put('/validate_transfer/:transfer', transferController.validate)
 
+//ENQUIRY
+route.post('/enquiry', enquiryController.enquiry)
 module.exports = route

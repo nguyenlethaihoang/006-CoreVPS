@@ -8,6 +8,7 @@ const asyncHandler = require('../../utils/async')
 const appError = require('../../utils/appError')
 
 const transferTransModel = require('../../models/transaction/transfer')
+const AppError = require('../../utils/appError')
 
 
 const transferTransController = {
@@ -16,7 +17,7 @@ const transferTransController = {
             accountType: req.body.accountType, //int
             debitAccount: req.body.debitAccount, //text
             transferAmount: req.body.transferAmount, //(debitAmount) int
-            creditAccount: req.body.debitAccount,
+            creditAccount: req.body.creditAccount,
             dealRate: req.body.dealRate, //float
             valueDate: req.body.valueDate, //ex: "2022/05/09"
             waiveCharges: req.body.waiveCharges, //bool
@@ -25,6 +26,10 @@ const transferTransController = {
 
         if(!transferReq.debitAccount || !transferReq.creditAccount || !transferReq.transferAmount){
             return next(new appError("Debit_Account, Credit_Account and Debit Amount are required!"), 404)
+        }
+
+        if(transferReq.debitAccount == transferReq.creditAccount){
+            return next(new appError("Credit Account invalid", 404))
         }
 
         const debitAccountDB = await debitAccountModel.findByPk(transferReq.debitAccount)
@@ -40,12 +45,16 @@ const transferTransController = {
         console.log("Working Amount")
         console.log(custAmountDB)
 
+        if(transferReq > custAmountDB){
+            return next(new AppError("invalid Amount!", 404))
+        }
+
         const newTransfer = await transferTransModel.create({
             DebitAccount: transferReq.debitAccount,
             CreditAccount: transferReq.creditAccount,
-            InitialAmount: transferReq.custAmountDB,
+            InitialAmount: custAmountDB,
             TransferAmount: transferReq.transferAmount,
-            NewAmount: custAmountDB + transferReq.transferAmount,
+            NewAmount: custAmountDB - transferReq.transferAmount,
             ValueDate: transferReq.valueDate,
             DealRate: transferReq.dealRate,
             CreditAmount: transferReq.transferAmount,
