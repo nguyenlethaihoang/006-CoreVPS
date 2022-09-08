@@ -26,11 +26,11 @@ async function deleteImage(blobName){
     await blobService.delete()
     .then(result => {
         console.log("Delete result: ", result)
-        return 1
+        return result
     })
     .catch(err => {
         console.log(err)
-        return 0
+        return err
     })
 }
 
@@ -306,7 +306,7 @@ const signatureController = {
         // REMOVE OLD SINGATURE ON CLOUD DB
         const deleteResult = await deleteImage(oldBlobName)
         if(!deleteResult){
-            return next(new appError("Delete error", 404))
+            return next(new appError(deleteResult, 404))
         }
 
         return res.status(200).json({
