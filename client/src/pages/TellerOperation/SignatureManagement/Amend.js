@@ -6,8 +6,20 @@ import TextField_Custom from '../../../components/TextField_Custom'
 import Button_Custom from "../../../components/Button_Custom";
 import UploadButton_Custom from "../../../components/UploadButton_Custom";
 import { Box } from "@mui/system";
+import axios from "axios";
+import { useState } from "react";
+import Popup_Custom from "../../../components/Popup_Custom";
+import Notification_Custom from "../../../components/Notification_Custom";
+
+
+let arr = []
+
+let idImage;
 
 function Amend() {
+    const [valueImage, setValueImage] = useState("")
+    const [buttonPopup, setButtonPopup] = useState(false)
+    const [buttonPopupNoti, setButtonPopupNoti] = useState(false)
     return (
         <div>
             <Accordion >
@@ -29,91 +41,21 @@ function Amend() {
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails style={{ paddingLeft: "30px"}}>
-                    {/* <div
-                        style={{ 
-                            display: "flex", 
-                            width: "100%", 
-                            flexWrap: "wrap"
-                        }}
-                    >
-                        <TextField_Custom props1="Customer ID" props2="30" props3="NO"/>
-                    </div>
-
                     <div
                         style={{ 
                             display: "flex", 
                             width: "100%", 
-                            flexWrap: "wrap",
-                            paddingTop: "20px",
-                            paddingBottom: "10px",
+                            // backgroundColor: "#333", 
+                            flexWrap: "wrap"
+                        
                         }}
                     >
-                        <Typography
-                            variant="h6" 
-                            align="center" 
-                            alignContent="center"
-                            color="#0a3060"
-                            fontWeight= "550"
-                            paddingRight="30px"
+                        <form 
+                            method="post" 
+                            action="https://api-newcore.vietvictory.vn/signature/upload" 
+                            enctype="multipart/form-data"
+                            id="idFormAmend"
                         >
-                            New signature:
-                        </Typography>
-                        <UploadButton_Custom props1="Select signature image" props2="10" props3="YES"/>
-                    </div>
-
-                    <div
-                        style={{ 
-                            display: "flex", 
-                            width: "100%", 
-                            flexWrap: "wrap",
-                            paddingBottom: "20px",
-                        }}
-                    >
-                        Old signature
-                    </div>
-
-                    <div
-                        style={{ 
-                            display: "flex", 
-                            width: "100%", 
-                            flexWrap: "wrap",
-                            paddingBottom: "20px",
-                        }}
-                    >
-                        <Box
-                            component="img"
-                            sx={{
-                            height: 233,
-                            width: 350,
-                            maxHeight: { xs: 233, md: 167 },
-                            maxWidth: { xs: 350, md: 250 },
-                            }}
-                            alt="The house from the offer."
-                            src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
-                        />
-                    </div> */}
-
-                    {/* <div
-                        style={{ 
-                            // display: "flex", 
-                            width: "100%", 
-                            // backgroundColor: "#333", 
-                            // flexWrap: "wrap"
-                        }}
-                    >
-                        <Button_Custom props1="Search"/> 
-                    </div> */}
-                        
-                    <div
-                        style={{ 
-                            display: "flex", 
-                            width: "100%", 
-                            // backgroundColor: "#333", 
-                            flexWrap: "wrap"
-                        
-                        }}
-                    >
-                        <form method="post" action="https://api-newcore.vietvictory.vn/signature/upload" enctype="multipart/form-data">
                             <div class="form-group">
 
                             <div
@@ -128,9 +70,8 @@ function Amend() {
                                 <Input 
                                 
                                     type="text" 
-                                    name="customerID"
-                                    placeholder="Customer ID"
-
+                                    name="docID"
+                                    placeholder="Doc ID / Tax Identification Number"
                                 />
                             </div>
                             <div
@@ -163,16 +104,73 @@ function Amend() {
                             >
                                 <Button 
                                     variant="contained"
-                                    type="submit" 
-                                    name="upload" 
-                                >
-                                    Change
-                                </Button>
-                            </div>
-                                
-                                
-                                
-                                
+                                    // type="submit 
+                                    // name="upload" 
+                                    onClick={() => {
+                                        // const form = document.getElementById("idform").elements["docID"].value
+                                        const docYeah = document.getElementById("idFormAmend").elements["docID"].value
+                                        console.log("docYeah")
+                                        console.log(docYeah)
+                                        const fetchDataGetAll = async () => { 
+                                            let valueId = docYeah
+                                            await axios.get(`https://api-newcore.vietvictory.vn/signature/get_by_customer/${valueId}`, {
+                                            }).then(response => {
+                                                if (response.data.data.signature[0].URL != undefined ) {
+                                                    // setValueImage(response.data.data.signature[0].URL)
+                                                    console.log("id ne")
+                                                    console.log(response.data.data.signature[0].signature.id)
+                                                    idImage = response.data.data.signature[0].signature.id
+                                                    const form = document.getElementById("idFormAmend")
+                                                    const formData = new FormData(form);
+                                                    axios.post(`https://api-newcore.vietvictory.vn/signature/change_image/${idImage}`, formData, {
+                                                        headers: {
+                                                        "Content-Type": "multipart/form-data",
+                                                        },
+                                                    })
+                                                    .then((res) => {
+                                                        if (!res.data.data) {
+                                                            arr = []
+                                                            arr.push(`Invalid "Doc ID / Tax Identification Number"`);
+                                                            setButtonPopupNoti(true)
+                                                        } 
+                                                        else {
+                                                            setButtonPopup(true)
+                                                            form.elements["docID"].value = '' 
+                                                        }
+                                                        
+                                                    })                                                 
+                                                    // document.getElementById('txtCustomerName').value = response.data.data.customer.GB_FullName.toString()
+                                                }
+                                                 
+                                            })
+                                            .catch(err=>{
+                                                console.log("err")
+                                                console.log(err)
+                                                arr = []
+                                                document.getElementById('txtCustomerName').value = ""
+                                                arr.push("Customer has no signature")
+                                                setButtonPopupNoti(true)
+                                            })
+                                            
+                                        };
+                                        fetchDataGetAll();
+                                    }}
+                                    >
+                                        Change
+                                    </Button>
+                                    <Popup_Custom 
+                                        trigger={buttonPopup}
+                                        setTrigger={setButtonPopup}
+                                    >           
+                                    </Popup_Custom>
+                                    <Notification_Custom
+                                        trigger={buttonPopupNoti}
+                                        setTrigger={setButtonPopupNoti}
+                                        arr={arr}
+                                    >
+
+                                    </Notification_Custom>
+                                </div>
                             </div>
                         </form>
                     </div>

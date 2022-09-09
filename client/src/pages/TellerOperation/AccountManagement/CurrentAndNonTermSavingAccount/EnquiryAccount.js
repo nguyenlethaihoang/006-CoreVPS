@@ -140,7 +140,7 @@ function EnquiryAccount() {
                                 else if (txtCustomerType.length == 13)
                                     valueCustomerType = 2;
                                 const fetchDataGetAll = async () => {
-                                    await axios.post(' https://api-newcore.vietvictory.vn/account/debit_account/enquiry', {
+                                    await axios.post('https://api-newcore.vietvictory.vn/account/debit_account/enquiry', {
                                         customerID: parseInt(document.getElementById('txtCustomerID.').value.toString()),
                                         account: parseInt(document.getElementById('txtAccountCode.').value.toString()),
                                         currency: checkName( currencyData, document.getElementById('sltCurrency.').textContent.toString()),

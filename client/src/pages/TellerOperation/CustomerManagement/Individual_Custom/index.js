@@ -168,7 +168,7 @@ function Individual_Custom(props1) {
         <div className='popup-inner-i'>
             
             <h1>
-                Customer Info - Individual - {props1.AccountCode.id}
+                Customer Info - Individual
             </h1>
             <div
                 style={{ 

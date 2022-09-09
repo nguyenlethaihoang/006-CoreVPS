@@ -305,8 +305,8 @@ const signatureController = {
 
         // REMOVE OLD SINGATURE ON CLOUD DB
         const deleteResult = await deleteImage(oldBlobName)
-        if(!deleteResult){
-            return next(new appError("Delete error", 404))
+        if(deleteResult == 0){
+            return next(new appError(deleteResult, 404))
         }
 
         return res.status(200).json({

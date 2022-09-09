@@ -18,4 +18,4 @@ route.post('/change_image/:signatureid', uploadStrategy, signatureController.cha
 //()=>{upload.single('image')}
 // https://cb-be.../signature/upload
 
-module.exports = route
+module.exports = route 

@@ -72,7 +72,7 @@ function Capture() {
                     >
                         <form 
                             method="post" 
-                            // onSubmit={handleSubmit} 
+                            onSubmit={handleSubmit} 
                             enctype="multipart/form-data" 
                             id="idform">
                             <div class="form-group">
@@ -144,6 +144,12 @@ function Capture() {
                                     name="upload" 
                                     onClick={() => {
                                         const form = document.getElementById("idform");
+                                        if (form.elements["customerID"].value > 300000)
+                                            form.elements["customerID"].value -= 300000
+                                        else if (form.elements["customerID"].value > 200000)
+                                            form.elements["customerID"].value -= 200000
+                                        else if (form.elements["customerID"].value > 100000)
+                                            form.elements["customerID"].value -= 100000
                                         document.getElementById("idform").addEventListener("submit", (e) => {
                                             e.preventDefault();
                                             const formData = new FormData(form);
@@ -153,20 +159,24 @@ function Capture() {
                                                 },
                                             })
                                             .then((res) => {
-                                                console.log("res1");
-                                                console.log("xxxxxxxxxxxxxx")
-                                                console.log(res);
+                                                // console.log("res1");
+                                                // console.log("xxxxxxxxxxxxxx")
+                                                // console.log(res);
                                                 if (!res.data.data) {
                                                     arr = []
                                                     arr.push(`Invalid "Customer ID"`);
                                                     setButtonPopupNoti(true)
                                                 } 
-                                                else setButtonPopup(true) 
+                                                else {
+                                                    setButtonPopup(true)
+                                                    form.elements["customerID"].value = '' 
+                                                }
+                                                
 
                                             })
                                             .catch((err) => {
-                                                console.log("err1");
-                                                console.log(err);
+                                                // console.log("err1");
+                                                // console.log(err);
                                                 arr = []
                                                 arr.push(`Provide image`);
                                                 setButtonPopupNoti(true)
@@ -189,7 +199,6 @@ function Capture() {
                                 >
                                 </Notification_Custom>
                             </div>
-                                
                                 
                                 
                                 
