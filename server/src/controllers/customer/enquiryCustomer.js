@@ -14,6 +14,7 @@ const industryModel = require('../../models/storage/industry')
 const subIndustryModel = require('../../models/storage/industry')
 const accountOfficerModel = require('../../models/storage/accountOfficer')
 const relationCodeModel = require('../../models/storage/relation')
+const { Op } = require('sequelize')
 
 // customerType
 // customerID
@@ -62,7 +63,8 @@ const enquiryCustomerController = {
             //     enquiryString += ' where '
             // enquiryString += ' GB_FullName = "' + enquiryReq.GB_FullName + '"'
             // count++
-            enquiryCondition.GB_FullName = enquiryReq.GB_FullName
+            //enquiryCondition.GB_FullName = enquiryReq.GB_FullName
+            enquiryCondition.GB_FullName = {[Op.substring]: enquiryReq.GB_FullName}
         }
         if(enquiryReq.phoneNumber){
             // if(count != 0)
@@ -71,7 +73,7 @@ const enquiryCustomerController = {
             //     enquiryString += ' where '
             // enquiryString += ' PhoneNumber = "' + enquiryReq.phoneNumber + '"'
             // count++
-            enquiryCondition.PhoneNumber = enquiryReq.phoneNumber
+            enquiryCondition.PhoneNumber = {[Op.substring]: enquiryReq.phoneNumber}
         }
         if(enquiryReq.docID){
             // if(count != 0)
@@ -80,7 +82,7 @@ const enquiryCustomerController = {
             //     enquiryString += ' where '
             // enquiryString += ' DocID = "' + enquiryReq.docID + '"'
             // count++
-            enquiryCondition.DocID = enquiryReq.docID
+            enquiryCondition.DocID = {[Op.substring]: enquiryReq.docID}
         }
         if(enquiryReq.mainSector){
             // if(count != 0)
