@@ -59,10 +59,10 @@ const exportFileController = {
             DocID_: individualCustomerDB.getDataValue('DocID')
         })
 
-        const docBuf = doc.getZip().generate({type: 'nodebuffer'})
-        const customerPath = individualCustomerDB.getDataValue('id')
-        const filePath = '../../../client/src/resources/Files/individual/' + customerPath.toString() +'.docx'
-        fs.writeFileSync(path.resolve(__dirname, filePath), docBuf)
+        // const docBuf = doc.getZip().generate({type: 'nodebuffer'})
+        // const customerPath = individualCustomerDB.getDataValue('id')
+        // const filePath = '../../../client/src/resources/Files/individual/' + customerPath.toString() +'.docx'
+        // fs.writeFileSync(path.resolve(__dirname, filePath), docBuf)
         return res.status(200).json({
             message: 'Exported',
             data: docBuf
