@@ -9,19 +9,25 @@ const path = require('path')
 const customerModel = require('../models/customer/customer')
 const individualCustomerModel = require('../models/customer/individualCustomer')
 
-function errorHandler(error) {
-    console.log(JSON.stringify({error: error}, replaceErrors));
 
-    if (error.properties && error.properties.errors instanceof Array) {
-        const errorMessages = error.properties.errors.map(function (error) {
-            return error.properties.explanation;
-        }).join("\n");
-        console.log('errorMessages', errorMessages);
-        // errorMessages is a humanly readable message looking like this :
-        // 'The tag beginning with "foobar" is unopened'
-    }
-    throw error;
+
+const
+    { BlobServiceClient } = require("@azure/storage-blob"),
+    blobServiceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING),
+    containerName = process.env.CONTAINER_NAME,
+    config = require('../utils/accountStorageConfig'),
+    multer = require('multer'),
+    inMemoryStorage = multer.memoryStorage(),
+    { BlockBlobClient } = require('@azure/storage-blob'),
+    getStream = require('into-stream')
+
+const getBlobName = originalName => {
+    const identifier = Math.random().toString().replace(/0\./, ''); // remove "0." from start of string
+    return `${identifier}-${originalName}`;
 }
+
+
+
 
 const exportFileController = {
     exportIndividual: asyncHandler(async (req, res, next) => {
@@ -63,9 +69,22 @@ const exportFileController = {
         // const customerPath = individualCustomerDB.getDataValue('id')
         // const filePath = '../../../client/src/resources/Files/individual/' + customerPath.toString() +'.docx'
         // fs.writeFileSync(path.resolve(__dirname, filePath), docBuf)
+
+        const
+        blobName = getBlobName('output.docx'),
+        blobService = new BlockBlobClient(process.env.AZURE_STORAGE_CONNECTION_STRING,containerName,blobName),
+        stream = getStream(docBuf),
+        streamLength = docBuf.length
+
+        await blobService.uploadStream(stream, streamLength)
+        .catch(err => {
+            console.log(err)
+            return null
+        })
+
         return res.status(200).json({
             message: 'Exported',
-            data: docBuf
+            data: blobName
         })
     }) 
 }
