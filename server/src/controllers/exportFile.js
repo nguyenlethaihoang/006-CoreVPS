@@ -65,7 +65,7 @@ const exportFileController = {
         fs.writeFileSync(path.resolve(__dirname, filePath), docBuf)
         return res.status(200).json({
             message: 'Exported',
-            data: customerDB
+            data: docBuf
         })
     }) 
 }
