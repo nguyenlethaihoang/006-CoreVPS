@@ -27,6 +27,18 @@ const getBlobName = originalName => {
 }
 
 
+async function deleteFile(blobName) {
+    blobService = new BlockBlobClient(process.env.AZURE_STORAGE_CONNECTION_STRING,containerName,blobName)
+    await blobService.delete()
+    .then(result => {
+        console.log("Delete result: ", result)
+        return 1
+    })
+    .catch(err => {
+        console.log(err)
+        return 0
+    })
+}
 
 
 const exportFileController = {
@@ -88,7 +100,20 @@ const exportFileController = {
             message: 'Exported',
             data: URLRes
         })
-    }) 
+    }),
+
+    deleteFile: asyncHandler(async (req, res, next) => {
+        const blobNameReq = req.body.blobName
+        const deleteResult = await deleteFile(blobNameReq)
+
+        if(deleteResult == 0){
+            return next(new appError(deleteResult, 404))
+        }
+
+        return res.status(200).json({
+            message: "delete"
+        })
+    })
 }
 
 module.exports = exportFileController
