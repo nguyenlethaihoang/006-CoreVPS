@@ -28,7 +28,7 @@ const getBlobName = originalName => {
 
 
 async function deleteFile(blobName) {
-    blobService = new BlockBlobClient(process.env.AZURE_STORAGE_CONNECTION_STRING,containerName,blobName)
+    blobService = new BlockBlobClient(process.env.AZURE_STORAGE_CONNECTION_STRING,process.env.CONTAINER_NAME,blobName)
     await blobService.delete()
     .then(result => {
         console.log("Delete result: ", result)

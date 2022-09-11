@@ -4,6 +4,6 @@ const route = express.Router()
 const exportFileController = require('../controllers/exportFile')
 
 route.get('/individual/:id', exportFileController.exportIndividual)
-route.delete('/delete', exportFileController.deleteFile)
+route.post('/delete', exportFileController.deleteFile)
 
 module.exports = route
