@@ -10,6 +10,8 @@ import Popup_Custom from '../../../../components/Popup_Custom';
 import Notification_Custom from '../../../../components/Notification_Custom'; 
 
 
+import individualFile from '../../../../resources/Files/individual.docx';
+
 
 const categoryData = [
     {id: 1,
@@ -68,6 +70,27 @@ function Individual_Custom(props1) {
     const [buttonPopupFail, setButtonPopupFail] = useState(false)
     const [buttonPopupNoti, setButtonPopupNoti] = useState(false)
 
+    // downloadEmployeeData = () => {
+	// 	fetch('http://localhost:81/employees/download')
+	// 		.then(response => {
+	// 			response.blob().then(blob => {
+	// 				let url = window.URL.createObjectURL(blob);
+	// 				let a = document.createElement('a');
+	// 				a.href = url;
+	// 				a.download = 'employees.json';
+	// 				a.click();
+	// 			});
+	// 			//window.location.href = response.url;
+	// 	});
+	// }
+
+    const onDownload = () => {
+        const link = document.createElement("a");
+        link.download = `${props1.AccountCode.GB_FullName}.docx`;
+        link.href = individualFile;
+        link.click();
+        // docx.docment
+      };
 
     console.log("props AccountCode")
     console.log(props1.AccountCode)
@@ -189,8 +212,12 @@ function Individual_Custom(props1) {
                     />
                 </IconButton>
                 <IconButton>
-                    <PrintIcon />
+                    <PrintIcon 
+                        onClick={onDownload}
+                    />
                 </IconButton>
+                {/*     <a href={individualFile} download="individual.docx"> Download Here </a> */}
+                
                 <IconButton></IconButton>
             </div>
             <div
@@ -255,7 +282,7 @@ function Individual_Custom(props1) {
                         marginBottom: "20px" 
                     }}
                 >
-                    <FormControl sx={{ m: 0, minWidth: `25ch` }}>
+                    <FormControl sx={{ m: 0, minWidth: `20ch` }}>
                     <InputLabel id="lblCountry...">GB Country</InputLabel>
                         <Select 
                             labelId="lblCountry..."
@@ -281,7 +308,7 @@ function Individual_Custom(props1) {
                         marginBottom: "20px" 
                     }}
                 >
-                    <FormControl sx={{ m: 0, minWidth: `25ch` }}>
+                    <FormControl sx={{ m: 0, minWidth: `20ch` }}>
                     <InputLabel id="lblNationality...">Nationality</InputLabel>
                         <Select
                             labelId="lblNationality..."
@@ -307,7 +334,7 @@ function Individual_Custom(props1) {
                         marginBottom: "20px" 
                     }}
                 >
-                    <FormControl sx={{ m: 0, minWidth: `25ch` }}>
+                    <FormControl sx={{ m: 0, minWidth: `20ch` }}>
                     <InputLabel id="lblResidence...">Residence</InputLabel>
                         <Select
                             labelId="lblResidence..."
@@ -421,7 +448,7 @@ function Individual_Custom(props1) {
                         marginBottom: "20px" 
                     }}
                 >
-                    <FormControl sx={{ m: 0, minWidth: `30ch` }}>
+                    <FormControl sx={{ m: 0, minWidth: `25ch` }}>
                     <InputLabel id="lblMainIndustry...">Main Industry</InputLabel>
                         <Select
                             labelId="lblMainIndustry..."
@@ -447,7 +474,7 @@ function Individual_Custom(props1) {
                         marginBottom: "20px" 
                     }}
                 >
-                    <FormControl sx={{ m: 0, minWidth: `30ch` }}>
+                    <FormControl sx={{ m: 0, minWidth: `25ch` }}>
                     <InputLabel id="lblSubIndustry...">Industry</InputLabel>
                         <Select
                             labelId="lblSubIndustry..."

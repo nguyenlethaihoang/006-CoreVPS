@@ -299,7 +299,7 @@ function Corporate_Custom(props1) {
                         marginBottom: "20px" 
                     }}
                 >
-                    <FormControl sx={{ m: 0, minWidth: `30ch` }}>
+                    <FormControl sx={{ m: 0, minWidth: `25ch` }}>
                     <InputLabel id="lblResidence...">Residence</InputLabel>
                         <Select
                             labelId="lblResidence..."
