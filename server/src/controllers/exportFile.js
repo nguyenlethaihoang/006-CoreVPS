@@ -82,9 +82,11 @@ const exportFileController = {
             return null
         })
 
+        URLRes = "https://" + config.getStorageAccountName() + ".blob.core.windows.net/" + containerName + "/" + blobName
+
         return res.status(200).json({
             message: 'Exported',
-            data: blobName
+            data: URLRes
         })
     }) 
 }
