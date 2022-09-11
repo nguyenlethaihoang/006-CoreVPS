@@ -98,7 +98,8 @@ const exportFileController = {
 
         return res.status(200).json({
             message: 'Exported',
-            data: URLRes
+            data: URLRes,
+            blobName: blobName
         })
     }),
 
