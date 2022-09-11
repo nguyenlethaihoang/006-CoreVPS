@@ -59,7 +59,7 @@ const exportFileController = {
             DocID_: individualCustomerDB.getDataValue('DocID')
         })
 
-        // const docBuf = doc.getZip().generate({type: 'nodebuffer'})
+        const docBuf = doc.getZip().generate({type: 'nodebuffer'})
         // const customerPath = individualCustomerDB.getDataValue('id')
         // const filePath = '../../../client/src/resources/Files/individual/' + customerPath.toString() +'.docx'
         // fs.writeFileSync(path.resolve(__dirname, filePath), docBuf)
