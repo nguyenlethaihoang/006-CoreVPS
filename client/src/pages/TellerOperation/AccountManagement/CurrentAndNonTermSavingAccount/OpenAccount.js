@@ -21,6 +21,11 @@ const currencyData = [{id: 1,Name: 'EUR' },{id: 2,Name: 'USD'},{id: 3,Name: 'GBP
 
 let arr = []
 
+let arrType = []
+
+arrType[1] = 100000;
+arrType[2] = 300000;
+
 let arrSearchCustomer = [
 
 ]
@@ -39,19 +44,25 @@ function checkName(a, b) {
 
 function checkNameCustomerID(a, b) {
     let temp = null
+    b.replace("10000","")
+    b.replace("20000","")
+    b.replace("30000","")
     a.map((data, index) => {
         // console.log("b")
         // console.log(b)
         // console.log("data.GB_FullName")
         // console.log(data.GB_FullName)
-        if (b.includes(data.GB_FullName))
+        if (b.includes(data.customer.GB_FullName))
         {
-            temp = data.id.toString()
+            temp = data.customer.id.toString()
             
         }
     })
     return temp
 }
+
+let bioCustomerTemp;
+
 function OpenAccount() {
 
     const [buttonPopup, setButtonPopup] = useState(false) 
@@ -65,19 +76,18 @@ function OpenAccount() {
         const fetchDataCustomer = async () => {
             const response = await fetch(`https://api-newcore.vietvictory.vn/customer/get_all_customer`);
             const data = await response.json();
-            // console.log("data")
-            // console.log(data.data.customer)
             // createSearchCustomer(data.data.customer)
             arrSearchCustomer = []
-            
-            bioCustomer.map((dataMap, i) => {
+            bioCustomerTemp.map((dataMap, i) => {
                 let resObj = {
                     index: i,
-                    id: dataMap.id,
-                    label: `${dataMap.id} - ${dataMap.GB_FullName}`
+                    id: dataMap.customer.id,
+                    label: `${dataMap.customer.id+arrType[dataMap.customer.CustomerType]} - ${dataMap.customer.GB_FullName}`
+
                 }
                 arrSearchCustomer.push(resObj)
             })
+            bioCustomerTemp = data.data.customer
             setBioCustomer(data.data.customer);  
         };
         fetchDataCustomer();
@@ -125,15 +135,17 @@ function OpenAccount() {
         fetchDataAccountOfficer();
     }, []);
 
-    let temp = bioCustomer
+    let bioCustomerTemp = bioCustomer
     arrSearchCustomer = []
-            bioCustomer.map((dataMap, i) => {
-                let resObj = {
-                    index: i,
-                    id: dataMap.id,
-                    label: `${dataMap.id} - ${dataMap.GB_FullName}`
-                }
-                arrSearchCustomer.push(resObj)
+    bioCustomerTemp.map((dataMap, i) => {
+        let resObj = {
+            index: i,
+            id: dataMap.customer.id,
+            label: `${dataMap.customer.id+arrType[dataMap.customer.CustomerType]} - ${dataMap.customer.GB_FullName}`
+
+        }
+        arrSearchCustomer.push(resObj)
+
     })
     return (
         <div>
@@ -197,7 +209,18 @@ function OpenAccount() {
                     >
                         
                         <br/>
-                        <Select_Custom props1="ID Join Holder" props2="35" props3="account_officer" props4={bioCustomer}/>
+                        <Autocomplete
+                            disablePortal
+                            id="sltIDJoinHolder"
+                            options={arrSearchCustomer}
+                            sx={{ 
+                                width: 400,
+                                paddingBottom: "25px",
+                                paddingRight: "25px"
+                            }}
+                            renderInput={(params) => <TextField {...params} label="ID Join Holder" />}
+                        />
+                        {/* <Select_Custom props1="ID Join Holder" props2="35" props3="account_officer" props4={bioCustomerTemp}/> */}
                         <Select_Custom props1="Relation Code" props2="35" props3="account_officer" props4={bioRelationCode}/>
                         <TextField_Custom props1="Join Notes" props2="35" props3="NO"/>
   
@@ -219,8 +242,6 @@ function OpenAccount() {
                             // href="https://google.com"
                             onClick={() => {
                                 let txtCustomerID = document.getElementById('sltCustomerID').value.toString();
-                                console.log("temp")
-                                console.log(temp)
                                 let txtCategory = document.getElementById('sltCategory').textContent.toString();
                                 let txtProductLine = document.getElementById('sltProductLine').textContent.toString();
                                 let txtCurrency = document.getElementById('sltCurrency').textContent.toString();    
@@ -228,6 +249,17 @@ function OpenAccount() {
                                 let txtIDJoinHolder = document.getElementById('sltIDJoinHolder').textContent.toString();
                                 let txtRelationCode = document.getElementById('sltRelationCode').textContent.toString();
                                 let txtChargeCode = document.getElementById('sltChargeCode').textContent.toString();
+
+                                console.log("cusID")
+                                console.log(txtCustomerID)
+                                console.log(checkNameCustomerID(bioCustomer, txtCustomerID))
+                                console.log("cusID")
+                                console.log(txtCategory)
+                                console.log(checkName(categoryData, txtCategory))
+                                console.log("currency")
+                                console.log(txtCurrency)
+                                console.log(checkName(currencyData, txtCurrency))
+
 
                                 axios.post('https://api-newcore.vietvictory.vn/account/debit_account/open',{
                                     accountTitle: document.getElementById('txtAccountTitle').value,
