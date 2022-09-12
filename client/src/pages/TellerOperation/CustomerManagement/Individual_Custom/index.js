@@ -8,9 +8,16 @@ import Select_Value_Custom from '../../../../components/Select_Value_Custom';
 import TextField_Value_Custom from '../../../../components/TextField_Value_Custom';
 import Popup_Custom from '../../../../components/Popup_Custom';
 import Notification_Custom from '../../../../components/Notification_Custom'; 
+import FileSaver from 'file-saver'
 
 
 import individualFile from '../../../../resources/Files/individual.docx';
+
+
+
+
+
+
 
 
 const categoryData = [
@@ -65,6 +72,20 @@ function checkNameCustomerID(a, b) {
     return temp
 }
 
+const onDownload = (customerID) => {
+    // const [bioFile, setBioFile] = useState([]);
+    // useEffect(() => {
+    //     const fetchDataFile = async () => {
+    //         const response = await fetch();
+    //         //const data = await response.json();
+    //         //setBioCity(data.rows);  
+    //     };
+    //     fetchDataFile();
+    // }, []);
+
+    
+  };
+
 function Individual_Custom(props1) {
     const [buttonPopup, setButtonPopup] = useState(false) 
     const [buttonPopupFail, setButtonPopupFail] = useState(false)
@@ -84,13 +105,7 @@ function Individual_Custom(props1) {
 	// 	});
 	// }
 
-    const onDownload = () => {
-        const link = document.createElement("a");
-        link.download = `${props1.AccountCode.GB_FullName}.docx`;
-        link.href = individualFile;
-        link.click();
-        // docx.docment
-      };
+   
 
     console.log("props AccountCode")
     console.log(props1.AccountCode)
@@ -213,7 +228,43 @@ function Individual_Custom(props1) {
                 </IconButton>
                 <IconButton>
                     <PrintIcon 
-                        onClick={onDownload}
+                        onClick={
+                            () => {
+                                const customerID = 7
+                                console.log(customerID)
+                                axios.get(`https://api-newcore.vietvictory.vn/export/individual/${customerID}`)
+                                .then(res => {
+                                    // DOWNLOAD FILE
+                                    console.log(res.data.data)
+                                    console.log(res.data.blobName)
+                                    const link = res.data.data
+                     				let a = document.createElement('a');
+                     				a.href = link;
+                     				a.download = `${props1.AccountCode01.GB_FullName}.docx`;
+                     				a.click();
+                                    
+                                    return res.data.blobName                                    
+                                })
+                                .then((blobName)=> {
+                                    // DELETE FILE
+                                    console.log("blobName")
+                                    console.log(blobName.toString())
+                                    axios.post(`https://api-newcore.vietvictory.vn/export/delete`, {
+                                        blobName: blobName.toString()
+                                    })
+                                    .then((res01)=> {
+                                        console.log(res01)
+                                    })
+                                    .catch(err =>{
+                                        console.log(err)
+                                    })
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                })
+
+                            }
+                        }
                     />
                 </IconButton>
                 {/*     <a href={individualFile} download="individual.docx"> Download Here </a> */}
