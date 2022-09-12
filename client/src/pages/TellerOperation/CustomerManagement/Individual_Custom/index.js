@@ -245,20 +245,20 @@ function Individual_Custom(props1) {
                                     
                                     return res.data.blobName                                    
                                 })
-                                .then((blobName)=> {
-                                    // DELETE FILE
-                                    console.log("blobName")
-                                    console.log(blobName.toString())
-                                    axios.post(`https://api-newcore.vietvictory.vn/export/delete`, {
-                                        blobName: blobName.toString()
-                                    })
-                                    .then((res01)=> {
-                                        console.log(res01)
-                                    })
-                                    .catch(err =>{
-                                        console.log(err)
-                                    })
-                                })
+                                // .then((blobName)=> {
+                                //      DELETE FILE
+                                //     console.log("blobName")
+                                //     console.log(blobName.toString())
+                                //     axios.post(`https://api-newcore.vietvictory.vn/export/delete`, {
+                                //         blobName: blobName.toString()
+                                //     })
+                                //     .then((res01)=> {
+                                //         console.log(res01)
+                                //     })
+                                //     .catch(err =>{
+                                //         console.log(err)
+                                //     })
+                                // })
                                 .catch(err => {
                                     console.log(err)
                                 })
