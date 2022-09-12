@@ -230,7 +230,7 @@ function Individual_Custom(props1) {
                     <PrintIcon 
                         onClick={
                             () => {
-                                const customerID = 7
+                                const customerID = props1.AccountCode.id
                                 console.log(customerID)
                                 axios.get(`https://api-newcore.vietvictory.vn/export/individual/${customerID}`)
                                 .then(res => {

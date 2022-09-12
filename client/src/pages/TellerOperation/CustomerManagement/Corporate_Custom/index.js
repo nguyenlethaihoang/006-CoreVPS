@@ -191,7 +191,7 @@ function Corporate_Custom(props1) {
                     <PrintIcon 
                         onClick={
                             () => {
-                                const customerID =  8 
+                                const customerID =  props1.AccountCode.id
                                 console.log(customerID)
                                 axios.get(`https://api-newcore.vietvictory.vn/export/corporate/${customerID}`)
                                 .then(res => {
