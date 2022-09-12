@@ -188,7 +188,45 @@ function Corporate_Custom(props1) {
                     />
                 </IconButton>
                 <IconButton>
-                    <PrintIcon />
+                    <PrintIcon 
+                        onClick={
+                            () => {
+                                const customerID =  8
+                                console.log(customerID)
+                                axios.get(`https://api-newcore.vietvictory.vn/export/corporate/${customerID}`)
+                                .then(res => {
+                                    // DOWNLOAD FILE
+                                    console.log(res.data.data)
+                                    console.log(res.data.blobName)
+                                    const link = res.data.data
+                     				let a = document.createElement('a');
+                     				a.href = link;
+                     				a.download = `${props1.AccountCode01.GB_FullName}.docx`;
+                     				a.click();
+                                    
+                                    return res.data.blobName                                    
+                                })
+                                // .then((blobName)=> {
+                                //      DELETE FILE
+                                //     console.log("blobName")
+                                //     console.log(blobName.toString())
+                                //     axios.post(`https://api-newcore.vietvictory.vn/export/delete`, {
+                                //         blobName: blobName.toString()
+                                //     })
+                                //     .then((res01)=> {
+                                //         console.log(res01)
+                                //     })
+                                //     .catch(err =>{
+                                //         console.log(err)
+                                //     })
+                                // })
+                                .catch(err => {
+                                    console.log(err)
+                                })
+
+                            }
+                        }
+                    />
                 </IconButton>
                 <IconButton></IconButton>
             </div>
