@@ -11,7 +11,8 @@ const individualCustomerModel = require('../models/customer/individualCustomer')
 const corporateCustomerModel = require('../models/customer/corporateCustomer')
 const cityProvinceModel = require('../models/storage/cityProvince')
 const countryModel = require('../models/storage/country')
-
+const sectorModel = require('../models/storage/sector')
+const industryModel = require('../models/storage/industry')
 
 const
     { BlobServiceClient } = require("@azure/storage-blob"),
@@ -149,7 +150,7 @@ const exportFileController = {
         // fs.writeFileSync(path.resolve(__dirname, filePath), docBuf)
 
         const
-        blobName = getBlobName('output.docx'),
+        blobName = getBlobName(`${customerDB.getDataValue('GB_FullName')}.docx`),
         blobService = new BlockBlobClient(process.env.AZURE_STORAGE_CONNECTION_STRING,containerName,blobName),
         stream = getStream(docBuf),
         streamLength = docBuf.length
@@ -201,7 +202,16 @@ const exportFileController = {
         const corporateCustomerDB = await corporateCustomerModel.findOne({
             where: { CustomerID: customerIDReq},
             include: [{
-                model: customerModel
+                model: customerModel,
+                include: [{
+                    model: cityProvinceModel, attributes: ['Name']
+                }, {
+                    model: countryModel, attributes: ['Name']
+                }, {
+                    model: sectorModel, attributes: ['Name']
+                }, {
+                    model: industryModel, attributes: ['Name']
+                }]
             }]
         })
         .catch(err => {
@@ -210,12 +220,85 @@ const exportFileController = {
 
         const customerDB = corporateCustomerDB.CUSTOMER
         
+        let renderObj = {}
+        // CHECK RENDER
+        if(customerDB.getDataValue('GB_FullName')){
+            renderObj.CustomerName_ = customerDB.getDataValue('GB_FullName')
+        }else{
+            renderObj.CustomerName_ = ' '
+        }
+        if(customerDB.getDataValue('DocID')){
+            renderObj.DocID_ = customerDB.getDataValue('DocID')
+        }else{
+            renderObj.DocID_ = ' '
+        }
+        
+        
+        if(customerDB.getDataValue('GB_Street')){
+            renderObj.GB_Street_ = customerDB.getDataValue('GB_Street')
+        }else{
+            renderObj.GB_Street_ = ' '
+        }
+        if(customerDB.getDataValue('GB_Towndist')){
+            renderObj.GB_Towndist_ = customerDB.getDataValue('GB_Towndist')
+        }else{
+            renderObj.GB_Towndist_ = ' '
+        }
+        if(customerDB.CITYPROVINCE.getDataValue('Name')){
+            renderObj.Province_ = customerDB.CITYPROVINCE.getDataValue('Name').slice(5)
+        }else{
+            renderObj.Province_ = ' '
+        }
+        if(customerDB.COUNTRY.getDataValue('GB_Country')){
+            renderObj.GB_Country_ = customerDB.COUNTRY.getDataValue('GB_Country')
+        }else{
+            renderObj.GB_Country_ = ' '
+        }
+        if(corporateCustomerDB.getDataValue('EmailAddress')){
+            renderObj.EmailAddress_ = corporateCustomerDB.getDataValue('EmailAddress')
+        }else{
+            renderObj.EmailAddress_ = ' '
+        }
+        if(customerDB.getDataValue('PhoneNumber')){
+            renderObj.PhoneNumber_ = customerDB.getDataValue('PhoneNumber')
+        }else{
+            renderObj.PhoneNumber_ = ' '
+        }
+        if(corporateCustomerDB.getDataValue('EmployeesNo')){
+            renderObj.EmployeesNo_ = corporateCustomerDB.getDataValue('EmployeesNo')
+        }else{
+            renderObj.EmployeesNo_ = ' '
+        }
+        //Sector - Industry - TotalRevenue ContactPerson - 
+        if(customerDB.getDataValue('PhoneNumber')){
+            renderObj.PhoneNumber_ = customerDB.getDataValue('PhoneNumber')
+        }else{
+            renderObj.PhoneNumber_ = ' '
+        }
+        if(customerDB.SECTOR.getDataValue('Name')){
+            renderObj.Sector_ = customerDB.SECTOR.getDataValue('Name')
+        }else{
+            renderObj.Sector_ = ' '
+        }
+        if(customerDB.INDUSTRY.getDataValue('Name')){
+            renderObj.Industry_ = customerDB.INDUSTRY.getDataValue('Name')
+        }else{
+            renderObj.Industry_ = ' '
+        }
+        if(corporateCustomerDB.getDataValue('ContactPerson')){
+            renderObj.ContactPerson_ = corporateCustomerDB.getDataValue('ContactPerson')
+        }else{
+            renderObj.ContactPerson_ = ' '
+        }
+        if(corporateCustomerDB.getDataValue('TotalRevenue')){
+            renderObj.TotalRevenue_ = corporateCustomerDB.getDataValue('TotalRevenue')
+        }else{
+            renderObj.TotalRevenue_ = ' '
+        }
+
 
         // FILE RENDER
-        doc.render({
-            CustomerName_: customerDB.getDataValue('GB_FullName'),
-            DocID_: corporateCustomerDB.getDataValue('DocID')
-        })
+        doc.render(renderObj)
 
         const docBuf = doc.getZip().generate({type: 'nodebuffer'})
         // const customerPath = individualCustomerDB.getDataValue('id')
@@ -223,7 +306,7 @@ const exportFileController = {
         // fs.writeFileSync(path.resolve(__dirname, filePath), docBuf)
 
         const
-        blobName = getBlobName('output.docx'),
+        blobName = getBlobName(`${customerDB.getDataValue('GB_FullName')}.docx`),
         blobService = new BlockBlobClient(process.env.AZURE_STORAGE_CONNECTION_STRING,containerName,blobName),
         stream = getStream(docBuf),
         streamLength = docBuf.length
