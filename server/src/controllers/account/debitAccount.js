@@ -427,7 +427,7 @@ const debitAccountController = {
         const blockage = await blockageModel.findOne({
             include: [
                 {model: debitAccountModel, include: [{
-                    model: customerModel, attributes: ['GB_FullName']
+                    model: customerModel, attributes: ['GB_FullName'], as:'Customer'
                 }]}
             ],
             where: {Account: accountReq}
