@@ -77,7 +77,11 @@ const debitAccountController = {
 
     getAccount: asyncHandler(async (req, res, nwext) => {
         const accountReq = req.params.account
-        const accountDB = await debitAccountModel.findByPk(accountReq)
+        const accountDB = await debitAccountModel.findByPk(accountReq,{
+            include: [{
+                model: customerModel, attributes: ['GB_FullName']
+            }]
+        })
         .catch(err => {
             return next(new appError(err, 404))
         })
