@@ -330,9 +330,9 @@ const debitAccountController = {
 
 
     //GIAI TOA TAI KHOAN
-    // [PUT] /account/unblock/:blockid
+    // [PUT] /account/unblock/:accountID
     unBlockAccount: asyncHandler(async (req, res, next) => {
-        const blockageReq = req.params.blockid
+        const blockageReq = req.params.accountID
         const unblockageReq = {
             relievedDate: req.body.relievedDate,
             notes: req.body.notes
@@ -341,7 +341,9 @@ const debitAccountController = {
             return next(new appError("BlockageID is required!", 404))
         }
 
-        const blockageDB = await blockageModel.findByPk(blockageReq)
+        const blockageDB = await blockageModel.findOne({
+            where: {Account: blockageReq}
+        })
         if(!blockageDB){
             return next(new appError("Blockage not found!", 404))
         }
@@ -421,7 +423,10 @@ const debitAccountController = {
             return next(new appError("Account not found", 404))
         }
 
-        const {count, rows} = await blockageModel.findAndCountAll({
+        const blockage = await blockageModel.findOne({
+            include: [
+                {model: debitAccountModel}
+            ],
             where: {Account: accountReq}
         })
         .catch(err=>{
@@ -429,13 +434,7 @@ const debitAccountController = {
         })
         return res.status(200).json({
             message: "blockage infomation",
-            data: {
-                account: accountDB,
-                blockage: {
-                    quantity: count,
-                    info: rows
-                }
-            }
+            data: blockage
         })
     }),
     //DONG TAI KHOAN
