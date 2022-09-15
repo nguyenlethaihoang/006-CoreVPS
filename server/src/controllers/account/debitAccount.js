@@ -75,16 +75,19 @@ const debitAccountController = {
         })
     }),
 
-    getAccount: asyncHandler(async (req, res, nwext) => {
+    getAccount: asyncHandler(async (req, res, next) => {
         const accountReq = req.params.account
         const accountDB = await debitAccountModel.findByPk(accountReq,{
             include: [{
-                model: customerModel, attributes: ['GB_FullName']
+                model: customerModel, attributes: ['GB_FullName'], as: 'Customer'
             }]
         })
-        .catch(err => {
-            return next(new appError(err, 404))
-        })
+        // .catch(err => {
+        //     return next(new appError(err, 404))
+        // })
+        if(!accountDB){
+            return next(new appError("find err", 404))
+        }
         return res.status(200).json({
             message: 'get account',
             data: accountDB
