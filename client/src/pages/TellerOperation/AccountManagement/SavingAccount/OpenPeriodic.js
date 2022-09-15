@@ -13,8 +13,12 @@ import axios from "axios";
 const categoryData = [{id: 1, Name: "3000 - Tiền gửi tiết kiệm" },{id: 2, Name: "3001 - Tiết kiệm không kỳ hạn"},]
 const productData = [{id: 1, Name: "Tradi FD - Periodic - Monthly" },{id: 2, Name: "Tradi - FD-Periodic Quaterly"}]
 const rollData = [{id: 1, Name: "Yes"}, {id: 2, Name: "No"}]
-
+ 
 let arr = []
+let arrType = []
+
+arrType[1] = 100000;
+arrType[2] = 300000;
 let arrSearchCustomer = []
 
 function checkName(a, b) {
@@ -46,15 +50,24 @@ function checkName(a, b) {
 
 function checkNameCustomerID(a, b) {
     let temp = null
+    b.replace("10000","")
+    b.replace("20000","")
+    b.replace("30000","")
     a.map((data, index) => {
-        if (b.includes(data.GB_FullName))
+        // console.log("b")
+        // console.log(b)
+        // console.log("data.GB_FullName")
+        // console.log(data.GB_FullName)
+        if (b.includes(data.customer.GB_FullName))
         {
-            temp = data.id.toString()
+            temp = data.customer.id.toString()
             
         }
     })
     return temp
 }
+let bioCustomerTemp;
+
 
 function OpenPeriodic() {
     const [buttonPopup, setButtonPopup] = useState(false) 
@@ -66,15 +79,18 @@ function OpenPeriodic() {
         const fetchDataCustomer = async () => {
             const response = await fetch(`https://api-newcore.vietvictory.vn/customer/get_all_customer`);
             const data = await response.json();
+            // createSearchCustomer(data.data.customer)
             arrSearchCustomer = []
-            bioCustomer.map((dataMap, i) => {
+            bioCustomerTemp.map((dataMap, i) => {
                 let resObj = {
                     index: i,
-                    id: dataMap.id,
-                    label: `${dataMap.id} - ${dataMap.GB_FullName}`
+                    id: dataMap.customer.id,
+                    label: `${dataMap.customer.id+arrType[dataMap.customer.CustomerType]} - ${dataMap.customer.GB_FullName}`
+
                 }
                 arrSearchCustomer.push(resObj)
             })
+            bioCustomerTemp = data.data.customer
             setBioCustomer(data.data.customer);  
         };
         fetchDataCustomer();
@@ -126,15 +142,17 @@ function OpenPeriodic() {
         };
         fetchDataAccountOfficer();
     }, []);
-    let temp = bioCustomer
+    let bioCustomerTemp = bioCustomer
     arrSearchCustomer = []
-            bioCustomer.map((dataMap, i) => {
-                let resObj = {
-                    index: i,
-                    id: dataMap.id,
-                    label: `${dataMap.id} - ${dataMap.GB_FullName}`
-                }
-                arrSearchCustomer.push(resObj)
+    bioCustomerTemp.map((dataMap, i) => {
+        let resObj = {
+            index: i,
+            id: dataMap.customer.id,
+            label: `${dataMap.customer.id+arrType[dataMap.customer.CustomerType]} - ${dataMap.customer.GB_FullName}`
+
+        }
+        arrSearchCustomer.push(resObj)
+
     })
     return (
         <div>
@@ -211,7 +229,17 @@ function OpenPeriodic() {
                             paddingTop: "10px"
                         }}
                     >
-                        <Select_Custom props1="Joint A/c Holder..." props2="35" props3="account_officer" props4={bioCustomer}/>
+                        <Autocomplete
+                                disablePortal
+                                id="sltJointA/cHolder..."
+                                options={arrSearchCustomer}
+                                sx={{ 
+                                    width: 400,
+                                    paddingBottom: "25px",
+                                    paddingRight: "25px"
+                                }}
+                                renderInput={(params) => <TextField {...params} label="Joint A/c Holder" />}
+                            />
                         <Select_Custom props1="Relationship..." props2="35" props3="account_officer" props4={bioRelationCode}/>
                         <TextField_Custom props1="Notes..." props2="35" props3="NO"/>
                         <Select_Custom props1="Account Officer..." props2="25" props3="account_officer" props4={bioAccountOfficer}/>

@@ -19,6 +19,12 @@ const currencyData = [{id: 1,Name: 'EUR' },{id: 2,Name: 'USD'},{id: 3,Name: 'GBP
 const productLineData = [{id: 1, Name: "5001 - Tiết kiệm lãi trả trước" }]
 
 let arr = []
+
+let arrType = []
+
+arrType[1] = 100000;
+arrType[2] = 300000;
+
 let arrSearchCustomer = []
 
 
@@ -51,15 +57,25 @@ function checkName(a, b) {
 
 function checkNameCustomerID(a, b) {
     let temp = null
+    b.replace("10000","")
+    b.replace("20000","")
+    b.replace("30000","")
     a.map((data, index) => {
-        if (b.includes(data.GB_FullName))
+        // console.log("b")
+        // console.log(b)
+        // console.log("data.GB_FullName")
+        // console.log(data.GB_FullName)
+        if (b.includes(data.customer.GB_FullName))
         {
-            temp = data.id.toString()
+            temp = data.customer.id.toString()
             
         }
     })
     return temp
 }
+
+let bioCustomerTemp;
+
 
 function OpenDiscounted() {
     const [buttonPopup, setButtonPopup] = useState(false) 
@@ -71,10 +87,23 @@ function OpenDiscounted() {
         const fetchDataCustomer = async () => {
             const response = await fetch(`https://api-newcore.vietvictory.vn/customer/get_all_customer`);
             const data = await response.json();
+            // createSearchCustomer(data.data.customer)
+            arrSearchCustomer = []
+            bioCustomerTemp.map((dataMap, i) => {
+                let resObj = {
+                    index: i,
+                    id: dataMap.customer.id,
+                    label: `${dataMap.customer.id+arrType[dataMap.customer.CustomerType]} - ${dataMap.customer.GB_FullName}`
+
+                }
+                arrSearchCustomer.push(resObj)
+            })
+            bioCustomerTemp = data.data.customer
             setBioCustomer(data.data.customer);  
         };
         fetchDataCustomer();
     }, []);
+
 
     const [bioTerm, setBioTerm] = useState([]);
     useEffect(() => {
@@ -122,15 +151,17 @@ function OpenDiscounted() {
         };
         fetchDataAccountOfficer();
     }, []);
-    let temp = bioCustomer
+    let bioCustomerTemp = bioCustomer
     arrSearchCustomer = []
-            bioCustomer.map((dataMap, i) => {
-                let resObj = {
-                    index: i,
-                    id: dataMap.id,
-                    label: `${dataMap.id} - ${dataMap.GB_FullName}`
-                }
-                arrSearchCustomer.push(resObj)
+    bioCustomerTemp.map((dataMap, i) => {
+        let resObj = {
+            index: i,
+            id: dataMap.customer.id,
+            label: `${dataMap.customer.id+arrType[dataMap.customer.CustomerType]} - ${dataMap.customer.GB_FullName}`
+
+        }
+        arrSearchCustomer.push(resObj)
+
     })
     return (
         <div>
@@ -212,13 +243,28 @@ function OpenDiscounted() {
                                 let txtAmountLCY = document.getElementById('txtAmountLCY*').value;
                                 let txtAmountLCYInterest =  document.getElementById('txtAmountLCYInterest*').value
 
+                                console.log("cusID")
+                                console.log(checkNameCustomerID(bioCustomer,txtCustomerID))
+                                console.log("amountLCY")
+                                console.log(txtAmountLCY)
+                                console.log("payment")
+                                console.log(checkName(bioCurrency, txtPaymentCurrency))
+                                console.log("curr")
+                                console.log(checkName(bioCurrency, txtCurrency))
+                                console.log("producline")
+                                console.log(txtProductLine)
+                                console.log("term")
+                                console.log(checkName(bioTerm, txtTerm))
+                                console.log("interest")
+                                console.log(txtAmountLCYInterest)
                                 axios.post('https://api-newcore.vietvictory.vn/account/saving_account/open_discounted',{
                                     customerID: checkNameCustomerID(bioCustomer,txtCustomerID),
                                     valueDate: "2022-06-24",
                                     amountLCY: txtAmountLCY,
                                     paymentCurrency: checkName(bioCurrency, txtPaymentCurrency),
                                     currency: checkName(bioCurrency, txtCurrency),
-                                    productLine: checkName(bioProductLine, txtProductLine),
+                                    // productLine: checkName(bioProductLine, txtProductLine),
+                                    productLine: 1,
                                     term: checkName(bioTerm, txtTerm),
                                     amountLCYInterest: txtAmountLCYInterest
 

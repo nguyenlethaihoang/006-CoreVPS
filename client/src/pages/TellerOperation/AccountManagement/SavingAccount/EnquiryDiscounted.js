@@ -23,9 +23,9 @@ let rows = [];
 function getNameCustomerID(a, b) {
     let temp = null
     a.map((data, index) => {
-        if (b.toString() == data.id.toString())
+        if (b.toString() == data.customer.id.toString())
         {
-            temp = data.GB_FullName.toString()
+            temp = data.customer.GB_FullName.toString()
             
         }
     })
