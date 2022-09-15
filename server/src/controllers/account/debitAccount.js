@@ -342,7 +342,7 @@ const debitAccountController = {
         }
 
         const blockageDB = await blockageModel.findOne({
-            where: {Account: blockageReq}
+            where: {Account: blockageReq, Status: 'Blocked'}
         })
         if(!blockageDB){
             return next(new appError("Blockage not found!", 404))
