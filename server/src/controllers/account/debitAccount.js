@@ -430,7 +430,7 @@ const debitAccountController = {
                     model: customerModel, attributes: ['GB_FullName'], as:'Customer'
                 }]}
             ],
-            where: {Account: accountReq}
+            where: {Account: accountReq, Status: 'Blocked'}
         })
         .catch(err=>{
             return next(new appError(err, 404))
