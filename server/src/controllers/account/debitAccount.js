@@ -280,6 +280,10 @@ const debitAccountController = {
             return next(new appError("AccountID is required!", 404))
         }
 
+        if(!blockageReq.startDate || !blockageReq.endDate){
+            return next(new appError("Start Date and End Date are required!"))
+        }
+
         const accountDB = await debitAccountModel.findByPk(accountReq)
         if(!accountDB){
             return next(new appError("Account not found!", 404))
