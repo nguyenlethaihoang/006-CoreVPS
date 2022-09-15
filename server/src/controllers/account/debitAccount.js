@@ -284,6 +284,9 @@ const debitAccountController = {
         if(!accountDB){
             return next(new appError("Account not found!", 404))
         }
+        if(accountDB.getDataValue('Status') == 'Blocked'){
+            return next(new appError('Account is blocked', 404))
+        }
         const workingAmountDB = parseInt(accountDB.getDataValue('WorkingAmount'))
         const blockedAmountDB = parseInt(accountDB.getDataValue('BlockedAmount'))
         if(workingAmountDB < blockageReq.amount){
@@ -295,18 +298,19 @@ const debitAccountController = {
             StartDate: blockageReq.startDate,
             EndDate: blockageReq.endDate,
             Amount: blockageReq.amount,
-            Status: 'blocked',
+            Status: 'Blocked',
             Notes: blockageReq.notes,
             Account: accountReq
         })
         .catch(err=>{
-            console.log(err)
+            return next(new appError(err, 404))
         })
 
         // UPDATE ACCOUNT
         const updatedAccount = await accountDB.update({
             WorkingAmount: workingAmountDB - blockageReq.amount,
-            BlockedAmount: blockedAmountDB + blockageReq.amount
+            BlockedAmount: blockedAmountDB + blockageReq.amount,
+            Status: "Blocked"
         })
         .catch(err=>{
             console.log(err)
