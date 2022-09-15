@@ -225,6 +225,7 @@ function Check_Custom(props1) {
                         let txtIDJoinHolder = document.getElementById('sltIDJoinHolder.').textContent.toString();
                         let txtRelationCode = document.getElementById('sltRelationCode.').textContent.toString();
 
+                        
                         console.log("account title")
                         console.log(document.getElementById('txtAccountTitle.').value)
 

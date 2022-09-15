@@ -10,6 +10,9 @@ import Select_Value_Custom from '../../../../../components/Select_Value_Custom';
 import TextField_Value_Custom from '../../../../../components/TextField_Value_Custom';
 import TextField_Value_Custom_No_Data from '../../../../../components/TextField_Value_Custom_No_Data';
 import DatePicker_Custom from '../../../../../components/DatePicker_Custom';
+import axios from 'axios';
+import Popup_Custom from '../../../../../components/Popup_Custom';
+import Notification_Custom from '../../../../../components/Notification_Custom';
 
 const closeOnlineData = [
     {id: 1,
@@ -19,10 +22,16 @@ const closeOnlineData = [
     Name: 'N'},
 ]
 
+let arr = []
 let txtCustomerID = ""
 let txtDescription = ""
 
 function Block_Custom(props1) {
+
+    const [buttonPopup, setButtonPopup] = useState(false) 
+
+    const [buttonPopupNoti, setButtonPopupNoti] = useState(false)
+
     let tmpURL = `https://api-newcore.vietvictory.vn/account/debit_account/get/${props1.AccountCode}`
     const [bioFilled, setBioFilled] = useState([]);
     useEffect(() => {
@@ -36,7 +45,9 @@ function Block_Custom(props1) {
         fetchDataFilled();
     }, []);
 
-txtCustomerID = `${bioFilled.CustomerID} - ${bioFilled.GB_FullName}`  
+
+
+txtCustomerID = `${bioFilled.CustomerID} - ${bioFilled.Customer?.GB_FullName}`  
 txtDescription = `PHONG TOA TK: ${bioFilled.id}`
 
 
@@ -129,7 +140,41 @@ txtDescription = `PHONG TOA TK: ${bioFilled.id}`
                     sx={{
                         marginRight: "30px"
                     }}
-                    onClick={() => {props1.setTrigger(false)}
+                    onClick={() => {
+                        props1.setTrigger(false)
+                        let
+                            txtFromDate = document.getElementById('dpFromDate').value.toString(),
+                            txtToDate = document.getElementById('dpToDate').value.toString(),
+                            txtAmount = document.getElementById('txtAmount').value,
+                            txtDescription = document.getElementById('txtDescription').value.toString()
+
+                        axios.post(`https://api-newcore.vietvictory.vn/account/debit_account/block/${props1.AccountCode}`, {
+                            startDate: txtFromDate,
+                            endDate: txtToDate,
+                            amount: txtAmount,
+                            notes: txtDescription
+                        })
+                        .then( res => {
+                            console.log(res)
+                            setButtonPopup(true)
+                        })
+                        .catch(err => {
+                            arr = []
+                            if(!txtFromDate) {
+                                arr.push('From_Date is required')
+                            }
+                            if(!txtToDate){
+                                arr.push('To_Date is required')
+                            }
+                            if(bioFilled.Status == 'Blocked'){
+                                arr.push('Account was blocked!')
+                            }
+                            setButtonPopupNoti(true)
+                            
+                        })
+                        props1.setTrigger(true)
+
+                    }
                     }
                 >
                     Save
@@ -144,6 +189,21 @@ txtDescription = `PHONG TOA TK: ${bioFilled.id}`
                 >
                     Cancel
                 </Button>
+
+                <Popup_Custom 
+                    trigger={buttonPopup}
+                    setTrigger={setButtonPopup}
+                >
+                    
+                </Popup_Custom>
+                <Notification_Custom
+                    trigger={buttonPopupNoti}
+                    setTrigger={setButtonPopupNoti}
+                    arr={arr}
+                >
+
+                </Notification_Custom>
+
             </div>
             
         </div>
