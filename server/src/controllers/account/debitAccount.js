@@ -369,7 +369,8 @@ const debitAccountController = {
         const amount = parseInt(blockageDB.getDataValue('Amount'))
         const updatedAccount = await accountDB.update({
             WorkingAmount: workingAmountDB + amount,
-            BlockedAmount: blockedAmountDB - amount
+            BlockedAmount: blockedAmountDB - amount,
+            Status: 'Active'
         })
         .catch(err => {
             console.log(err)
