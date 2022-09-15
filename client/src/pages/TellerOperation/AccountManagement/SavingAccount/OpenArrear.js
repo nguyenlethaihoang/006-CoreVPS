@@ -17,6 +17,11 @@ const rollData = [{id: 1, Name: "Yes"}, {id: 2, Name: "No"}]
 let arr = []
 let arrSearchCustomer = []
 
+function addMonths(number, date = new Date()){
+    date.setMonth(date.getMonth() + number)
+    return date
+}
+
 function checkName(a, b) {
     let temp = null
     a.map((data, index) => {
@@ -44,38 +49,93 @@ function checkName(a, b) {
     return temp
 }
 
+function calculateMaturityDate(valueDate, term){
+
+    let date = new Date(valueDate)
+    console.log(date)
+    
+
+    const months = term.getDataValue('Value')
+    const maturityDate = addMonths(months, date)
+
+    return maturityDate
+}
+
 function checkNameCustomerID(a, b) {
     let temp = null
+    b.replace("10000","")
+    b.replace("20000","")
+    b.replace("30000","")
     a.map((data, index) => {
-        if (b.includes(data.GB_FullName))
+        // console.log("b")
+        // console.log(b)
+        // console.log("data.GB_FullName")
+        // console.log(data.GB_FullName)
+        if (b.includes(data.customer.GB_FullName))
         {
-            temp = data.id.toString()
+            temp = data.customer.id.toString()
             
         }
     })
     return temp
 }
 
+
+let bioCustomerTemp;
+
+
+let arrType = []
+
+arrType[1] = 100000;
+arrType[2] = 300000;
 function OpenArrear() {
 
     const [buttonPopup, setButtonPopup] = useState(false) 
     const [buttonPopupFail, setButtonPopupFail] = useState(false)
     const [buttonPopupNoti, setButtonPopupNoti] = useState(false)
 
+
+
+    // const [bioCustomer, setBioCustomer] = useState([]);
+    // useEffect(() => {
+    //     const fetchDataCustomer = async () => {
+    //         const response = await fetch(`https://api-newcore.vietvictory.vn/customer/get_all_customer`);
+    //         const data = await response.json();
+    //         arrSearchCustomer = []
+
+    //         customerArray.map((dataMap, i) => {
+    //             let resObj = {
+    //                 index: i,
+    //                 id: dataMap.id,
+    //                 label: `${dataMap.customer.id} - ${dataMap.customer.GB_FullName}`
+    //             }
+    //             arrSearchCustomer.push(resObj)
+    //         })
+    //         customerArray = data.data.customer
+    //         setBioCustomer(data.data.customer);  
+    //     };
+    //     fetchDataCustomer();
+    // }, []);
+
+
     const [bioCustomer, setBioCustomer] = useState([]);
     useEffect(() => {
         const fetchDataCustomer = async () => {
             const response = await fetch(`https://api-newcore.vietvictory.vn/customer/get_all_customer`);
             const data = await response.json();
+            // createSearchCustomer(data.data.customer)
             arrSearchCustomer = []
-            bioCustomer.map((dataMap, i) => {
+            
+            bioCustomerTemp.map((dataMap, i) => {
                 let resObj = {
                     index: i,
-                    id: dataMap.id,
-                    label: `${dataMap.id} - ${dataMap.GB_FullName}`
+                    id: dataMap.customer.id,
+                    label: `${dataMap.customer.id+arrType[dataMap.customer.CustomerType]} - ${dataMap.customer.GB_FullName}`
+
                 }
                 arrSearchCustomer.push(resObj)
             })
+            bioCustomerTemp = data.data.customer
             setBioCustomer(data.data.customer);  
         };
         fetchDataCustomer();
@@ -90,6 +150,7 @@ function OpenArrear() {
         };
         fetchDataTerm();
     }, []);
+
 
     const [bioCurrency, setBioCurrency] = useState([]);
     useEffect(() => {
@@ -127,15 +188,17 @@ function OpenArrear() {
         };
         fetchDataAccountOfficer();
     }, []);
-    let temp = bioCustomer
+    let bioCustomerTemp = bioCustomer
     arrSearchCustomer = []
-            bioCustomer.map((dataMap, i) => {
-                let resObj = {
-                    index: i,
-                    id: dataMap.id,
-                    label: `${dataMap.id} - ${dataMap.GB_FullName}`
-                }
-                arrSearchCustomer.push(resObj)
+    bioCustomerTemp.map((dataMap, i) => {
+        let resObj = {
+            index: i,
+            id: dataMap.customer.id,
+            label: `${dataMap.customer.id+arrType[dataMap.customer.CustomerType]} - ${dataMap.customer.GB_FullName}`
+
+        }
+        arrSearchCustomer.push(resObj)
+
     })
     return (
         <div>
@@ -212,7 +275,18 @@ function OpenArrear() {
                             paddingTop: "10px"
                         }}
                     >
-                        <Select_Custom props1="Joint A/c Holder" props2="35" props3="account_officer" props4={bioCustomer}/>
+                        <Autocomplete
+                                disablePortal
+                                id="sltJoinHolderID.."
+                                options={arrSearchCustomer}
+                                sx={{ 
+                                    width: 400,
+                                    paddingBottom: "25px",
+                                    paddingRight: "25px"
+                                }}
+                                renderInput={(params) => <TextField {...params} label="Join A/c Holder" />}
+                            />
+                        {/* <Select_Custom props1="Joint A/c Holder" props2="35" props3="account_officer" props4={bioCustomer}/> */}
                         <Select_Custom props1="Relationship" props2="35" props3="account_officer" props4={bioRelationCode}/>
                         <TextField_Custom props1="Notes" props2="35" props3="NO"/>
                         <Select_Custom props1="Account Officer" props2="25" props3="account_officer" props4={bioAccountOfficer}/>
@@ -265,7 +339,7 @@ function OpenArrear() {
                         <Select_Custom props1="Product.." props2="35" props3="account_officer" props4={productData}/>
                         <TextField_Custom props1="Principal.." props2="35" props3="YES"/>
                         <DatePicker_Custom props1="Value Date.." props2="350" props3="YES"/>
-                        <Select_Custom props1="Term.." props2="35" props3="account_officer" props4={bioTerm}/>
+                        <Select_Custom id ='sltTerm..' props1="Term.." props2="35" props3="account_officer" props4={bioTerm}/>
                         <DatePicker_Custom props1="Maturity Date.." props2="350" props3="YES"/>
                         <TextField_Custom props1="Interest Rate.." props2="35" props3="YES"/>
                         
@@ -335,16 +409,17 @@ function OpenArrear() {
                                 let txtProduct = document.getElementById('sltProduct..').innerText.toString();
                                 let txtTerm = document.getElementById('sltTerm..').innerText.toString();
                                 let txtAccountTitle = document.getElementById('txtAccountTitle..').value;
+                                let txtValueDate = document.getElementById('dpValueDate..').value.toString();
 
                                 let txtPrincipal =  document.getElementById('txtPrincipal..').value
 
                                 axios.post('https://api-newcore.vietvictory.vn/account/saving_account/open_arrear',{
                                     customerID: checkNameCustomerID(bioCustomer,txtCustomerID),
-                                    category: 1,
+                                    category: checkName(categoryData,txtCategory),
                                     currency: checkName(bioCurrency, txtCurrency),
                                     product: "product",
                                     term: checkName(bioTerm, txtTerm),
-
+                                    valueDate: txtValueDate,
                                     accountTitle: txtAccountTitle,
                                     // principalAmount: document.getElementById('txtPrincipal..').value.toString(),
                                     principalAmount: txtPrincipal,
