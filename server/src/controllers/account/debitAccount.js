@@ -480,7 +480,7 @@ const debitAccountController = {
         if(closureReq.paymentType != 'Cash' && closureReq.transferredAccount){
             transferredAccountDB = await debitAccountModel.findByPk(closureReq.transferredAccount)
             // CHUYEN TIEN DEN TAI KHOAN KHAC
-            const workingAmountDB = transferredAccountDB.getDataValue('WorkingAmount')
+            const workingAmountDB = parseInt(transferredAccountDB.getDataValue('WorkingAmount'))
             updatedTransferredAccount = await transferredAccountDB.update({
                 WorkingAmount: workingAmountDB + parseInt(accountDB.getDataValue('WorkingAmount'))
             })
