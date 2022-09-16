@@ -80,6 +80,8 @@ const debitAccountController = {
         const accountDB = await debitAccountModel.findByPk(accountReq,{
             include: [{
                 model: customerModel, attributes: ['GB_FullName'], as: 'Customer'
+            }, {
+                model: currencyModel, attributes: ['Name']
             }]
         })
         // .catch(err => {
