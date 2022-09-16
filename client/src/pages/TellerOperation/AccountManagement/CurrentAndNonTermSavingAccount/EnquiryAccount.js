@@ -14,8 +14,8 @@ const customerTypeData = [{id: 0, Name: 'All'}, {id: 1,Name: 'P - Person' },{id:
 
 const currencyData = [{id: 0, Name: 'None'}, {id: 1,Name: 'EUR' },{id: 2,Name: 'USD'},{id: 3,Name: 'GBP'},{id: 4,Name: 'JPY'},{id: 5,Name: 'VND'},]
 
-function createData(AccountCode, CustomerID, CustomerName, DocID, Category, ProductLine, Currency, ActualBallance, WorkingAmount, LockedAmount) {
-    return { AccountCode, CustomerID, CustomerName, DocID, Category, ProductLine, Currency , ActualBallance, WorkingAmount, LockedAmount};
+function createData(AccountCode, CustomerID, CustomerName, DocID, Category, ProductLine, Currency, ActualBallance, WorkingAmount, LockedAmount, Status) {
+    return { AccountCode, CustomerID, CustomerName, DocID, Category, ProductLine, Currency , ActualBallance, WorkingAmount, LockedAmount, Status};
   }
 
 let rows = [];
@@ -178,7 +178,8 @@ function EnquiryAccount() {
                                                         tempCurrency, 
                                                         value.ActualBalance,
                                                         value.WorkingAmount, 
-                                                        <Actions AccountCode={value.id}/>, 
+                                                        <Actions AccountCode={value.id}/>,
+                                                        value.Status 
                                                         ))
                                 })
                                 // console.log("rows")
@@ -244,11 +245,25 @@ function EnquiryAccount() {
                                 </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {bioRow.map((row,index) => (
+                                    {bioRow.map((row,index) => {
+                                        let accountStatus = row.Status
+                                        let colorCode = '#ffffff'
+                                        if (accountStatus == "Blocked"){
+                                            colorCode = '#dfe6e9'
+                                        }
+
+                                        return (
+                                            
                                         <TableRow
                                         key={index}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                        sx=
+                                        {{ 
+                                            '&:last-child td, &:last-child th': { border: 0 },
+                                            backgroundColor: `${colorCode}`
+                                    
+                                        }}
                                         >
+
                                             <TableCell align="center" component="right" scope="row">
                                                 {row.AccountCode}
                                             </TableCell>
@@ -269,7 +284,7 @@ function EnquiryAccount() {
                                                 {row.LockedAmount}
                                             </TableCell>
                                         </TableRow>
-                                    ))}
+                                    )})}
                                 </TableBody>
                             </Table>
                         </TableContainer>

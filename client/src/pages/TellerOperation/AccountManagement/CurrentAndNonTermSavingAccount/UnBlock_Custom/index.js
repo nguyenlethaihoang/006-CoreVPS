@@ -10,7 +10,9 @@ import Select_Value_Custom from '../../../../../components/Select_Value_Custom';
 import TextField_Value_Custom from '../../../../../components/TextField_Value_Custom';
 import TextField_Value_Custom_No_Data from '../../../../../components/TextField_Value_Custom_No_Data';
 import DatePicker_Custom from '../../../../../components/DatePicker_Custom';
-
+import axios from 'axios';
+import Popup_Custom from '../../../../../components/Popup_Custom';
+import Notification_Custom from '../../../../../components/Notification_Custom';
 const closeOnlineData = [
     {id: 1,
     Name: 'Y' },
@@ -18,11 +20,15 @@ const closeOnlineData = [
     id: 2,
     Name: 'N'},
 ]
-
+let arr = []
 let txtCustomerID = ""
 let txtDescription = ""
 
 function UnBlock_Custom(props1) {
+
+    const [buttonPopup, setButtonPopup] = useState(false) 
+
+    const [buttonPopupNoti, setButtonPopupNoti] = useState(false)
     let tmpURL = `https://api-newcore.vietvictory.vn/account/debit_account/get/${props1.AccountCode}`
     const [bioFilled, setBioFilled] = useState([]);
     useEffect(() => {
@@ -36,7 +42,20 @@ function UnBlock_Custom(props1) {
         fetchDataFilled();
     }, []);
 
-txtCustomerID = `${bioFilled.CustomerID} - ${bioFilled.GB_FullName}`  
+
+    const [bioUnblock, setBioUnblock] = useState([]);
+    useEffect(() => {
+        const fetchDataUnblock = async () => {
+            const response = await fetch(`https://api-newcore.vietvictory.vn/account/debit_account/get_blockage/${props1.AccountCode}`);
+            const data = await response.json();
+            console.log("block data")
+            console.log(data)
+            setBioUnblock(data.data);  
+        };  
+        fetchDataUnblock();
+    }, []);
+
+txtCustomerID = `${bioFilled.CustomerID} - ${bioFilled.Customer?.GB_FullName}`  
 txtDescription = `PHONG TOA TK: ${bioFilled.id}`
 
 
@@ -87,7 +106,8 @@ txtDescription = `PHONG TOA TK: ${bioFilled.id}`
             >
                 <TextField_Value_Custom_No_Data props1="Customer ID" props2="35" props3="NO" props4={txtCustomerID}/>
                 <TextField_Value_Custom_No_Data props1="Account" props2="15" props3="NO" props4={bioFilled.id}/>
-                <TextField_Value_Custom_No_Data props1="Amount" props2="20" props3="YES" props4="0"/>
+                <TextField_Value_Custom_No_Data props1="Amount" props2="20" props3="NO" props4={bioUnblock.Amount}/>
+                
             </div>
             <div
             
@@ -109,9 +129,11 @@ txtDescription = `PHONG TOA TK: ${bioFilled.id}`
                     flexWrap: "wrap"
                 }}
             >
-                <DatePicker_Custom props1="From Date" props2="350" props3="YES"/>
-                <DatePicker_Custom props1="To Date" props2="350" props3="YES"/>
-                <TextField_Value_Custom_No_Data props1="Description" props2="35" props3="YES" props4={txtDescription}/>
+                {/* <DatePicker_Custom props1="From Date" props2="350" props3="YES"/>
+                <DatePicker_Custom props1="To Date" props2="350" props3="YES"/> */}
+                <TextField_Value_Custom_No_Data props1="From Date" props2="20" props3="NO" props4={bioUnblock.StartDate}/>
+                <TextField_Value_Custom_No_Data props1="To Date" props2="20" props3="NO" props4={bioUnblock.EndDate}/>
+                <TextField_Value_Custom_No_Data props1="Description" props2="35" props3="NO" props4={bioUnblock.Notes}/>
             </div>
             <div
                 style={{ 
@@ -129,7 +151,25 @@ txtDescription = `PHONG TOA TK: ${bioFilled.id}`
                     sx={{
                         marginRight: "30px"
                     }}
-                    onClick={() => {props1.setTrigger(false)}
+                    onClick={() => {
+                        props1.setTrigger(false)
+
+
+                        axios.put(`https://api-newcore.vietvictory.vn/account/debit_account/unblock/${props1.AccountCode}`)
+                        .then( res => {
+                            console.log(res)
+                            setButtonPopup(true)
+                        })
+                        .catch(err => {
+                            arr = []
+                            arr.push('Account is unblocked!')
+                            console.log(err)
+                            setButtonPopupNoti(true)
+                            
+                        })
+                        props1.setTrigger(true)
+
+                    }
                     }
                 >
                     Save
@@ -144,6 +184,21 @@ txtDescription = `PHONG TOA TK: ${bioFilled.id}`
                 >
                     Cancel
                 </Button>
+
+
+                <Popup_Custom 
+                    trigger={buttonPopup}
+                    setTrigger={setButtonPopup}
+                >
+                    
+                </Popup_Custom>
+                <Notification_Custom
+                    trigger={buttonPopupNoti}
+                    setTrigger={setButtonPopupNoti}
+                    arr={arr}
+                >
+
+                </Notification_Custom>
             </div>
             
         </div>
