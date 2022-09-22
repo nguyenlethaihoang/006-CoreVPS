@@ -475,14 +475,19 @@ const debitAccountController = {
         }
 
         let transferredAccountDB 
-        
+         
         let updatedTransferredAccount 
         if(closureReq.paymentType != 'Cash' && closureReq.transferredAccount){
             transferredAccountDB = await debitAccountModel.findByPk(closureReq.transferredAccount)
+            if(transferredAccountDB.getDataValue('Status') !== 'Active'){
+                return next(new appError('Invalid Transfer Account', 404))
+            }
             // CHUYEN TIEN DEN TAI KHOAN KHAC
             const workingAmountDB = parseInt(transferredAccountDB.getDataValue('WorkingAmount'))
+            const actualBalanceDB = parseInt(transferredAccountDB.getDataValue('ActualBalance'))
             updatedTransferredAccount = await transferredAccountDB.update({
-                WorkingAmount: workingAmountDB + parseInt(accountDB.getDataValue('WorkingAmount'))
+                WorkingAmount: workingAmountDB + parseInt(accountDB.getDataValue('WorkingAmount')),
+                ActualBalance: actualBalanceDB + parseInt(accountDB.getDataValue('ActualBalance'))
             })
         }else{
             transferredAccountDB = null
