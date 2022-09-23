@@ -462,6 +462,9 @@ const debitAccountController = {
         if(closureReq.paymentType == 'Cash'){
             transferredAccountReq = null
         }else{
+            if(closureReq.transferredAccount == accountReq){
+                return next(new appError('Invalid Transfer Account', 404))
+            }
             transferredAccountReq = closureReq.transferredAccount
         }
 
