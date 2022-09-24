@@ -42,7 +42,7 @@ const foreignExchangeController = {
         let FCYamount
         let dealRate
         let paidAmount
-        if(exchangeReq.debitCurrency == 12){ // 12 - VND
+        if(exchangeReq.debitCurrency == 12 || exchangeReq.debitCurrency == '12') { // 12 - VND
             //VND
             if(!exchangeReq.debitAmtLCY || !exchangeReq.debitDealRate){
                 return next(new appError('Debit_Amount_LCY and Debit_Deal_Rate are required!', 404))
