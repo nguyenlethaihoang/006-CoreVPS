@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Button, Divider, FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material"
+import { Accordion, AccordionDetails, AccordionSummary, appBarClasses, Button, Divider, fabClasses, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TextField_Custom from "../../../components/TextField_Custom";
 import Select_Custom from "../../../components/Select_Custom";
@@ -57,13 +57,105 @@ function SubForeignExchange() {
         fetchDataAccountOfficer();
     }, []);
 
+
+    const debitAmtLCYElement = document.getElementById('txtDebitAmountFCY')
+    console.log("Debit Amount LCY ELement: ", debitAmtLCYElement)
+    const debitAmtFCYElement = document.getElementById('txtDebitAmountLCY')
+    console.log("Debit Amount FCY ELement: ", debitAmtFCYElement)
+    const debitDealRateElement = document.getElementById('txtDebitDealRate')
+    const creditDealRateElement = document.getElementById('txtCreditDealRate')
+
+
     const [age, setAge] = useState('');
+    const [debitDisable, setDebitDisable] = useState(true);
+    const [creditDisable, setCreditDisable] = useState(true);
+    const [debitAmt, setDebitAmt] = useState(null);
+    const [creditAmt, setCreditAmt] = useState(null);
+    const [labelFCY, setLabelFCY] = useState('Debit Amount FCY')
+    const [labelLCY, setLabelLCY] = useState('Debit Amount LCY')
     const handleChange = (event) => {
         setAge(event.target.value);
+
+        setDebitDisable(true)
+        setCreditDisable(true)
+        setDebitAmt(null)
+        setCreditAmt(null)
+        debitAmtFCYElement.value = null
+        debitAmtLCYElement.value = null
+        debitDealRateElement.value = null
+        creditDealRateElement.value = null
+        if(event.target.value == 12){
+            
+            setDebitDisable(false)
+            setCreditDisable(true)
+            
+        }else{
+            setDebitDisable(true)
+            setCreditDisable(false)
+        }
       };
+
+
 
     let a = "Debit Currency"
     let b = "Debit Account"
+    let dealRate = null
+    let paidAmount = null
+
+    function setPaidAmount_Amt(event) {
+        paidAmount = event.target.value
+        if(paidAmount && age){
+            console.log("age")
+            console.log(age)
+            if(age == "12" || age == 12 ){
+                console.log("VNDDD")
+                dealRate = document.getElementById('txtDebitDealRate').value
+                if(dealRate){
+                    setCreditAmt(parseFloat(paidAmount / dealRate))
+                    setLabelFCY(null)
+                    setLabelLCY('Debit Amount LCY')
+                }
+            }else{
+                dealRate = document.getElementById('txtCreditDealRate').value
+                console.log("FLCCC")
+                if(dealRate){
+                    setDebitAmt(parseFloat(paidAmount * dealRate))
+                    setLabelFCY('Debit Amount FCY')
+                    setLabelLCY(null)
+                }
+                
+            }
+        }
+    }
+    function setDealRate(event){
+        dealRate = event.target.value
+
+        if(dealRate && age){
+            console.log("age")
+            console.log(age)
+            if(age == "12" || age == 12 ){
+                console.log("VNDDD")
+                paidAmount = document.getElementById('txtDebitAmountLCY').value
+                if(paidAmount){
+                    setCreditAmt(parseFloat(paidAmount / dealRate))
+                    setLabelFCY(null)
+                    setLabelLCY('Debit Amount LCY')
+                }
+            }else{
+                paidAmount = document.getElementById('txtDebitAmountFCY').value
+                console.log("FLCCC")
+                if(paidAmount){
+                    setDebitAmt(parseFloat(paidAmount * dealRate))
+                    setLabelFCY('Debit Amount FCY')
+                    setLabelLCY(null)
+                }
+                
+            }
+        }
+    }
+    
+    
+
     return (
         <div>
             <Accordion >
@@ -179,7 +271,33 @@ function SubForeignExchange() {
                                     </Select>
                                 </FormControl>
                         </div>
-                        <TextField_Custom props1="Debit Amount FCY" props2="25" props3="NO" />
+                        <TextField 
+                            sx={{
+                                width: `25ch`,
+                                marginRight: "20px",
+                                marginBottom: "20px" 
+                            }}
+                            id = "txtDebitAmountLCY"
+                            label = {labelLCY}
+                            variant="outlined"
+                            value={debitAmt}
+                            onChange={setPaidAmount_Amt}
+                            disabled = {debitDisable}
+                            
+                        />
+                        <TextField 
+                            sx={{
+                                width: `25ch`,
+                                marginRight: "20px",
+                                marginBottom: "20px" 
+                            }}
+                            id = "txtDebitAmountFCY"
+                            label = {labelFCY}
+                            variant="outlined"
+                            value={creditAmt}
+                            onChange={setPaidAmount_Amt}
+                            disabled = {creditDisable}
+                        />
 
                         
 
@@ -198,7 +316,31 @@ function SubForeignExchange() {
                         <Select_Custom props1="Teller ID" props2="30" props3="YES" props4={bioAccountOfficer}/>
                         {/* <TextField_Custom props1="Teller ID" props2="25" props3="NO" /> */}
                         <Select_Custom props1="Credit Account" props2="25" props3="YES" props4={creditAccountData}/>
-                        <TextField_Custom props1="Credit Deal Rate" props2="25" props3="NO" />
+                        <TextField 
+                            sx={{
+                                width: `25ch`,
+                                marginRight: "20px",
+                                marginBottom: "20px" 
+                            }}
+                            id = "txtCreditDealRate"
+                            label = "Credit Deal Rate"
+                            variant="outlined"
+                            onChange={setDealRate}
+                            disabled = {creditDisable}
+                        />
+                        <TextField 
+                            sx={{
+                                width: `25ch`,
+                                marginRight: "20px",
+                                marginBottom: "20px" 
+                            }}
+                            id = "txtDebitDealRate"
+                            label = "Debit Deal Rate"
+                            variant="outlined"
+                            onChange={setDealRate}
+                            disabled = {debitDisable}
+                        />
+                    
 
                     </div>
                     <Divider></Divider>
@@ -237,7 +379,9 @@ function SubForeignExchange() {
                                 let txtTellerID = document.getElementById('sltTellerID*').innerText.toString()
 
                                 let txtDebitAmountFCY = document.getElementById('txtDebitAmountFCY').value
+                                let txtDebitAmountLCY = document.getElementById('txtDebitAmountLCY').value
                                 let txtCreditDealRate = document.getElementById('txtCreditDealRate').value
+                                let txtDebitDealRate = document.getElementById('txtDebitDealRate').value
                                 
                                 let txtDebitCurrency = document.getElementById('sltDebitCurrency').innerText.toString()
                                 let txtDebitAccount = document.getElementById('sltDebitAccount').innerText.toString()
@@ -250,6 +394,7 @@ function SubForeignExchange() {
                                 console.log(txtDebitAccount)
                                 console.log(checkName(currencyData, txtCurrencyPaid))
 
+
                                 
                                 
                                 let txtCreditAccount = document.getElementById('sltCreditAccount').innerText.toString()
@@ -261,6 +406,8 @@ function SubForeignExchange() {
                                     debitCurrency: checkName(currencyData, txtDebitCurrency),
                                     currencyPaid: checkName(currencyData, txtCurrencyPaid),
                                     debitAmtFCY: txtDebitAmountFCY,
+                                    debitAmtLCY: txtDebitAmountLCY,
+                                    debitDealRate: txtDebitDealRate,
                                     creditDealRate: txtCreditDealRate,
                                 })
                                 .then(res => {
@@ -274,9 +421,22 @@ function SubForeignExchange() {
                                      if (txtAddress.length == 1 || txtAddress.length == 0) arr.push(`"Address" is Required`);
                                      if (txtTellerID.length == 0) arr.push(`"Teller ID" is Required`);
                                      if (txtDebitCurrency.length == 0) arr.push(`"Debit Currency" is Required`);
+                                     if (txtDebitCurrency == 'VND'){
+                                        if(!txtDebitAmountLCY){
+                                            arr.push(`"Debit Amount LCY" is required`)
+                                        }
+                                        if(!txtDebitDealRate){
+                                            arr.push(`"Debit Deal Rate" is required`)
+                                        }
+                                     }else{
+                                        if(!txtDebitAmountFCY){
+                                            arr.push(`"Debit Amount FCY" is required`)
+                                        }
+                                        if(!txtCreditDealRate){
+                                            arr.push(`"Credit Deal Rate" is required`)
+                                        }
+                                     }
                                      if (txtCurrencyPaid.length == 1 || txtCurrencyPaid.length == 0) arr.push(`"Currency Paid" is Required`);
-                                     if (txtDebitAmountFCY.length == 1 || txtDebitAmountFCY.length == 0) arr.push(`"Debit Amount FCY" is Required`);
-                                     if (txtCreditDealRate.length == 1 || txtCreditDealRate.length == 0) arr.push(`"Credit Deal Rate" is Required`);
                                      if (txtDebitCurrency == txtCurrencyPaid) arr.push(`"Currency Paid" must be different with "Debit Currency"`);
                                     console.log("err")
                                     console.log(err)
