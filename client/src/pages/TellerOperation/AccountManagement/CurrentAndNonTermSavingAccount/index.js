@@ -6,6 +6,9 @@ import CloseAccount from "./CloseAccount"
 import EnquiryAccount from "./EnquiryAccount"
 import OpenAccount from "./OpenAccount"
 import UnblockAccount from "./UnblockAccount"
+import CashDeposit from "./CashDeposit";
+import CashWithdrawal from "./CashWithdrawal";
+import TransferWithdrawal from "./TransferWithdrawal";
 
 function CurrentAndNonTermSavingAccount()  {
     return (
@@ -34,7 +37,9 @@ function CurrentAndNonTermSavingAccount()  {
                     {/* <CloseAccount /> */}
                     {/* <BlockAccount /> */}
                     {/* <UnblockAccount /> */}
-                
+                    <CashDeposit />
+                    <CashWithdrawal />
+                    <TransferWithdrawal />
  
 
                 </AccordionDetails>
