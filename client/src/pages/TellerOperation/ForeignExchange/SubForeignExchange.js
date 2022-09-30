@@ -57,6 +57,15 @@ function SubForeignExchange() {
         fetchDataAccountOfficer();
     }, []);
 
+    const [biochargeCategory, setchargeCategory] = useState([]);
+    useEffect(() => {
+        const fetchDataChargeCategory = async () => {
+            const response = await fetch(`https://api-newcore.vietvictory.vn/storage/get_charge_category`);
+            const data = await response.json();
+            setchargeCategory(data.rows);  
+        };
+        fetchDataChargeCategory();
+    }, []);
 
     const debitAmtLCYElement = document.getElementById('txtDebitAmountFCY')
     console.log("Debit Amount LCY ELement: ", debitAmtLCYElement)
@@ -96,7 +105,7 @@ function SubForeignExchange() {
       };
 
 
-
+    // CALCULATE AMOUNt
     let a = "Debit Currency"
     let b = "Debit Account"
     let dealRate = null
@@ -152,6 +161,19 @@ function SubForeignExchange() {
                 
             }
         }
+    }
+
+
+    // CALCULATE VAT
+    const [vatAmount, setVatAmount] = useState(0);
+    const [totalAmount, setTotalAmount] = useState(0);
+
+    function setChargAmount(event){
+        const chargeAmount = parseInt(event.target.value)
+        let vatAmount = chargeAmount * 0.1
+        setVatAmount(vatAmount)
+        let totalAmount = chargeAmount + vatAmount
+        setTotalAmount(totalAmount)
     }
     
     
@@ -365,7 +387,7 @@ function SubForeignExchange() {
 
                         }}
                     >
-                        <Select_Custom props1="Category PL" props2="40" props3="YES" props4={currencyData}/>
+                        <Select_Custom props1="Category PL" props2="40" props3="YES" props4={biochargeCategory}/>
                     </div>
                     <div
                         style={{ 
@@ -376,12 +398,20 @@ function SubForeignExchange() {
 
                         }}
                     >
-                        <TextField_Custom props1="Charg Amount LCY" props2="20" props3="NO" />
+                        {/* <TextField_Custom props1="Charg Amount LCY" props2="20" props3="NO" /> */}
+                        <TextField 
+                            id="txtChargAmountLCY" 
+                            label="Charg Amount LCY" 
+                            variant="outlined" 
+                            onChange={setChargAmount}
+                            sx={{marginRight: "30px",marginBottom: "20px" }}
+                        />
                         <TextField_Custom props1="Deal Rate" props2="15" props3="NO" />
                         <TextField 
                             id="txtVATAmountLCY" 
                             label="VAT Amount LCY" 
                             variant="outlined" 
+                            value={vatAmount}
                             disabled
                             sx={{marginRight: "30px",marginBottom: "20px" }}
                         />
@@ -389,7 +419,14 @@ function SubForeignExchange() {
                             id="txtTotalAmountLCY" 
                             label="Total Amount LCY" 
                             variant="outlined" 
+                            value={totalAmount}
                             disabled
+                            sx={{marginRight: "30px",marginBottom: "20px" }}
+                        />
+                        <TextField 
+                            id="txtVatSerialNo" 
+                            label="Vat Serial No" 
+                            variant="outlined" 
                             sx={{marginRight: "30px",marginBottom: "20px" }}
                         />
 
@@ -424,6 +461,10 @@ function SubForeignExchange() {
                                 let txtDebitAccount = document.getElementById('sltDebitAccount').innerText.toString()
                                 let txtCurrencyPaid = document.getElementById('sltCurrencyPaid').innerText.toString()
 
+                                let txtChargAmountLCY = document.getElementById('txtChargAmountLCY').value
+                                let txtDealRate = document.getElementById('txtDealRate').value
+                                let txtVatSerialNo = document.getElementById('txtVatSerialNo').value.toString()
+                                let txtChargeCategory = document.getElementById('sltCategoryPL').textContent.toString()
                                 console.log("sltDebitCurrency")
                                 console.log(txtDebitCurrency)
                                 console.log(checkName(currencyData, txtDebitCurrency))
@@ -446,6 +487,10 @@ function SubForeignExchange() {
                                     debitAmtLCY: txtDebitAmountLCY,
                                     debitDealRate: txtDebitDealRate,
                                     creditDealRate: txtCreditDealRate,
+                                    ccAmount: txtChargAmountLCY,
+                                    ccDealRate: txtDealRate,
+                                    ccCategory: checkName(biochargeCategory, txtChargeCategory),
+                                    ccVatSerialNo: txtVatSerialNo
                                 })
                                 .then(res => {
                                     console.log("res")
