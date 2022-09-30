@@ -354,7 +354,34 @@ function SubForeignExchange() {
                         }}
                     >
                         <TextField_Custom props1="Narrative" props2="40" props3="NO" />
-                        
+
+                    </div>
+                    <div
+                        style={{ 
+                            display: "flex", 
+                            width: "100%", 
+                            flexWrap: "wrap",
+                            paddingTop: "20px"
+
+                        }}
+                    >
+                        <TextField_Custom props1="Charg Amount LCY" props2="40" props3="NO" />
+                        <Select_Custom props1="Category PL" props2="20" props3="YES" props4={currencyData}/>
+                        <TextField_Custom props1="Deal Rate" props2="40" props3="NO" />
+                        <TextField 
+                            id="txtUATAmountLCY" 
+                            label="UAT Amount LCY" 
+                            variant="outlined" 
+                            disabled
+                            sx={{marginRight: "30px",marginBottom: "20px" }}
+                        />
+                        <TextField 
+                            id="txtTotalAmountLCY" 
+                            label="Total Amount LCY" 
+                            variant="outlined" 
+                            disabled
+                            sx={{marginRight: "30px",marginBottom: "20px" }}
+                        />
 
                     </div>
                     <div
