@@ -13,7 +13,35 @@ ChargeCollection.init({
     TotalAmountLCY: DataTypes.INTEGER,
     TotalAmountFCY: DataTypes.INTEGER,
     VatSerialNo: DataTypes.STRING,
-    Narrative: DataTypes.TEXT 
+    Narrative: DataTypes.TEXT ,
+    Category: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'CHARGECATEGORY',
+            key: 'id'
+        },
+        onDelete: 'CASCADE'
+    },
+    Account: DataTypes.TEXT,
+    AccountType: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references:{
+            model: 'ACCOUNTTYPE',
+            key: 'id'
+        },
+        onDelete: 'CASCADE'
+    },
+    Type: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'CHARGECOLLECTIONTYPE',
+            key: 'id'
+        },
+        onDelete: 'CASCADE'
+    }
 }, {sequelize, modelName:'CHARGECOLLECTION'})
 
 

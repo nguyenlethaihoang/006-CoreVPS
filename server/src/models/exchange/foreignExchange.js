@@ -14,7 +14,16 @@ ForeignExchange.init({
     TellerIDnd: DataTypes.TEXT,
     CreditDealRate: DataTypes.FLOAT,
     AmountPaidToCust: DataTypes.FLOAT,
-    Narrative: DataTypes.TEXT
+    Narrative: DataTypes.TEXT,
+    ChargeCollectionID: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'CHARGECOLLECTION',
+            key: 'id'
+        },
+        onDelete: 'CASCADE'
+    }
 }, {sequelize, modelName:'FOREIGNEXCHANGE'})
 
 module.exports = ForeignExchange

@@ -1,6 +1,8 @@
 const foreignExchangeModel = require('../../models/exchange/foreignExchange')
 const currencyModel = require('../../models/storage/currency')
 const statusTypeModel = require('../../models/signature/statusType')
+const chargeCollectionModel = require('../../models/chargeCollection/chargeCollection')
+const chargeCollectionfrAccountModel = require('../../models/chargeCollection/chargeCollectionfrAccount')
 const asyncHandler = require('../../utils/async')
 const appError = require('../../utils/appError')
 
@@ -21,7 +23,11 @@ const foreignExchangeController = {
             tellerIDnd: req.body.tellerIDnd,
             creditAccount: req.body.creditAccount,
             creditDealRate: req.body.creditDealRate,
-            narrative: req.body.narrative
+            narrative: req.body.narrative,
+            ccAmount: req.body.ccAmount,
+            ccCategory: req.body.ccCategory,
+            ccDealRate: req.body.ccDealRate,
+            ccVatSerialNo: req.body.ccVatSerialNo
         }
 
         // DebitCurrency => Enable Fields
@@ -62,6 +68,32 @@ const foreignExchangeController = {
             paidAmount = LCYamount
         }
 
+        // Calculate ChargeCode
+        let ccVatAmount, ccTotalAmount
+        if(exchangeReq.ccAmount){
+            ccVatAmount = 0.1 * parseInt(exchangeReq.ccAmount)
+            console.log(ccVatAmount)
+            ccTotalAmount = parseInt(exchangeReq.ccAmount) + ccVatAmount
+        }
+        // Store charge Collection
+        const newChargeCollection = await chargeCollectionModel.create({
+            ChargeAmountLCY: parseInt(exchangeReq.ccAmount),
+            DealRate: exchangeReq.ccDealRate,
+            VatAmountLCY: ccVatAmount,
+            TotalAmountLCY: ccTotalAmount,
+            VatSerialNo: exchangeReq.ccVatSerialNo,
+            Category: exchangeReq.ccCategory,
+            Type: 1
+        })
+        const ccID = newChargeCollection.getDataValue('id')
+        const newCCfrAccount = await chargeCollectionfrAccountModel.create({
+            chargeID: ccID
+        })
+        let chargeID = null
+        if(newChargeCollection){
+            chargeID = newChargeCollection.getDataValue('id')
+        }
+
         // Store to database
         const newExchange = await foreignExchangeModel.create({
             CustomerName: exchangeReq.customerName, 
@@ -79,6 +111,7 @@ const foreignExchangeController = {
             CurrencyPaidID: exchangeReq.currencyPaid,
             DebitAccount: exchangeReq.debitAccount,
             CreditAccount: exchangeReq.creditAccount,
+            ChargeCollectionID: chargeID,
             Status: 1
         })
         .catch(err => {
@@ -144,7 +177,8 @@ const foreignExchangeController = {
 
         return res.status(200).json({
             message: 'enquiry exchange',
-            data: exchangesDB
+            data: exchangesDB,
+            chargeCollection: newChargeCollection
         })
     }),
 

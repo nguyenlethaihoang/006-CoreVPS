@@ -15,6 +15,8 @@ const productLineController = require('../controllers/storage/productLine')
 const subSectorController = require('../controllers/storage/subSector')
 const subIndustryController = require('../controllers/storage/subIndustry')
 const savingTermController = require('../controllers/storage/savingTerm')
+const chargeCategoryController = require('../controllers/storage/chargeCategory')
+const ChargeCollectionfrAccount = require("../models/chargeCollection/chargeCollectionfrAccount")
 
 route.get('/get_currency', currencyController.getAll)
 route.get('/get_account_officer', accountOfficerController.getAll)
@@ -32,6 +34,8 @@ route.get('/get_subsector_by_sector/:sectorid', subSectorController.getBySector)
 route.get('/get_subindustry', subIndustryController.getAll)
 route.get('/get_subindustry_by_industry/:industryid', subIndustryController.getByIndustry)
 route.get('/get_saving_term', savingTermController.getAll)
+route.get('/get_charge_category', chargeCategoryController.getAll)
+route.get('/get_charge_type', chargeCategoryController.getAllChargeType)
 
 
 

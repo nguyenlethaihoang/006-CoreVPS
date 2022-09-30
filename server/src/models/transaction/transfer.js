@@ -36,7 +36,16 @@ TransferTrans.init({
     WaiveCharges: {
         type: DataTypes.BOOLEAN
     },
-    Narrative: DataTypes.TEXT
+    Narrative: DataTypes.TEXT,
+    ChargeCollectionID: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'CHARGECOLLECTION',
+            key: 'id'
+        },
+        onDelete: 'CASCADE'
+    }
 }, {sequelize, modelName:'TRANSFERTRANS'})
 
 module.exports = TransferTrans

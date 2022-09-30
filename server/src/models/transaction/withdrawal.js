@@ -22,6 +22,15 @@ WithdrawalTrans.init({
     TellerID: {
         type: DataTypes.TEXT,
         defaultValue: 'VietVictory'
+    },
+    ChargeCollectionID: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'CHARGECOLLECTION',
+            key: 'id'
+        },
+        onDelete: 'CASCADE'
     }
 }, {sequelize, modelName:'WITHDRAWALTRANS'})
 

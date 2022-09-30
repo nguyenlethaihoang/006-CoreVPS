@@ -1,5 +1,9 @@
 const sequelize = require('./sequelize')
 const userModel = require('../models/user')
+const chargeCategoryModel = require('../models/storage/chargeCategory')
+const chargeCollectionModel = require('../models/chargeCollection/chargeCollection')
+const chargeCollectionTypeModel = require('../models/chargeCollection/chargeCollectionType')
+const ChargeCollectionfrAccountModel = require('../models/chargeCollection/chargeCollectionfrAccount')
 const association = require('../models/association')
 
 const database = {
