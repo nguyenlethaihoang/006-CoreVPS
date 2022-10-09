@@ -269,7 +269,7 @@ const debitAccountController = {
             ShortTitle: updateReq.shortTitle,
             AccountOfficer: updateReq.accountOfficer,
             ChargeCode: updateReq.chargeCode,
-            JoinHolder: updateReq.joinHolder,
+            JoinHolderID: updateReq.joinHolder,
             RelationCode: updateReq.relationCode,
             JoinNotes: updateReq.joinNotes
         })
