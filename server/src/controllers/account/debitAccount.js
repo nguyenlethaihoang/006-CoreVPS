@@ -152,7 +152,7 @@ const debitAccountController = {
             enquiryObject.condition.Currency = enquiryReq.currency
         }
         if(enquiryReq.isBlocked == 'true' || enquiryReq.isClosed == 'true'){
-            let status = ['Active']
+            let status = []
             if(enquiryReq.isBlocked == 'true')
                 status.push('Blocked')
             if(enquiryReq.isClosed == 'true')
@@ -541,7 +541,7 @@ const debitAccountController = {
     }),
     getClosedByID: asyncHandler( async (req, res, next) => {
         const accountReq = req.params.account
-        const closureDB = await closureModel.getOne({
+        const closureDB = await closureModel.findOne({
             where: {Account: accountReq}
         })
         return res.status(200).json({
