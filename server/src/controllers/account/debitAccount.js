@@ -85,6 +85,8 @@ const debitAccountController = {
                 model: currencyModel, attributes: ['Name']
             },  {
                 model: customerModel, attributes: ['GB_ShortName', 'GB_FullName'], as: 'JoinHolder'
+            }, {
+                model: relationCodeModel, attributes: ['Name']
             }]
         })
         // .catch(err => {
