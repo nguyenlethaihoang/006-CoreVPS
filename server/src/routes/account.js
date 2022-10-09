@@ -1,4 +1,5 @@
 const express = require("express")
+const { getAccount } = require("../controllers/account/debitAccount")
 const route = express.Router()
 
 const debitAccountController = require('../controllers/account/debitAccount')
@@ -14,6 +15,7 @@ route.get('/debit_account/get_blocked_amount', debitAccountController.getBlocked
 route.put('/debit_account/close/:account', debitAccountController.closeAccount)
 route.put('/debit_account/update/:account', debitAccountController.update)
 route.get('/debit_account/get/:account', debitAccountController.getAccount)
+route.get('/debit_account/get_closure/:account', debitAccountController.getClosedByID)
 
 // SAVING ACCOUNT
 route.post('/saving_account/open_arrear', savingAccountController.openArrearSA)

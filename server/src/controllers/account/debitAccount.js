@@ -151,19 +151,19 @@ const debitAccountController = {
             // count++
             enquiryObject.condition.Currency = enquiryReq.currency
         }
-        if(enquiryReq.isBlocked == 'true' || enquiryReq.isClosed == 'true' || enquiryReq.isActive){
-            let status = []
+        if(enquiryReq.isBlocked == 'true' || enquiryReq.isClosed == 'true'){
+            let status = ['Active']
             if(enquiryReq.isBlocked == 'true')
                 status.push('Blocked')
             if(enquiryReq.isClosed == 'true')
                 status.push('closed')
-            if(enquiryReq.isActive == 'true')
-                status.push('Active')
             // if(count != 0)
             //     enquiryString += ' AND '
             // enquiryString += ' Status = \'' + enquiryReq.status + '\''
             // count++
             enquiryObject.condition.Status = {[Op.in]: status}
+        }else{
+            enquiryObject.condition.Status = {[Op.in]: ['Active']}
         }
 
         // FIND ACCOUNT FROM CUSTOMERID
@@ -538,6 +538,16 @@ const debitAccountController = {
             }
         })
 
+    }),
+    getClosedByID: asyncHandler( async (req, res, next) => {
+        const accountReq = req.params.account
+        const closureDB = await closureModel.getOne({
+            where: {Account: accountReq}
+        })
+        return res.status(200).json({
+            message: 'Closure Info',
+            data: closureDB
+        })
     })
 }
 
