@@ -147,7 +147,7 @@ const debitAccountController = {
             // count++
             enquiryObject.condition.Currency = enquiryReq.currency
         }
-        if(enquiryReq.isBlocked || enquiryReq.isClosed || enquiryReq.isActive){
+        if(enquiryReq.isBlocked == 'on' || enquiryReq.isClosed == 'on' || enquiryReq.isActive){
             let status = []
             if(enquiryReq.isBlocked == 'on')
                 status.push('Blocked')
