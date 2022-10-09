@@ -83,6 +83,8 @@ const debitAccountController = {
                 model: customerModel, attributes: ['GB_FullName'], as: 'Customer'
             }, {
                 model: currencyModel, attributes: ['Name']
+            },  {
+                model: customerModel, attributes: ['GB_ShortName', 'GB_FullName'], as: 'JoinHolder'
             }]
         })
         // .catch(err => {
