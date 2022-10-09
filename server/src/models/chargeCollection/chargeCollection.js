@@ -41,6 +41,15 @@ ChargeCollection.init({
             key: 'id'
         },
         onDelete: 'CASCADE'
+    },
+    Status: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'STATUSTYPE',
+            key: 'id'
+        },
+        onDelete: 'CASCADE'
     }
 }, {sequelize, modelName:'CHARGECOLLECTION'})
 

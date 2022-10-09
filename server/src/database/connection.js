@@ -4,6 +4,7 @@ const chargeCategoryModel = require('../models/storage/chargeCategory')
 const chargeCollectionModel = require('../models/chargeCollection/chargeCollection')
 const chargeCollectionTypeModel = require('../models/chargeCollection/chargeCollectionType')
 const ChargeCollectionfrAccountModel = require('../models/chargeCollection/chargeCollectionfrAccount')
+const ChargeCollectionfrCashModel = require('../models/chargeCollection/chargeCollectionfrCash')
 const association = require('../models/association')
 
 const database = {
@@ -29,6 +30,9 @@ const database = {
             })
         }
     }
+
+
+    
 }
 
 module.exports = database

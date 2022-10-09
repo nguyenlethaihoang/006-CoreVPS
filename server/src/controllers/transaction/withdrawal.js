@@ -3,6 +3,8 @@ const debitAccountModel = require('../../models/account/debitAccount')
 const arrearSAModel = require('../../models/account/ArrearSA')
 const periodicSAModel = require('../../models/account/PeriodicSA')
 const discountedSAModel = require('../../models/account/DiscountedSA')
+const chargeCollectionModel = require('../../models/chargeCollection/chargeCollection')
+const chargeCollectionfrAccountModel = require('../../models/chargeCollection/chargeCollectionfrAccount')
 const appError = require('../../utils/appError')
 const asyncHandler = require('../../utils/async')
 
@@ -18,7 +20,11 @@ const withdrawalController = {
             cashAccount: req.body.cashAccount,
             dealRate: req.body.dealRate,
             waiveCharges: req.body.waiveCharges,
-            print: req.body.print
+            print: req.body.print,
+            ccAmount: req.body.ccAmount,
+            ccCategory: req.body.ccCategory,
+            ccDealRate: req.body.ccDealRate,
+            ccVatSerialNo: req.body.ccVatSerialNo
         }
 
         if(!withdrawalReq.account || !withdrawalReq.accountType){
@@ -83,6 +89,36 @@ const withdrawalController = {
         }
         const newAmount = balanceDB - paidAmount
 
+        // Calculate ChargeCode
+        let ccVatAmount = 0, ccTotalAmount = 0, ccAmount = 0
+        if(withdrawalReq.ccAmount){
+            ccAmount = parseInt(withdrawalReq.ccAmount)
+            ccVatAmount = 0.1 * parseInt(withdrawalReq.ccAmount)
+            console.log(ccVatAmount)
+            ccTotalAmount = parseInt(withdrawalReq.ccAmount) + ccVatAmount
+        }
+        // Store charge Collection
+        const newChargeCollection = await chargeCollectionModel.create({
+            ChargeAmountLCY: ccAmount,
+            DealRate: withdrawalReq.ccDealRate,
+            VatAmountLCY: ccVatAmount,
+            TotalAmountLCY: ccTotalAmount,
+            VatSerialNo: withdrawalReq.ccVatSerialNo,
+            Category: withdrawalReq.ccCategory,
+            Account: withdrawalReq.account,
+            AccountType: withdrawalReq.accountType,
+            Status: 2,
+            Type: 1
+        })
+        const ccID = newChargeCollection.getDataValue('id')
+        const newCCfrAccount = await chargeCollectionfrAccountModel.create({
+            chargeID: ccID
+        })
+        let chargeID = null
+        if(newChargeCollection){
+            chargeID = newChargeCollection.getDataValue('id')
+        }
+
         const newWithdrawalTrans = await withdrawalTransModel.create({
             Account: withdrawalReq.account,
             InitialAmount: balanceDB,
@@ -97,6 +133,7 @@ const withdrawalController = {
             AccountType: withdrawalReq.accountType,
             Currency: currencyDB,
             CurrencyPaid: currencyDB,
+            ChargeCollectionID: chargeID,
             Status: 1
         })
         .catch(err => {
@@ -124,7 +161,7 @@ const withdrawalController = {
         if(!withdrawalDB){
             return next(new appError("Withdrawal not found!", 404))
         }
-        const statusDB = (await withdrawalDB).getDataValue('Status')
+        const statusDB = (withdrawalDB).getDataValue('Status')
         if(statusDB != 1){ // != spending
             return next(new appError("Validated!", 404))
         }
@@ -136,6 +173,12 @@ const withdrawalController = {
         .catch(err => {
             return next(new appError(err, 404))
         })
+        const chargeID = withdrawalDB.getDataValue('ChargeCollectionID')
+        const chargeDB = await chargeCollectionModel.findByPk(chargeID)
+        let chargeAmount = 0
+        if(chargeDB){
+            chargeAmount = parseInt(chargeDB.getDataValue('TotalAmountLCY'))
+        }
 
         // UPDATE ACCOUNT AMOUNT
         const accountTypeDB = withdrawalDB.getDataValue('AccountType')
@@ -153,8 +196,8 @@ const withdrawalController = {
                 const actualBalanceDB = parseInt(accountDB.getDataValue('ActualBalance'))
 
                 updatedAccount = await accountDB.update({
-                    WorkingAmount: workingAmountDB - paidAmountDB,
-                    ActualBalance: actualBalanceDB - paidAmountDB
+                    WorkingAmount: workingAmountDB - paidAmountDB - chargeAmount,
+                    ActualBalance: actualBalanceDB - paidAmountDB - chargeAmount
                 })
                 .catch(err => {
                     return next(new appError(err, 404))

@@ -32,6 +32,9 @@ const foreignExchange = require('./exchange/foreignExchange')
 
 const withdrawalTrans = require('./transaction/withdrawal')
 const transferTrans = require('./transaction/transfer')
+
+const chargeCategory = require('./storage/chargeCategory')
+const chargeCollection = require('./chargeCollection/chargeCollection')
 const association = () => {
     // CUSTOMER 
     // -- FkCustomer_CityProvinceId
@@ -435,6 +438,11 @@ const association = () => {
     })
     transferTrans.belongsTo(statusType, {
         foreignKey: 'Status'
+    })
+
+    //CHARGE
+    chargeCollection.belongsTo(chargeCategory, {
+        foreignKey: 'Category'
     })
 }
 

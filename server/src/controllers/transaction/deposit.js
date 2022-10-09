@@ -4,6 +4,8 @@ const savingAccountModel = require('../../models/account/savingAccount')
 const arrearSAModel = require('../../models/account/ArrearSA')
 const periodicSAModel = require('../../models/account/PeriodicSA')
 const discountedSAModel = require('../../models/account/DiscountedSA')
+const chargeCollectionModel = require('../../models/chargeCollection/chargeCollection')
+const chargeCollectionfrAccountModel = require('../../models/chargeCollection/chargeCollectionfrAccount')
 const asyncHandler = require('../../utils/async')
 const appError = require('../../utils/appError')
 const AppError = require('../../utils/appError')
@@ -21,11 +23,18 @@ const depositController = {
             currencyDeposited: req.body.currencyDeposited,
             narrative: req.body.narrative,
             tellerID: req.body.tellerID,
-            cashAccount: req.body.cashAccount
+            cashAccount: req.body.cashAccount,
+            ccAmount: req.body.ccAmount,
+            ccCategory: req.body.ccCategory,
+            ccDealRate: req.body.ccDealRate,
+            ccVatSerialNo: req.body.ccVatSerialNo
         }
         if(!depositReq.accountType || !depositReq.account || !depositReq.amount){
             return next(new appError("Enter required fields", 404))
         }
+        
+
+
         let debitAccountDB
         let accountDB // Saving Account DB
         let savingAccountDB // Saving Account DB Detail
@@ -87,6 +96,34 @@ const depositController = {
             return next(new appError("Account Type not found", 404))
         }
 
+        // CHARGE CALCULATE
+        let ccVatAmount = 0, ccTotalAmount = 0, ccAmount = 0
+        if(depositReq.ccAmount){
+            ccAmount = parseInt(depositReq.ccAmount)
+            ccVatAmount = 0.1 * parseInt(depositReq.ccAmount)
+            ccTotalAmount = parseInt(depositReq.ccAmount) + ccVatAmount
+        }
+        const newChargeCollection = await chargeCollectionModel.create({
+            ChargeAmountLCY: ccAmount,
+            DealRate: depositReq.ccDealRate,
+            VatAmountLCY: ccVatAmount,
+            TotalAmountLCY: ccTotalAmount,
+            VatSerialNo: depositReq.ccVatSerialNo,
+            Category: depositReq.ccCategory,
+            Account: depositReq.account,
+            AccountType: depositReq.accountType,
+            Status: 2,
+            Type: 1
+        })
+        const ccID = newChargeCollection.getDataValue('id')
+        const newCCfrAccount = await chargeCollectionfrAccountModel.create({
+            chargeID: ccID
+        })
+        let chargeID = null
+        if(newChargeCollection){
+            chargeID = newChargeCollection.getDataValue('id')
+        }
+
         
         // Set DealRate
         if(!depositReq.dealRate){
@@ -107,7 +144,8 @@ const depositController = {
             Narrrative: depositReq.narrative,
             TellerID: depositReq.tellerID,
             CurrencyDeposited: depositReq.currencyDeposited,
-            Status: 1
+            Status: 1,
+            ChargeCollectionID: chargeID
         })
         .catch(err => {
             return next(new appError(err, 404))
@@ -115,7 +153,8 @@ const depositController = {
 
         return res.status(200).json({
             message: 'inserted',
-            data: newDeposit
+            data: newDeposit,
+            charge: newChargeCollection
         })
     }),
 
@@ -133,7 +172,12 @@ const depositController = {
         if(!depositDB){
             return next(new appError('Deposit not found', 404))
         }
-
+        const chargeID = depositDB.getDataValue('ChargeCollectionID')
+        const chargeDB = await chargeCollectionModel.findByPk(chargeID)
+        let chargeAmount = 0
+        if(chargeDB){
+            chargeAmount = parseInt(chargeDB.getDataValue('TotalAmountLCY'))
+        }
         // CHECK IS VALIDATED
         const status = depositDB.getDataValue('Status')
         console.log(status)
@@ -154,7 +198,6 @@ const depositController = {
         }
 
         // UPDATE ACCOUNT
-
         const paidAmount = parseInt(depositDB.getDataValue('PaidAmount'))
         const accountID = depositDB.getDataValue('Account')
         const accountType = depositDB.getDataValue('AccountType')
@@ -169,8 +212,8 @@ const depositController = {
             const ActualBalanceDB = parseInt(accountDB.getDataValue('ActualBalance'))
 
             updatedAccount = await accountDB.update({
-                WorkingAmount: WorkingAmountDB + paidAmount,
-                ActualBalance: ActualBalanceDB + paidAmount
+                WorkingAmount: WorkingAmountDB + paidAmount - chargeAmount,
+                ActualBalance: ActualBalanceDB + paidAmount - chargeAmount
             })
 
         }else if(accountType == 2){

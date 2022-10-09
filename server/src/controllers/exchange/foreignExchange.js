@@ -69,20 +69,22 @@ const foreignExchangeController = {
         }
 
         // Calculate ChargeCode
-        let ccVatAmount, ccTotalAmount
+        let ccVatAmount = 0, ccTotalAmount = 0, ccAmount = 0
         if(exchangeReq.ccAmount){
+            ccAmount = parseInt(exchangeReq.ccAmount)
             ccVatAmount = 0.1 * parseInt(exchangeReq.ccAmount)
             console.log(ccVatAmount)
             ccTotalAmount = parseInt(exchangeReq.ccAmount) + ccVatAmount
         }
         // Store charge Collection
         const newChargeCollection = await chargeCollectionModel.create({
-            ChargeAmountLCY: parseInt(exchangeReq.ccAmount),
+            ChargeAmountLCY: ccAmount,
             DealRate: exchangeReq.ccDealRate,
             VatAmountLCY: ccVatAmount,
             TotalAmountLCY: ccTotalAmount,
             VatSerialNo: exchangeReq.ccVatSerialNo,
             Category: exchangeReq.ccCategory,
+            Status: 2,
             Type: 1
         })
         const ccID = newChargeCollection.getDataValue('id')

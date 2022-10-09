@@ -16,6 +16,9 @@ const accountOfficerModel = require('../../models/storage/accountOfficer')
 const relationCodeModel = require('../../models/storage/relation')
 const { Op } = require('sequelize')
 
+
+
+
 // customerType
 // customerID
 // GBFullName
@@ -121,7 +124,7 @@ const enquiryCustomerController = {
             enquiryCondition.Industry = enquiryReq.subIndustry
         }
         
-
+    
         const customersDB = await customerModel.findAll({
             where: enquiryCondition,
             include: [{
@@ -144,9 +147,9 @@ const enquiryCustomerController = {
                 model: relationCodeModel, attributes: ['Name']
             }]
         })
-        // .catch(err => {
-        //     return next(new appError(err, 404))
-        // })
+        .catch(err => {
+            return next(new appError(err, 404))
+        })
 
 
         // rowsRes = []

@@ -11,7 +11,7 @@ ChargeCollectionfrAccount.init({
             model: 'CHARGECOLLECTION',
             key: 'id'
         },
-
+        onDelete: 'CASCADE'
     }
 }, {sequelize, modelName:'CHARGECOLLECTION_ACCOUNT'})
 

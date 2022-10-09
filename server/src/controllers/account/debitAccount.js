@@ -172,14 +172,14 @@ const debitAccountController = {
             //     enquiryString += ' AND '
             // enquiryString += ' DocID = ' + enquiryReq.docID
             // count++
-            enquiryObject.customerCondition.DocID = enquiryReq.docID
+            enquiryObject.customerCondition.DocID = {[Op.substring]: enquiryReq.docID}
         }
         if(enquiryReq.GB_FullName){
             // if(count != 0)
             //     enquiryString += ' AND '
             // enquiryString += ' GB_FullName = ' + enquiryReq.GB_FullName
             // count++
-            enquiryObject.customerCondition.GB_FullName = enquiryReq.GB_FullName
+            enquiryObject.customerCondition.GB_FullName = {[Op.substring]: enquiryReq.GB_FullName}
         }
 
         // console.log(enquiryString)

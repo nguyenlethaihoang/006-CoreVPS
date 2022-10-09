@@ -7,6 +7,8 @@ const discountedSAModel = require('../../models/account/DiscountedSA')
 const asyncHandler = require('../../utils/async')
 const appError = require('../../utils/appError')
 
+const chargeCollectionModel = require('../../models/chargeCollection/chargeCollection')
+const chargeCollectionfrAccountModel = require('../../models/chargeCollection/chargeCollectionfrAccount')
 const transferTransModel = require('../../models/transaction/transfer')
 const AppError = require('../../utils/appError')
 
@@ -21,7 +23,11 @@ const transferTransController = {
             dealRate: req.body.dealRate, //float
             valueDate: req.body.valueDate, //ex: "2022/05/09"
             waiveCharges: req.body.waiveCharges, //bool
-            narrative: req.body.narrative //text
+            narrative: req.body.narrative, //text
+            ccAmount: req.body.ccAmount,
+            ccCategory: req.body.ccCategory,
+            ccDealRate: req.body.ccDealRate,
+            ccVatSerialNo: req.body.ccVatSerialNo
         }
 
         if(!transferReq.debitAccount || !transferReq.creditAccount || !transferReq.transferAmount){
@@ -33,13 +39,13 @@ const transferTransController = {
         }
 
         const debitAccountDB = await debitAccountModel.findByPk(transferReq.debitAccount)
-        .catch(err => {
-            return next(new appError(err, 404))
-        })
+        if(!debitAccountDB){
+            return next(new AppError("Debit Account not found", 404))
+        }
         const creditAccountDB = await debitAccountModel.findByPk(transferReq.creditAccount)
-        .catch(err => {
-            return next(new appError(err, 404))
-        })
+        if(!creditAccountDB){
+            return next(new AppError("Credit Account not found", 404))
+        }
 
         const custAmountDB = parseInt(debitAccountDB.getDataValue("WorkingAmount"))
         console.log("Working Amount")
@@ -47,6 +53,36 @@ const transferTransController = {
 
         if(transferReq > custAmountDB){
             return next(new AppError("invalid Amount!", 404))
+        }
+
+        // Calculate ChargeCode
+        let ccVatAmount = 0, ccTotalAmount = 0, ccAmount = 0
+        if(transferReq.ccAmount){
+            ccAmount = parseInt(transferReq.ccAmount)
+            ccVatAmount = 0.1 * parseInt(transferReq.ccAmount)
+            console.log(ccVatAmount)
+            ccTotalAmount = parseInt(transferReq.ccAmount) + ccVatAmount
+        }
+        // Store charge Collection
+        const newChargeCollection = await chargeCollectionModel.create({
+            ChargeAmountLCY: ccAmount,
+            DealRate: transferReq.ccDealRate,
+            VatAmountLCY: ccVatAmount,
+            TotalAmountLCY: ccTotalAmount,
+            VatSerialNo: transferReq.ccVatSerialNo,
+            Category: transferReq.ccCategory,
+            Account: transferReq.debitAccount,
+            AccountType: transferReq.accountType,
+            Status: 2,
+            Type: 1
+        })
+        const ccID = newChargeCollection.getDataValue('id')
+        const newCCfrAccount = await chargeCollectionfrAccountModel.create({
+            chargeID: ccID
+        })
+        let chargeID = null
+        if(newChargeCollection){
+            chargeID = newChargeCollection.getDataValue('id')
         }
 
         const newTransfer = await transferTransModel.create({
@@ -61,6 +97,7 @@ const transferTransController = {
             WaiveCharges: transferReq.waiveCharges,
             Narrative: transferReq.narrative,
             AccountType: transferReq.accountType,
+            ChargeCollectionID: chargeID,
             Status: 1
         })
         
@@ -99,17 +136,25 @@ const transferTransController = {
             const creditAccountDB = await debitAccountModel.findByPk(creditAccountID)
 
             const transferAmountDB = transferDB.getDataValue('TransferAmount')
+            const chargeID = transferDB.getDataValue('ChargeCollectionID')
+            const chargeDB = await chargeCollectionModel.findByPk(chargeID)
+            let chargeAmount = 0
+            if(chargeDB){
+                chargeAmount = parseInt(chargeDB.getDataValue('TotalAmountLCY'))
+            }
 
             // UPDATE WORKING AMOUNT DEBIT ACCOUNT
             const initialWorkingAmountDebitDB =parseInt(debitAccountDB.getDataValue('WorkingAmount'))
             const initialActualBalanceDebitDB = parseInt(debitAccountDB.getDataValue('ActualBalance'))
             const updatedDebitAccount = await debitAccountDB.update({
-                WorkingAmount: initialWorkingAmountDebitDB - transferAmountDB,
-                ActualBalance: initialActualBalanceDebitDB - transferAmountDB
+                WorkingAmount: initialWorkingAmountDebitDB - transferAmountDB - chargeAmount,
+                ActualBalance: initialActualBalanceDebitDB - transferAmountDB - chargeAmount
             })
             .catch(err => {
                 return next(new appError(err, 404))
             })
+
+            
 
             // UPDATE WORKING AMOUNT CREDIT ACCOUNT
             const initialWorkingAmountCreditDB = parseInt(creditAccountDB.getDataValue('WorkingAmount'))
