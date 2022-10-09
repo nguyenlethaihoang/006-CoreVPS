@@ -11,6 +11,7 @@ const currencyModel = require('../../models/storage/currency')
 const accountOfficerModel = require('../../models/storage/accountOfficer')
 const chargeCodeModel = require('../../models/storage/chargeCode')
 const relationCodeModel = require('../../models/storage/relation')
+const { Op } = require('sequelize')
 
 // Them quan ly so tien  + lock
 // query account của từng customer 
