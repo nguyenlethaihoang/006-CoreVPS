@@ -159,7 +159,7 @@ const debitAccountController = {
             //     enquiryString += ' AND '
             // enquiryString += ' Status = \'' + enquiryReq.status + '\''
             // count++
-            enquiryObject.condition.Status = {[Op]: status}
+            enquiryObject.condition.Status = {[Op.in]: status}
         }
 
         // FIND ACCOUNT FROM CUSTOMERID
