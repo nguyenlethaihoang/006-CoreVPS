@@ -108,7 +108,9 @@ const debitAccountController = {
             productLine: req.body.productLine,
             category: req.body.category,
             currency: req.body.currency,
-            status: req.body.status
+            isBlocked: req.body.isBlocked,
+            isClosed: req.body.isClosed,
+            isActive: req.body.isActive
         }
 
         let enquiryString = "Select DEBITACCOUNT.id, Account, CardNumber, AccountTitle, ShortTitle, JoinNotes, Status, WorkingAmount, ActualBalance, BlockedAmount, CATEGORY.Name, PRODUCTLINE.Name, CURRENCY.Name, ACCOUNTOFFICER.Name, CHARGECODE.Name, JoinHolder, RELATION.Name , CUSTOMER.id as CustomerID, GB_FullName, GB_ShortName, DocID from DEBITACCOUNT, CUSTOMER, CATEGORY, PRODUCTLINE, CURRENCY, ACCOUNTOFFICER, CHARGECODE, RELATION where DEBITACCOUNT.CustomerID = CUSTOMER.id and CATEGORY.id = DEBITACCOUNT.Category and PRODUCTLINE.id = DEBITACCOUNT.ProductLine and CURRENCY.id = DEBITACCOUNT.Currency and  CHARGECODE.id = DEBITACCOUNT.ChargeCode and ACCOUNTOFFICER.id = DEBITACCOUNT.AccountOfficer and RELATION.id = DEBITACCOUNT.RelationCode "
@@ -145,12 +147,19 @@ const debitAccountController = {
             // count++
             enquiryObject.condition.Currency = enquiryReq.currency
         }
-        if(enquiryReq.status){
+        if(enquiryReq.isBlocked || enquiryReq.isClosed || enquiryReq.isActive){
+            let status = []
+            if(enquiryReq.isBlocked == 'on')
+                status.push('Blocked')
+            if(enquiryReq.isClosed == 'on')
+                status.push('closed')
+            if(enquiryReq.isActive == 'on')
+                status.push('Active')
             // if(count != 0)
             //     enquiryString += ' AND '
             // enquiryString += ' Status = \'' + enquiryReq.status + '\''
             // count++
-            enquiryObject.condition.Status = enquiryReq.status
+            enquiryObject.condition.Status = {[Op]: status}
         }
 
         // FIND ACCOUNT FROM CUSTOMERID
