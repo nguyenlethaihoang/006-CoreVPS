@@ -35,6 +35,11 @@ const transferTrans = require('./transaction/transfer')
 
 const chargeCategory = require('./storage/chargeCategory')
 const chargeCollection = require('./chargeCollection/chargeCollection')
+const cheque = require('./cheque/cheque')
+const chequeItem = require('./cheque/chequeItem')
+const DebitAccount = require('./account/debitAccount')
+const Currency = require('./storage/currency')
+const chequeWithdrawal = require('./cheque/withdrawal')
 const association = () => {
     // CUSTOMER 
     // -- FkCustomer_CityProvinceId
@@ -444,6 +449,26 @@ const association = () => {
     chargeCollection.belongsTo(chargeCategory, {
         foreignKey: 'Category'
     })
+
+    //CHEQUE
+    cheque.belongsTo(debitAccount, {
+        foreignKey: 'WorkingAccount'
+    })
+    cheque.belongsTo(Currency,{
+        foreignKey: 'Currency'
+    })
+    chequeItem.belongsTo(cheque, {
+        foreignKey: 'Cheque'
+    })
+    cheque.belongsTo(statusType, {
+        foreignKey: 'Status'
+    })
+    // chequeWithdrawal.belongsTo(debitAccount, {
+    //     foreignKey: 'CustomerAccount'
+    // })
+    // chequeWithdrawal.belongsTo(currency, {
+    //     foreignKey: 'Currency'
+    // })
 }
 
 

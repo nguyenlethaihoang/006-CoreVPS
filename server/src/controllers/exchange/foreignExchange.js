@@ -146,42 +146,51 @@ const foreignExchangeController = {
 
     // [POST] /exchange/enquiry
     enquiry: asyncHandler( async (req, res, next) => {
-        const enquiryReq = {
-            debitCurrency: req.body.debitCurrency,
-            currencyPaid: req.body.currencyPaid, 
-            status: req.body.status
-        }
-        let enquiryObj = {}
-        if(enquiryReq.debitCurrency){
-            enquiryObj.DebitCurrencyID = enquiryReq.debitCurrency
-        }
-        if(enquiryReq.currencyPaid){
-            enquiryObj.CurrencyPaidID = enquiryReq.currencyPaid
-        }
-        if(enquiryReq.status){
-            enquiryObj.Status = enquiryReq.status
-        }
+        // const enquiryReq = {
+        //     debitCurrency: req.body.debitCurrency,
+        //     currencyPaid: req.body.currencyPaid, 
+        //     status: req.body.status
+        // }
+        // let enquiryObj = {}
+        // if(enquiryReq.debitCurrency){
+        //     enquiryObj.DebitCurrencyID = enquiryReq.debitCurrency
+        // }
+        // if(enquiryReq.currencyPaid){
+        //     enquiryObj.CurrencyPaidID = enquiryReq.currencyPaid
+        // }
+        // if(enquiryReq.status){
+        //     enquiryObj.Status = enquiryReq.status
+        // }
 
-
-        const exchangesDB = await foreignExchangeModel.findAll({
-            where: enquiryObj,
-            include: [{
-                model: currencyModel, as: 'DebitCurrency', attributes: ['Name']
-            }, {
-                model: currencyModel, as: 'CurrencyPaid', attributes: ['Name']
-            }, {
-                model: statusTypeModel, attributes: ['Name']
-            }]
+        await foreignExchangeModel.findAll()
+        .then(exchangesDB => {
+            console.log(exchangesDB)
+            return res.status(200).json({
+                message: 'enquiry exchange',
+                data: exchangesDB
+            })
         })
         .catch(err => {
-            return next(new appError(err, 404))
+            return res.status(404).json({
+                message: 'enquiry exchange',
+                data: err
+            })
         })
 
-        return res.status(200).json({
-            message: 'enquiry exchange',
-            data: exchangesDB,
-            chargeCollection: newChargeCollection
-        })
+        // const exchangesDB = await foreignExchangeModel.findAll({
+        //     include: [{
+        //         model: currencyModel, as: 'DebitCurrency', attributes: ['Name']
+        //     }, {
+        //         model: currencyModel, as: 'CurrencyPaid', attributes: ['Name']
+        //     }, {
+        //         model: statusTypeModel, attributes: ['Name']
+        //     }]
+        // })
+        // .catch(err => {
+        //     return next(new appError(err, 404))
+        // })
+
+        
     }),
 
 
