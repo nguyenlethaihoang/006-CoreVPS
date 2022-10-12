@@ -454,8 +454,6 @@ const savingAccountController = {
             }, {
                 model: categoryModel, attributes: ['Name']
             }, {
-                model: currencyModel, as: 'CurrencyT', attributes: ['Name']
-            }, {
                 model: productLineModel, attributes: ['Name']
             }, {
                 model: customerModel, attributes: ['GB_FullName', 'GB_ShortName', 'DocID']
@@ -465,8 +463,6 @@ const savingAccountController = {
                 model: accountOfficerModel, attributes: ['Name']
             }, {
                 model: termModel, attributes: ['Name', 'Value']
-            }, {
-                model: currencyModel, as: 'PaymentCurrencyT', attributes: ['Name']
             }, {
                 model: debitAccountModel, attributes: ['id']
             }]

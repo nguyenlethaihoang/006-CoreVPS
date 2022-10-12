@@ -16,6 +16,7 @@ route.put('/debit_account/close/:account', debitAccountController.closeAccount)
 route.put('/debit_account/update/:account', debitAccountController.update)
 route.get('/debit_account/get/:account', debitAccountController.getAccount)
 route.get('/debit_account/get_closure/:account', debitAccountController.getClosedByID)
+route.get('/debit_aacount/get_all', debitAccountController.getAll)
 
 // SAVING ACCOUNT
 route.post('/saving_account/open_arrear', savingAccountController.openArrearSA)

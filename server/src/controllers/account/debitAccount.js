@@ -100,6 +100,34 @@ const debitAccountController = {
             data: accountDB
         })
     }),
+    getAll: asyncHandler(async (req, res, next) => {
+        const accountsDB = await debitAccountModel.findAll({
+            include: [{
+                model: customerModel, attributes: ['GB_ShortName', 'GB_FullName', 'DocID'], as: 'Customer', 
+            }, {
+                model: categoryModel, attributes: ['Name']
+            }, {
+                model: currencyModel, attributes: ['Name']
+            }, {
+                model: productLineModel, attributes: ['Name']
+            }, {
+                model: accountOfficerModel, attributes: ['Name']
+            }, {
+                model: chargeCodeModel, attributes: ['Name']
+            }, {
+                model: relationCodeModel, attributes: ['Name']
+            }, {
+                model: customerModel, attributes: ['GB_ShortName', 'GB_FullName'], as: 'JoinHolder'
+            }]
+        }).catch(err => {
+            return next(new appError(err, 404))
+        })
+
+        return res.status(200).json({
+            message: 'account',
+            data: accountsDB
+        })
+    }),
 
     //ENQUIRY
     enquiry: asyncHandler(async (req, res, next) => {

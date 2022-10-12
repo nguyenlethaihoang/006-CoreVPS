@@ -304,10 +304,6 @@ const association = () => {
     arrearSA.belongsTo(category, {
         foreignKey: 'Category'
     })
-    arrearSA.belongsTo(currency, {
-        foreignKey: 'Currency', 
-        as: 'CurrencyT'
-    })
     arrearSA.belongsTo(productLine, {
         foreignKey: 'ProductLine'
     })
@@ -322,10 +318,6 @@ const association = () => {
     })
     arrearSA.belongsTo(savingTerm, {
         foreignKey: 'Term'
-    })
-    arrearSA.belongsTo(currency, {
-        foreignKey: 'PaymentCurrency', 
-        as: 'PaymentCurrencyT'
     })
     arrearSA.belongsTo(debitAccount, {
         foreignKey: 'DebitAccount'
