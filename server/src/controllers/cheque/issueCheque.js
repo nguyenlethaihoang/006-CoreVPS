@@ -195,6 +195,8 @@ const issueChequeController = {
                     model: DebitAccountModel, attributes: ['CustomerID', 'WorkingAmount'],
                     include: [{
                         model: customerModel, attributes: ['id', 'GB_FullName'], as: 'Customer'
+                    },{
+                        model: currencyModel, attributes: ['Name']
                     }]
                 }]
             })
