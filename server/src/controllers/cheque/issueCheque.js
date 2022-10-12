@@ -4,6 +4,7 @@ const asyncHandler = require('../../utils/async')
 const AppError = require('../../utils/appError')
 const DebitAccountModel = require('../../models/account/debitAccount')
 const customerModel = require('../../models/customer/customer')
+const currencyModel = require('../../models/storage/currency')
 const { Op } = require('sequelize')
 
 const issueChequeController = {
@@ -189,7 +190,13 @@ const issueChequeController = {
             })
         }else{
             const chequeDB = await chequeModel.findAll({
-                where: enquiryObj
+                where: enquiryObj, 
+                include: [{
+                    model: DebitAccountModel, attributes: ['CustomerID', 'WorkingAmount'],
+                    include: [{
+                        model: customerModel, attributes: ['id', 'GB_FullName'], as: 'Customer'
+                    }]
+                }]
             })
 
             return res.status(200).json({
