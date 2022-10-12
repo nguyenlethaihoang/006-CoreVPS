@@ -2,11 +2,9 @@ const chequeModel = require('../../models/cheque/cheque')
 const chequeItemModel = require('../../models/cheque/chequeItem')
 const asyncHandler = require('../../utils/async')
 const AppError = require('../../utils/appError')
-const { tracingPolicy } = require('@azure/core-http')
 const DebitAccountModel = require('../../models/account/debitAccount')
 const customerModel = require('../../models/customer/customer')
 const { Op } = require('sequelize')
-const { enquiry } = require('../chargeCollection')
 
 const issueChequeController = {
     issue: asyncHandler(async (req, res, next) => {
@@ -25,6 +23,7 @@ const issueChequeController = {
                     message: 'Cheque_Status, Issued_Quantity, Cheque_No_Start are required'
                 })
             }
+        // -------------------------- CHECK -----------------------------------------------------
         //CHECK EXISTED 
         const chequeDB = await chequeModel.findAll({
             where: { ChequeID: issueReq.chequeID}
@@ -62,6 +61,10 @@ const issueChequeController = {
                 message: 'ChequeID invalid'
             })
         }
+        // CHECK CHEQUE NO
+
+
+        // -----------------------------------------------------------------------------------------
         
         const chequeNoEnd = parseInt(issueReq.issuedQuantity) + parseInt(issueReq.chequeNoStart) - 1
         // CREATE CHEQUE
@@ -92,12 +95,36 @@ const issueChequeController = {
             data: newCheque
         })
     }),
+    validate: asyncHandler(async (req, res, next) => {
+        const idReq = req.params.id
+        const statusReq = req.body.status
+        const chequeDB = await chequeModel.findByPk(idReq)
+        if(!chequeDB){
+            return res.status(404).json({
+                message: 'Cheque not found'
+            })
+        }
+        const statusDB = chequeDB.getDataValue('Status')
+        if(statusDB != 1){
+            return res.status(404).json({
+                message: 'Validated'
+            })
+        }
+
+        const updatedCheque = await chequeDB.update({
+            Status: statusReq
+        })
+        return res.status(200).json({
+            message: 'Updated',
+            data: updatedCheque
+        })
+    }),
     getID: asyncHandler(async (req, res, next) => {
         const idReq = req.params.id
         // FIND CHEQUE
         const chequeDB = await chequeModel.findByPk(idReq, {
             include: [{
-                model: DebitAccountModel, attributes: ['CustomerID'],
+                model: DebitAccountModel, attributes: ['CustomerID', 'WorkingAmount'],
                 include: [{
                     model: customerModel, attributes: ['id', 'GB_FullName'], as: 'Customer'
                 }]

@@ -40,6 +40,7 @@ const chequeItem = require('./cheque/chequeItem')
 const DebitAccount = require('./account/debitAccount')
 const Currency = require('./storage/currency')
 const chequeWithdrawal = require('./cheque/withdrawal')
+const chequeTransfer = require('./cheque/transfer')
 const association = () => {
     // CUSTOMER 
     // -- FkCustomer_CityProvinceId
@@ -463,12 +464,47 @@ const association = () => {
     cheque.belongsTo(statusType, {
         foreignKey: 'Status'
     })
-    // chequeWithdrawal.belongsTo(debitAccount, {
-    //     foreignKey: 'CustomerAccount'
-    // })
-    // chequeWithdrawal.belongsTo(currency, {
-    //     foreignKey: 'Currency'
-    // })
+    //CHEQUE TRANSFER
+    chequeTransfer.belongsTo(debitAccount, {
+        foreignKey: 'DebitAccount',
+        as: 'DebitAccountt'
+    })
+    chequeTransfer.belongsTo(currency, {
+        foreignKey: 'DebitCurrency',
+        as: 'DebitCurrencyt'
+    })
+    chequeTransfer.belongsTo(currency, {
+        foreignKey: 'CreditCurrency',
+        as: 'CreditCurrencyt'
+    })
+    chequeTransfer.belongsTo(chequeItem, {
+        foreignKey: 'ChequeItem'
+    })
+    chequeTransfer.belongsTo(statusType,{
+        foreignKey: 'Status'
+    })
+    chequeTransfer.belongsTo(debitAccount, {
+        foreignKey: 'BeneficiaryAccount',
+        as: 'BeneficiaryAccountt'
+    })
+    // CHEQUE WITHDRAWAL
+    chequeWithdrawal.belongsTo(debitAccount, {
+        foreignKey: 'CustomerAccount',
+    })
+    chequeWithdrawal.belongsTo(currency, {
+        foreignKey: 'Currency',
+        as: 'Currencyt'
+    })
+    chequeWithdrawal.belongsTo(currency, {
+        foreignKey: 'CurrencyPaid',
+        as: 'CurrencyPaidt'
+    })
+    chequeWithdrawal.belongsTo(chequeItem, {
+        foreignKey: 'ChequeItem'
+    })
+    chequeWithdrawal.belongsTo(statusType,{
+        foreignKey: 'Status'
+    })
 }
 
 

@@ -1,29 +1,30 @@
 const { Sequelize, Model, DataTypes } = require("sequelize")
-const database = require("../../database/connection")
 const sequelize = require('../../database/sequelize')
 
-class ChequeWithdrawal extends Model {}
+class ChequeTransfer extends Model {}
 
-ChequeWithdrawal.init({
+ChequeTransfer.init({
     ChequeID: DataTypes.TEXT,
     ChequeNo: DataTypes.INTEGER,
-    AmountLCY: DataTypes.INTEGER,
+    DebitAmount: DataTypes.INTEGER,
     OldBalance: DataTypes.INTEGER,
     NewBalance: DataTypes.INTEGER,
     ChequeType: DataTypes.ENUM('CC', 'AB'),
-    TellerID: DataTypes.TEXT,
+    ValueDate: DataTypes.DATEONLY,
     DealRate: DataTypes.FLOAT,
+    CreditAccount: DataTypes.TEXT,
     PaidAmount: DataTypes.INTEGER, //Amt Paid to Cust
     WaiveCharges: {
         type: DataTypes.BOOLEAN,
         defaultValue: true
     },
+    ExposureDate: DataTypes.DATEONLY,
     Narrative: DataTypes.TEXT,
     BeneficiaryName: DataTypes.TEXT,
     BeneficiaryAddress: DataTypes.TEXT,
     BeneficiaryLegalID: DataTypes.TEXT,
     IssuedDate: DataTypes.DATEONLY,
     PlaceOfIssue: DataTypes.TEXT
-}, {sequelize, modelName:'CHEQUEWITHDRAWAL'})
+}, {sequelize, modelName:'CHEQUETRANSFER'})
 
-module.exports = ChequeWithdrawal
+module.exports = ChequeTransfer
