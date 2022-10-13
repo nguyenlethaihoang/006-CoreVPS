@@ -19,6 +19,7 @@ const transferTransController = {
             accountType: req.body.accountType, //int
             debitAccount: req.body.debitAccount, //text
             transferAmount: req.body.transferAmount, //(debitAmount) int
+            paidAmount: req.body.paidAmount,
             creditAccount: req.body.creditAccount,
             dealRate: req.body.dealRate, //float
             valueDate: req.body.valueDate, //ex: "2022/05/09"
@@ -90,10 +91,10 @@ const transferTransController = {
             CreditAccount: transferReq.creditAccount,
             InitialAmount: custAmountDB,
             TransferAmount: transferReq.transferAmount,
-            NewAmount: custAmountDB - transferReq.transferAmount,
+            NewAmount: custAmountDB - transferReq.paidAmount,
             ValueDate: transferReq.valueDate,
             DealRate: transferReq.dealRate,
-            CreditAmount: transferReq.transferAmount,
+            CreditAmount: transferReq.paidAmount,
             WaiveCharges: transferReq.waiveCharges,
             Narrative: transferReq.narrative,
             AccountType: transferReq.accountType,
@@ -135,7 +136,7 @@ const transferTransController = {
             const debitAccountDB = await debitAccountModel.findByPk(debitAccountID)
             const creditAccountDB = await debitAccountModel.findByPk(creditAccountID)
 
-            const transferAmountDB = transferDB.getDataValue('TransferAmount')
+            const transferAmountDB = transferDB.getDataValue('CreditAmount')
             const chargeID = transferDB.getDataValue('ChargeCollectionID')
             const chargeDB = await chargeCollectionModel.findByPk(chargeID)
             let chargeAmount = 0
