@@ -228,6 +228,10 @@ const withdrawalChequeController = {
         if(enquiryReq.chequeNo){
             withdrawalCond.ChequeNo = enquiryReq.chequeNo
         }
+        if(enquiryReq.withdrawalDate){
+            console.log(enquiryReq.withdrawalDate)
+            withdrawalCond.createdAt = {[Op.substring]: `${enquiryReq.withdrawalDate}`}
+        }
         if(enquiryReq.amountfr && enquiryReq.amountto){
             console.log('amount')
             withdrawalCond.AmountLCY = {[Op.between]: [parseInt(enquiryReq.amountfr), parseInt(enquiryReq.amountto)]}
