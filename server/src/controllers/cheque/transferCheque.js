@@ -14,6 +14,7 @@ const transferChequeController = {
            chequeID: req.body.chequeID,
            chequeNo: req.body.chequeNo,
            debitAmount: req.body.debitAmount,
+           paidAmount: req.body.paidAmount,
            chequeType: req.body.chequeType? req.body.chequeType : 'CC',
            valueDate: req.body.valueDate,
            dealRate: req.body.dealRate,
@@ -93,7 +94,7 @@ const transferChequeController = {
         console.log('WorkingAmount')
         console.log(workingAmountDB)
         // CALCULATE
-        const newBalance = workingAmountDB - parseInt(transferReq.debitAmount)
+        const newBalance = workingAmountDB - parseInt(transferReq.paidAmount)
         // CREATE CHEQUE_WITHDRAWAL
         const newTransfer = await transferChequeModel.create({
             ChequeID: transferReq.chequeID,
@@ -105,7 +106,7 @@ const transferChequeController = {
             ValueDate: transferReq.valueDate,
             DealRate: transferReq.dealRate,
             CreditAccount: transferReq.creditAccount,
-            PaidAmount: transferReq.debitAmount,
+            PaidAmount: transferReq.paidAmount,
             WaiveCharges: transferReq.waiveCharges,
             ExposureDate: transferReq.exposureDate,
             Narrative: transferReq.narrative,
@@ -169,7 +170,7 @@ const transferChequeController = {
         
             const debitworkingAmountDB = parseInt(debitAccountDB.getDataValue('WorkingAmount'))
             const debitactualBalanceDB = parseInt(debitAccountDB.getDataValue('ActualBalance'))
-            const amountDB = parseInt(transferDB.getDataValue('DebitAmount'))
+            const amountDB = parseInt(transferDB.getDataValue('PaidAmount'))
 
             const updatedDebitAccount = await debitAccountDB.update({
                 WorkingAmount: debitworkingAmountDB - amountDB,
