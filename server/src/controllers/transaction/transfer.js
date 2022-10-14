@@ -145,11 +145,12 @@ const transferTransController = {
             }
 
             // UPDATE WORKING AMOUNT DEBIT ACCOUNT
+            const transferAmountDebit = parseInt(transferDB.getDataValue('TransferAmount'))
             const initialWorkingAmountDebitDB =parseInt(debitAccountDB.getDataValue('WorkingAmount'))
             const initialActualBalanceDebitDB = parseInt(debitAccountDB.getDataValue('ActualBalance'))
             const updatedDebitAccount = await debitAccountDB.update({
-                WorkingAmount: initialWorkingAmountDebitDB - transferAmountDB - chargeAmount,
-                ActualBalance: initialActualBalanceDebitDB - transferAmountDB - chargeAmount
+                WorkingAmount: initialWorkingAmountDebitDB - transferAmountDebit - chargeAmount,
+                ActualBalance: initialActualBalanceDebitDB - transferAmountDebit - chargeAmount
             })
             .catch(err => {
                 return next(new appError(err, 404))

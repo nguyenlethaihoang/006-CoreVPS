@@ -121,6 +121,9 @@ const transferChequeController = {
             ChequeItem: chequeItemID,
             Status: 1,
             BeneficiaryAccount: transferReq.beneficiaryAccount
+        }).catch(err => {
+            console.log('err')
+            console.log(err)
         })
 
         return res.status(200).json({
@@ -284,6 +287,8 @@ const transferChequeController = {
                 model: debitAccountModel, attributes: ['CustomerID'], as: 'BeneficiaryAccountt', 
                 include: [{
                     model: customerModel, attributes:['GB_FullName'], as: 'Customer'
+                }, {
+                    model: currencyModel, attributes:['Name']
                 }]
             }, {
                 model: currencyModel, attributes: ['Name'], as: 'DebitCurrencyt'
