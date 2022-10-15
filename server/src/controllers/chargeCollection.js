@@ -21,7 +21,12 @@ const chargeCollectionController = {
             ccNarrative: req.body.ccNarrative,
             ccCategory: req.body.ccCategory,
             account: req.body.account,
-            accountType: req.body.accountType
+            accountType: req.body.accountType,
+            ccAmountFCY: req.body.ccAmountFCY,
+            vatAmountLCY: req.body.vatAmountLCY,
+            vatAmountFCY: req.body.vatAmountFCY,
+            totalAmountLCY: req.body.totalAmountLCY,
+            totalAmountFCY: req.body.totalAmountFCY,
         }
         if(!chargeReq.ccAmount || !chargeReq.account || !chargeReq.accountType){
             return res.status(404).json({
@@ -39,15 +44,18 @@ const chargeCollectionController = {
         }
 
 
-        let vatAmountLCY = parseInt(chargeReq.ccAmount) * 0.1
-        let totalAmount = vatAmountLCY + chargeReq.ccAmount
+        // let vatAmountLCY = parseInt(chargeReq.ccAmount) * 0.1
+        // let totalAmount = vatAmountLCY + chargeReq.ccAmount
 
 
         const newChargeCollection = await chargeCollectionModel.create({
             ChargeAmountLCY: chargeReq.ccAmount,
+            ChargeAmountFCY: chargeReq.ccAmountFCY,
             DealRate: chargeReq.ccDealRate,
-            VatAmountLCY: vatAmountLCY,
-            TotalAmountLCY: totalAmount,
+            VatAmountLCY: chargeReq.vatAmountLCY,
+            VatAmountFCY: chargeReq.vatAmountFCY,
+            TotalAmountFCY: chargeReq.totalAmountFCY,
+            TotalAmountLCY: chargeReq.totalAmountLCY,
             VatSerialNo: chargeReq.ccVatSerialNo,
             Narrative: chargeReq.ccNarrative,
             Category: chargeReq.ccCategory,
@@ -76,6 +84,11 @@ const chargeCollectionController = {
     createCCCash: asyncHandler(async( req, res, next) => {
         const chargeReq = {
             ccAmount: req.body.ccAmount,
+            ccAmountFCY: req.body.ccAmountFCY,
+            vatAmountLCY: req.body.vatAmountLCY,
+            vatAmountFCY: req.body.vatAmountFCY,
+            totalAmountLCY: req.body.totalAmountLCY,
+            totalAmountFCY: req.body.totalAmountFCY,
             ccDealRate: req.body.ccDealRate,
             ccVatSerialNo: req.body.ccVatSerialNo,
             ccNarrative: req.body.ccNarrative,
@@ -84,7 +97,7 @@ const chargeCollectionController = {
             accountType: req.body.accountType,
             teller: req.body.teller,
             currency: req.body.currency,
-            legalID: req.body.legalID
+            legalID: req.body.legalID,
         }
 
         if(!chargeReq.ccAmount || !chargeReq.account || !chargeReq.accountType){
@@ -103,15 +116,18 @@ const chargeCollectionController = {
         }
 
 
-        let vatAmountLCY = parseInt(chargeReq.ccAmount) * 0.1
-        let totalAmount = vatAmountLCY + chargeReq.ccAmount
+        // let vatAmountLCY = parse(chargeReq.ccAmount) * 0.1
+        // let totalAmount = vatAmountLCY + chargeReq.ccAmount
 
 
         const newChargeCollection = await chargeCollectionModel.create({
             ChargeAmountLCY: chargeReq.ccAmount,
+            ChargeAmountFCY: chargeReq.ccAmountFCY,
             DealRate: chargeReq.ccDealRate,
-            VatAmountLCY: vatAmountLCY,
-            TotalAmountLCY: totalAmount,
+            VatAmountLCY: chargeReq.vatAmountLCY,
+            VatAmountFCY: chargeReq.vatAmountFCY,
+            TotalAmountFCY: chargeReq.totalAmountFCY,
+            TotalAmountLCY: chargeReq.totalAmountLCY,
             VatSerialNo: chargeReq.ccVatSerialNo,
             Narrative: chargeReq.ccNarrative,
             Category: chargeReq.ccCategory,
