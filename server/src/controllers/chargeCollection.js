@@ -93,8 +93,7 @@ const chargeCollectionController = {
             ccVatSerialNo: req.body.ccVatSerialNo,
             ccNarrative: req.body.ccNarrative,
             ccCategory: req.body.ccCategory,
-            account: req.body.account,
-            accountType: req.body.accountType,
+            customerID: req.body.customerID,
             teller: req.body.teller,
             currency: req.body.currency,
             legalID: req.body.legalID,
@@ -107,10 +106,10 @@ const chargeCollectionController = {
         }
 
         if(chargeReq.accountType == 1){
-            const debitAccountDB = debitAccountModel.findByPk(chargeReq.account)
-            if(!debitAccountDB){
+            const customerDB = customerModel.findByPk(chargeReq.account)
+            if(!customerDB){
                 return res.status(404).json({
-                    message: 'Account not found!'
+                    message: 'Customer not found!'
                 })
             }
         }
@@ -131,8 +130,6 @@ const chargeCollectionController = {
             VatSerialNo: chargeReq.ccVatSerialNo,
             Narrative: chargeReq.ccNarrative,
             Category: chargeReq.ccCategory,
-            Account: chargeReq.account,
-            AccountType: chargeReq.accountType,
             Type: 2,
             Status: 1
         })
@@ -145,6 +142,7 @@ const chargeCollectionController = {
 
         const chargeID = newChargeCollection.getDataValue('id')
         const newCCCash = await chargeCollectionfrCashModel.create({
+            CustomerID: chargeReq.customerID,
             chargeID: chargeID,
             Teller: chargeReq.teller,
             Currency: chargeReq.currency,
