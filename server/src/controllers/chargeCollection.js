@@ -281,9 +281,9 @@ const chargeCollectionController = {
             chargeCond.id = {[Op.in]: IDs}
         }
 
-        let chargesDB
+        let chargesDB = [], tempChargesObj
         if(enquiryReq.chargeType == 1){
-            hargesDB =  await chargeCollectionModel.findAll({
+            chargesDB =  await chargeCollectionModel.findAll({
                 where: chargeCond,
                 include: [{
                     model: chargeCategoryModel, as:'CHARGECATEGORY'
@@ -291,18 +291,28 @@ const chargeCollectionController = {
             })
         }
         else{
-            chargesDB =  await chargeCollectionModel.findAll({
+            tempChargesObj =  await chargeCollectionModel.findAll({
                 where: chargeCond,
                 include: [{
                     model: chargeCategoryModel, as:'CHARGECATEGORY'
-                }, {
-                    model: chargeCollectionfrCashModel
                 }]
             })
+            console.log('cash')
+            await Promise.all(tempChargesObj.map(async (value, i) => {
+                    let chargeID = value.getDataValue('id')
+                    let chargeCashDB = await chargeCollectionfrCashModel.findOne({
+                        where: {chargeID: chargeID}
+                    }) 
+                    let tempObj = {}
+                    tempObj.CC = value
+                    tempObj.CASH = chargeCashDB
+                    chargesDB.push(tempObj)
+                })
+            )
+            
         }
-        
-
-        
+        console.log('cachs3')
+        console.log(chargesDB)
         return res.status(200).json({
             message: "Charge Collection Enquiry",
             data: chargesDB
