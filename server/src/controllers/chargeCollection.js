@@ -109,7 +109,7 @@ const chargeCollectionController = {
         //     })
         // }
 
-        if(chargeReq.accountType == 1){
+        if(chargeReq.accountType == 1 && chargeReq.customerID){
             const customerDB = customerModel.findByPk(chargeReq.account)
             if(!customerDB){
                 return res.status(404).json({
