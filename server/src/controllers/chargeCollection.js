@@ -97,6 +97,10 @@ const chargeCollectionController = {
             teller: req.body.teller,
             currency: req.body.currency,
             legalID: req.body.legalID,
+            address: req.body.address,
+            customerName: req.body.customerName,
+            issuedDate: req.body.issuedDate,
+            issuePlace: req.body.issuePlace
         }
 
         // if(!chargeReq.ccAmount){
@@ -146,7 +150,11 @@ const chargeCollectionController = {
             chargeID: chargeID,
             Teller: chargeReq.teller,
             Currency: chargeReq.currency,
-            LegalID: chargeReq.legalID
+            LegalID: chargeReq.legalID,
+            CustomerName: chargeReq.customerName,
+            Address: chargeReq.address,
+            IssuedDate: chargeReq.issuedDate,
+            issuePlace: chargeReq.issuePlace
         })
 
         return res.status(200).json({
@@ -301,7 +309,10 @@ const chargeCollectionController = {
             await Promise.all(tempChargesObj.map(async (value, i) => {
                     let chargeID = value.getDataValue('id')
                     let chargeCashDB = await chargeCollectionfrCashModel.findOne({
-                        where: {chargeID: chargeID}
+                        where: {chargeID: chargeID}, 
+                        include: [{
+                            model: customerModel, as:"Customer"
+                        }]
                     }) 
                     let tempObj = {}
                     tempObj.CC = value
