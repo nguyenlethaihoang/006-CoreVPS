@@ -280,13 +280,28 @@ const chargeCollectionController = {
             })
             chargeCond.id = {[Op.in]: IDs}
         }
+
+        let chargesDB
+        if(enquiryReq.chargeType == 1){
+            hargesDB =  await chargeCollectionModel.findAll({
+                where: chargeCond,
+                include: [{
+                    model: chargeCategoryModel, as:'CHARGECATEGORY'
+                }]
+            })
+        }
+        else{
+            chargesDB =  await chargeCollectionModel.findAll({
+                where: chargeCond,
+                include: [{
+                    model: chargeCategoryModel, as:'CHARGECATEGORY'
+                }, {
+                    model: chargeCollectionfrCashModel
+                }]
+            })
+        }
         
-        let chargesDB =  await chargeCollectionModel.findAll({
-            where: chargeCond,
-            include: [{
-                model: chargeCategoryModel, as:'CHARGECATEGORY'
-            }]
-        })
+
         
         return res.status(200).json({
             message: "Charge Collection Enquiry",
