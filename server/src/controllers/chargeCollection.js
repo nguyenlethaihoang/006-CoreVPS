@@ -99,11 +99,11 @@ const chargeCollectionController = {
             legalID: req.body.legalID,
         }
 
-        if(!chargeReq.ccAmount || !chargeReq.account || !chargeReq.accountType){
-            return res.status(404).json({
-                message: "Enter required fields!"
-            })
-        }
+        // if(!chargeReq.ccAmount){
+        //     return res.status(404).json({
+        //         message: "Enter required fields!"
+        //     })
+        // }
 
         if(chargeReq.accountType == 1){
             const customerDB = customerModel.findByPk(chargeReq.account)
