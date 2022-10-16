@@ -153,8 +153,8 @@ const chargeCollectionController = {
             LegalID: chargeReq.legalID,
             CustomerName: chargeReq.customerName,
             Address: chargeReq.address,
-            IssuedDate: chargeReq.issuedDate,
-            //PlaceOfIssue: chargeReq.issuePlace
+           //IssuedDate: chargeReq.issuedDate,
+            PlaceOfIssue: chargeReq.issuePlace
         })
 
         return res.status(200).json({
