@@ -22,7 +22,9 @@ ArrearSA.init({
         defaultValue: DataTypes.NOW
     },
     Teller: DataTypes.TEXT,
-    Product: DataTypes.INTEGER
+    Product: DataTypes.INTEGER,
+    Currency: DataTypes.INTEGER,
+    PaymentCurrency: DataTypes.INTEGER
 }, {sequelize, modelName:'ARREAR_SA'})
 
 module.exports = ArrearSA
