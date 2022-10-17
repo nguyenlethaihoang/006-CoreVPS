@@ -310,9 +310,7 @@ const chargeCollectionController = {
                     let chargeID = value.getDataValue('id')
                     let chargeCashDB = await chargeCollectionfrCashModel.findOne({
                         where: {chargeID: chargeID}, 
-                        include: [{
-                            model: customerModel, as:"Customer"
-                        }]
+                        
                     }) 
                     let tempObj = {}
                     tempObj.CC = value
