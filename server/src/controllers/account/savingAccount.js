@@ -684,10 +684,10 @@ const savingAccountController = {
                 if(!termDB){
                     return next(new appError('Term not found!', 404))
                 }
-                const months = termDB.getDataValue('Value')
+                const months = termDB.getDataValue('Value') ? termDB.getDataValue('Value') : null
                 maturityDate = addMonths(months, date)
             }else{
-                maturityDate = arrearDB.getDataValue('MaturityDate')
+                maturityDate = arrearDB.getDataValue('MaturityDate') ? arrearDB.getDataValue('MaturityDate') : null
             }
 
             updatedDetailAccount = await arrearDB.update({
@@ -729,10 +729,10 @@ const savingAccountController = {
                 if(!termDB){
                     return next(new appError('Term not found!', 404))
                 }
-                const months = termDB.getDataValue('Value')
+                const months = termDB.getDataValue('Value') ? termDB.getDataValue('Value') : null
                 maturityDate = addMonths(months, date)
             }else{
-                maturityDate = periodicDB.getDataValue('MaturityDate')
+                maturityDate = periodicDB.getDataValue('MaturityDate') ? periodicDB.getDataValue('MaturityDate') : null
             }
             
             //UPDATE
