@@ -124,6 +124,7 @@ const savingAccountController = {
             Term: accountReq.term,
             PaymentCurrency: accountReq.paymentCurrency,
             DebitAccount: accountReq.debitAccount,
+            Product: accountReq.product
         })
         .catch(err => {
             return next(new appError(err, 404))
@@ -710,7 +711,8 @@ const savingAccountController = {
                 AccountOfficer: updateReq.accountOfficer,
                 Term: updateReq.term,
                 PaymentCurrency: updateReq.paymentCurrency,
-                DebitAccount: updateReq.debitAccount
+                DebitAccount: updateReq.debitAccount, 
+                Product: updateReq.product
             })
             .catch(err=> {
                 return next(new appError(err, 404))
