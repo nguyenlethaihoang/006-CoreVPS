@@ -9,7 +9,7 @@ const connection = {
 require('dotenv').config()
 console.log(process.env.DIALECT)
 
-const sequelize = new Sequelize('corebanking', 'admin_db', 'Camhackpass@44', {
+const sequelize = new Sequelize('corebanking', 'admin_db', 'dbpassword@1', {
     host: 'core-banking-db.mysql.database.azure.com',
     dialect: 'mysql',
     define:{

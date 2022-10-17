@@ -38,5 +38,4 @@ route.get('/get_charge_category', chargeCategoryController.getAll)
 route.get('/get_charge_type', chargeCategoryController.getAllChargeType)
 
 
-
 module.exports = route
