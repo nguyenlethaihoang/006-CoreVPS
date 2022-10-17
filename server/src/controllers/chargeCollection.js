@@ -146,7 +146,7 @@ const chargeCollectionController = {
 
         const chargeID = newChargeCollection.getDataValue('id')
         const newCCCash = await chargeCollectionfrCashModel.create({
-            CustomerID: chargeReq.customerID,
+            CustomerID: chargeReq.customerID? chargeReq.customerID : null,
             chargeID: chargeID,
             Teller: chargeReq.teller,
             Currency: chargeReq.currency,
@@ -155,6 +155,8 @@ const chargeCollectionController = {
             Address: chargeReq.address,
            //IssuedDate: chargeReq.issuedDate,
             PlaceOfIssue: chargeReq.issuePlace
+        }).catch(err => {
+            console.log(err)
         })
 
         return res.status(200).json({
