@@ -18,7 +18,9 @@ ArrearPeriodicClosure.init({
     NewCustomerBalance: DataTypes.FLOAT,
     DealRate: DataTypes.FLOAT,
     TellerID: DataTypes.TEXT,
-    CreditCCY: DataTypes.INTEGER
+    CreditCCY: DataTypes.INTEGER,
+    Status: DataTypes.INTEGER,
+    SAType: DataTypes.INTEGER
 }, {sequelize, modelName:'ARREAR_PERIODIC_CLOSURE'})
 
 module.exports = ArrearPeriodicClosure

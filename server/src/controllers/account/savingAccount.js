@@ -16,6 +16,7 @@ const accountOfficerModel = require('../../models/storage/accountOfficer')
 const termModel = require('../../models/account/savingTerm')
 const debitAccountModel = require('../../models/account/debitAccount')
 const { Op } = require('sequelize')
+const ArrearPeriodicClosure = require('../../models/account/closeSA')
 
 
 
@@ -875,6 +876,100 @@ const savingAccountController = {
                 arrearAccount: arrearDB
             }
         })
+    }), 
+    
+    closeArrearPeriodic: asyncHandler(async (req, res, next) => {
+        const IDReq = req.params.id  // saving account id
+
+        // CHECK ACCOUNT WAS CLOSED ?
+        const closureDB = await ArrearPeriodicClosure.findOne({
+            where: {SavingAccount: IDReq}
+        })
+        if(closureDB){
+            return res.status(404).json({
+                message: 'Saving Account was closed'
+            })
+        }
+        const closureReq = {
+            customerID: req.body.customerID,
+            customerName: req.body.customerName,
+            valueDate: req.body.valueDate,
+            endDate: req.body.endDate,
+            originPrincipal: req.body.originPrincipal,
+            principal: req.body.principal,
+            interestRate: req.body.interestRate,
+            totalAmountLCY: req.body.totalAmountLCY,
+            totalAmountFCY: req.body.totalAmountFCY,
+            narrative: req.body.narrative,
+            dealRate: req.body.dealRate,
+            tellerID: req.body.tellerID,
+            creditCCY: req.body.creditCCY,
+            WorkingAccount: req.body.workingAccount,
+            customerBalance: req.body.customerBalance,
+        }
+
+        const savingAccountDB = await savingAccountModel.findByPk(IDReq)
+        if(!savingAccountDB){
+            return res.status(404).json({
+                message: 'Saving Account not found'
+            })
+        }
+        if(savingAccountDB.getDataValue('CustomerID') != closureReq.customerID){
+            return res.status(404).json({
+                message: 'Customer ID error'
+            })
+        }
+
+        const saTypeDB = savingAccountDB.getDataValue('Type')? savingAccountDB.getDataValue('Type') : null
+        if(!saTypeDB){
+            return res.status(404).json({
+                message: 'Error'
+            })
+        }
+
+        const newClosure = await ArrearPeriodicClosure.create({
+            CustomerID: closureReq.customerID,
+            CustomerName: closureReq.customerName,
+            ValueDate: closureReq.valueDate,
+            EndDate: closureReq.endDate,
+            OriginPrincipal: closureReq.originPrincipal,
+            Principal: closureReq.principal,
+            InterestRate: closureReq.interestRate,
+            TotalAmountFCY: closureReq.totalAmountFCY,
+            TotalAmountLCY: closureReq.totalAmountLCY,
+            Narrative: closureReq.narrative,
+            CustomerBalance: closureReq.customerBalance ? closureReq.customerBalance : -parseInt(closureReq.totalAmountLCY),
+            NewCustomerBalance: closureReq.totalAmountLCY? closureReq.totalAmountLCY : closureReq.totalAmountFCY,
+            DealRate: closureReq.dealRate,
+            TellerID: closureReq.tellerID,
+            CreditCCY: closureReq.creditCCY,
+            SavingAccount: IDReq,
+            Status: 1,
+            SAType: saTypeDB
+        }).catch(err => {
+            console.log(err)
+        })
+
+        return res.status(200).json({
+            message: 'Closure',
+            data: newClosure
+        })
+        
+        
+    }), 
+
+    closeDiscounted: asyncHandler(async (req, res, next) => {
+        const IDReq = req.params.id  // saving account id
+
+    }), 
+
+    getClosure: asyncHandler(async(req, res, next) => {
+        const IDReq = req.params.id // closure id
+        
+    }),
+
+    validateClosure: asyncHandler(async (req, res, next) => {
+        const IDReq = req.params.id // saving account closure id
     })
 }
 

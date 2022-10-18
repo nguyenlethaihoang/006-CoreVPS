@@ -27,7 +27,7 @@ route.post('/saving_account/enquiry_arrear', savingAccountController.enquiryArre
 route.post('/saving_account/enquiry_periodic', savingAccountController.enquiryPeriodic)
 route.post('/saving_account/enquiry_discounted', savingAccountController.enquiryDiscounted)
 route.put('/saving_account/update/:said', savingAccountController.update)
-route.get('/saving_account/arrear_close/:said', savingAccountController.arrearClosurePreview)
+route.post('/saving_account/close/:id', savingAccountController.closeArrearPeriodic)
 
 
 module.exports = route
