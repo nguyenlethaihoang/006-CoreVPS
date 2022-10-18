@@ -695,7 +695,7 @@ const savingAccountController = {
                 AccountTitle: updateReq.accountTitle,
                 ShortTitle: updateReq.shortTitle,
                 Notes: updateReq.notes,
-                MaturityDate: maturityDate,
+                MaturityDate: maturityDate? maturityDate : null,
                 InterestRate: updateReq.interestRate,
                 AccountNo: updateReq.accountNo,
                 PaymentNo: updateReq.paymentNo,
@@ -759,7 +759,7 @@ const savingAccountController = {
                 Term: updateReq.term,
                 PaymentCurrency: updateReq.paymentCurrency,
                 DebitAccount: updateReq.debitAccount,
-                MaturityDate: maturityDate
+                MaturityDate:  maturityDate? maturityDate : null
             })
             .catch(err => {
                 return next(new appError(err, 404))

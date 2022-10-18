@@ -41,6 +41,9 @@ const DebitAccount = require('./account/debitAccount')
 const Currency = require('./storage/currency')
 const chequeWithdrawal = require('./cheque/withdrawal')
 const chequeTransfer = require('./cheque/transfer')
+const SAClosure = require('./account/closeSA')
+const DiscountedClosure = require('./account/closeDiscounted')
+
 const association = () => {
     // CUSTOMER 
     // -- FkCustomer_CityProvinceId
@@ -496,6 +499,14 @@ const association = () => {
     })
     chequeWithdrawal.belongsTo(statusType,{
         foreignKey: 'Status'
+    })
+
+    // Arrear Periodic Saving Account
+    SAClosure.belongsTo(savingAccount, {
+        foreignKey: 'SavingAccount'
+    })
+    DiscountedClosure.belongsTo(savingAccount,{
+        foreignKey: 'SavingAccount'
     })
 }
 
