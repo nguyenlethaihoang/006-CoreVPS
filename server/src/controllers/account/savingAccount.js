@@ -17,6 +17,7 @@ const termModel = require('../../models/account/savingTerm')
 const debitAccountModel = require('../../models/account/debitAccount')
 const { Op } = require('sequelize')
 const ArrearPeriodicClosure = require('../../models/account/closeSA')
+const DiscountedClosure = require('../../models/account/closeDiscounted')
 
 
 
@@ -761,7 +762,8 @@ const savingAccountController = {
                 Term: updateReq.term,
                 PaymentCurrency: updateReq.paymentCurrency,
                 DebitAccount: updateReq.debitAccount,
-                MaturityDate:  maturityDate? maturityDate : null
+                MaturityDate:  maturityDate? maturityDate : null,
+                Product: updateReq.product
             })
             .catch(err => {
                 return next(new appError(err, 404))
@@ -960,8 +962,78 @@ const savingAccountController = {
     }), 
 
     closeDiscounted: asyncHandler(async (req, res, next) => {
-        const IDReq = req.params.id  // saving account id
+        try{
+            const IDReq = req.params.id  // saving account id
 
+            const closureReq = {
+                depositNo: req.body.depositNo,
+                customerID: req.body.customerID,
+                customerName: req.body.customerName,
+                valueDate: req.body.valueDate,
+                newMatDate: req.body.newMatDate,
+                intPymtMethod: req.body.intPymtMethod,
+                interestBasic: req.body.interestBasic,
+                interestRate: req.body.interestRate,
+                totalIntAmount: req.body.totalIntAmount,
+                eligibleInterest: req.body.eligibleInterest,
+                intRateVDate: req.body.intRateVDate,
+                amountLCY: req.body.amountLCY,
+                amountFCY: req.body.amountFCY,
+                narrative: req.body.narrative,
+                dealRate: req.body.dealRate,
+                teller: req.body.teller,
+                waiveCharge: req.body.waiveCharge,
+                newCustomerBalance: req.body.newCustomerBalance,
+                customerBalance: req.body.customerBalance
+            }
+
+            // CHECK SAVING ACCOUNT
+            const savingAccountDB = await savingAccountModel.findByPk(IDReq)
+            if(!savingAccountDB){
+                throw 'Saving Account Not Found'
+            }
+            if(savingAccountDB.getDataValue('AccountStatus') != 'Active'){
+                throw 'Saving Account was closed'
+            }
+            if(savingAccountDB.getDataValue('CustomerID') != closureReq.customerID){
+                throw 'Customer ID Error'
+            }
+
+            const newClosure = await DiscountedClosure.create({
+                DepositNo: closureReq.depositNo,
+                CustomerID: closureReq.customerID,
+                CustomerName: closureReq.customerName,
+                ValueDate: closureReq.valueDate,
+                NewMatDate: closureReq.newMatDate,
+                IntPymtMethod: closureReq.intPymtMethod,
+                InterestBasic: closureReq.interestBasic,
+                InterestRate: closureReq.interestRate,
+                TotalIntAmount: closureReq.totalIntAmount,
+                EligibleInterest: closureReq.eligibleInterest,
+                IntRateVDate: closureReq.intRateVDate,
+                AmountLCY: closureReq.amountLCY,
+                AmountFCY: closureReq.amountFCY,
+                Narrative: closureReq.narrative,
+                DealRate: closureReq.dealRate,
+                Teller: closureReq.teller,
+                WaiveCharge: closureReq.waiveCharge,
+                NewCustomerBalance: closureReq.newCustomerBalance,
+                CustomerBalance: closureReq.customerBalance,
+                Status: 1,
+                SAType: 4,
+                SavingAccount: IDReq
+            })
+
+            return res.status(200).json({
+                message: 'Close Discounted Saving Account',
+                data: newClosure
+            })
+
+        }catch(err){
+            return res.status(404).json({
+                message: err
+            })
+        }
     }), 
 
     getClosure: asyncHandler(async(req, res, next) => {
@@ -973,17 +1045,20 @@ const savingAccountController = {
             }
             let closureDB
             const accountTypeDB = savingAccountDB.getDataValue('Type')
-            if(accountTypeDB == 2){
+            if(accountTypeDB == 2 || accountTypeDB == 3){
                 closureDB = await ArrearPeriodicClosure.findOne({
                     where: {SavingAccount: IDReq}
                 })
                 if(!closureDB){
                     throw 'Account is Active'
                 }
-            }else if(accountTypeDB == 3){
-
             }else if(accountTypeDB == 4){
-
+                closureDB = await DiscountedClosure.findOne({
+                    where: {SavingAccount: IDReq}
+                })
+                if(!closureDB){
+                    throw 'Account is Active'
+                }
             }
             else{
                 throw 'Account cannot be closed'
@@ -1039,7 +1114,15 @@ const savingAccountController = {
                         }
                         transferAmount = parseInt(arrearDB.getDataValue('PrincipalAmount'))
                     }else if(SATypeDB == 3){
-
+                        const periodicDB = await periodicSAModel.findOne({
+                            where: {
+                                Account: savingAccountID
+                            }
+                        })
+                        if(!periodicDB){
+                            throw 'Saving Account Error'
+                        }
+                        transferAmount = parseInt(periodicDB.getDataValue('PrincipalAmount'))
                     }
                     // TRANSFER
                     const workingAccountDB = await debitAccountModel.findByPk(workingAccountID)
@@ -1070,7 +1153,78 @@ const savingAccountController = {
         }
     }),
     validateDiscounted: asyncHandler(async (req, res, next) => {
+        try{
+            const IDReq = req.params.id //saving closure id
 
+            const statusReq = req.body.status
+            const closureDB = await DiscountedClosure.findByPk(IDReq)
+            if(!closureDB){
+                throw 'Account Closure Error'
+            }
+            if(closureDB.getDataValue('Status') != 1){
+                throw 'Validated'
+            }
+
+            if(statusReq == 2){
+                //UPDATE SAVING ACCOUNT - BLOCKED
+                const savingAccountID = closureDB.getDataValue('SavingAccount')
+                const savingAccountDB = await savingAccountModel.findByPk(savingAccountID)
+                if(!savingAccountDB){
+                    throw 'Saving Account not found'
+                }
+
+                await savingAccountDB.update({
+                    AccountStatus: 'Blocked'
+                })
+                //TRANSFER AMOUNT
+                const CreditAccountDB = closureDB.getDataValue('CreditAccount')
+                if(CreditAccountDB){
+                    // GET TRANSFER AMOUNT
+                    
+                    const discountedDB = discountedSAModel.findOne({
+                        where: {Account: savingAccountID}
+                    })
+                    if(!discountedDB){
+                        throw 'Discounted Saving Account Error'
+                    }
+                    const transferAmount = discountedDB.getDataValue('Amount')
+                    // TRANSFER
+                    const workingAccountDB = await debitAccountModel.findByPk(CreditAccountDB)
+                    if(!workingAccountDB){
+                        throw 'Working Account Error'
+                    }
+                    await workingAccountDB.increment({
+                        'WorkingAmount': transferAmount,
+                        'ActualBalance': transferAmount
+                    })
+                }
+
+                //UPDATE CLOSURE - VALID
+                const updatedClosure = await closureDB.update({
+                    Status: statusReq
+                })
+    
+                res.status(200).json({
+                    message: 'Validated',
+                    data: updatedClosure
+                })
+    
+            }
+
+            const updatedClosure = await closureDB.update({
+                Status: statusReq
+            })
+
+            return res.status(200).json({
+                message: 'Validated',
+                data: updatedClosure
+            })
+
+        }catch(err){
+            return res.status(404).json({
+                message: err
+            })
+        }
     })
 }
 

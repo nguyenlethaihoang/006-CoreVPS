@@ -22,7 +22,8 @@ DiscountedClosure.init({
     Teller: DataTypes.TEXT,
     WaiveCharge: DataTypes.BOOLEAN,
     NewCustomerBalance: DataTypes.FLOAT,
-    CustomerBalance: DataTypes.FLOAT
+    CustomerBalance: DataTypes.FLOAT,
+    CreditAccount: DataTypes.INTEGER
 }, {sequelize, modelName:'DISCOUNTED_CLOSURE'})
 
 module.exports = DiscountedClosure
