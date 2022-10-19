@@ -284,7 +284,8 @@ const savingAccountController = {
             Term: accountReq.term,
             PaymentCurrency: accountReq.paymentCurrency,
             DebitAccount: accountReq.debitAccount,
-            MaturityDate: maturityDate
+            MaturityDate: maturityDate,
+            Product: accountReq.product
         })
         .catch(err => {
             return next(new appError(err, 404))
@@ -964,12 +965,64 @@ const savingAccountController = {
     }), 
 
     getClosure: asyncHandler(async(req, res, next) => {
-        const IDReq = req.params.id // closure id
-        
+        try{
+            const IDReq = req.params.id //saving id
+            const savingAccountDB = await savingAccountModel.findByPk(IDReq)
+            if(!savingAccountDB){
+                throw 'Saving Account not found'
+            }
+            let closureDB
+            const accountTypeDB = savingAccountDB.getDataValue('Type')
+            if(accountTypeDB == 2){
+                closureDB = await ArrearPeriodicClosure.findOne({
+                    where: {SavingAccount: IDReq}
+                })
+                if(!closureDB){
+                    throw 'Account is Active'
+                }
+            }else if(accountTypeDB == 3){
+
+            }else if(accountTypeDB == 4){
+
+            }
+            else{
+                throw 'Account cannot be closed'
+            }
+
+            return res.status(200).json({
+                message: 'Get Closure',
+                data: closureDB,
+                account: savingAccountDB
+            })
+        }catch(err){
+            return res.status(404).json({
+                message: err
+            })
+        }
     }),
 
     validateClosure: asyncHandler(async (req, res, next) => {
-        const IDReq = req.params.id // saving account closure id
+        try{
+            const IDReq = req.params.id //saving closure id
+            const closureDB = await ArrearPeriodicClosure.findByPk(IDReq)
+            if(!closureDB){
+                throw 'Account Closure Error'
+            }
+            // UPDATE SAVING ACCOUNT
+            const SATypeDB = closureDB.getDataValue('SAType')
+            const savingAccountDB = closureDB.getDataValue('SavingAccount')
+            // TRANSFER AMOUNT
+
+            // UPDATE CLOSURE
+
+        }catch(err){
+            return res.status(404).json({
+                message: err
+            })
+        }
+    }),
+    validateDiscounted: asyncHandler(async (req, res, next) => {
+
     })
 }
 

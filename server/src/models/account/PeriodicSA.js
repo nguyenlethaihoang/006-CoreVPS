@@ -23,7 +23,8 @@ PeriodicSA.init({
         type: DataTypes.DATEONLY,
         defaultValue: DataTypes.NOW
     },
-    Teller: DataTypes.TEXT
+    Teller: DataTypes.TEXT,
+    Product: DataTypes.INTEGER
 }, {sequelize, modelName:'PERIODIC_SA'})
 
 module.exports = PeriodicSA
