@@ -13,6 +13,9 @@ const cityProvinceModel = require('../models/storage/cityProvince')
 const countryModel = require('../models/storage/country')
 const sectorModel = require('../models/storage/sector')
 const industryModel = require('../models/storage/industry')
+const DepositTrans = require('../models/transaction/deposit')
+const DebitAccount = require('../models/account/debitAccount')
+const Currency = require('../models/storage/currency')
 
 const
     { BlobServiceClient } = require("@azure/storage-blob"),
@@ -324,6 +327,105 @@ const exportFileController = {
             data: URLRes,
             blobName: blobName
         })
+    }),
+
+    exportDeposit: asyncHandler(async (req, res, next) =>{
+        //------------------------------CASH DEPOSIT--------------------------------
+        //File resolve
+        const depositID = req.params.id
+        const content = fs.readFileSync(path.resolve(__dirname, '../../public/file/deposit.docx'), 'binary')
+        const zip = new PizZip(content)
+        const doc = new Docxtemplater(zip)
+        //Get info
+        const depositDB = await DepositTrans.findByPk(depositID, {
+            include: [{
+                model: Currency, attributes: ['Name']
+            }]
+        })
+        if(!depositDB){
+            return res.status(404).json({
+                message: 'Info Error'
+            })
+        }
+        const accountID = depositDB.getDataValue('Account')
+        const accountType = depositDB.getDataValue('AccountType')
+        console.log(accountType)
+        let accountDB
+        if(accountType == 1){
+            accountDB = await DebitAccount.findByPk(accountID, {
+                include: [{
+                    model: customerModel, as: 'Customer', 
+                    include: [{
+                        model: countryModel, attributes:['Name']
+                    }, {
+                        model: cityProvinceModel, attributes: ['Name']
+                    }]
+                }]
+            })
+            if(!accountDB){
+                return res.status(404).json({
+                    message: 'Info Error'
+                })
+            }
+        }
+        // render
+        let render = {}
+        let subCustomer = accountDB.get('Customer')
+        let today = new Date()
+        let day = today.getDay()
+        let month = today.getMonth()
+        let year = today.getFullYear()
+        render.Date_ = day
+        render.Month_ = month
+        render.Year_ = year
+        render.CustomerName_ = subCustomer.GB_FullName? accountDB.get('Customer').GB_FullName : ''
+        render.Street_ = subCustomer.GB_Street?  subCustomer.GB_Street : ''
+        render.Towndist_ = subCustomer.GB_Towndist ? subCustomer.GB_Towndist : ''
+        render.Country_ = subCustomer.COUNTRY.Name ? subCustomer.COUNTRY.Name : ''
+        render.City_ = subCustomer.CITYPROVINCE.Name ? subCustomer.CITYPROVINCE.Name.slice(5) : ''
+        render.Identify_ = subCustomer.DocID ?  subCustomer.DocID : ''
+        render.IssueDate_ = subCustomer.DocExpiryDate ? subCustomer.DocExpiryDate : '           '
+        render.IssuePlace_ = subCustomer.DocIssuePlace ? subCustomer.DocIssuePlace : '            '
+        render.Amount_ = depositDB.DepositAmount ? depositDB.DepositAmount : ''
+        render.Currency_ = depositDB.CURRENCY.Name ? depositDB.CURRENCY.Name: ''
+        render.Narrative_ = depositDB.Narrative ?  depositDB.Narrative : ''
+        render.TransNo_ =  `TT.20144.${subCustomer.DocID}`
+        render.Teller_ = depositDB.TellerID ? depositDB.TellerID : ''
+        render.PaymentNo_ = `${day}${month}${year}.${depositID}`
+        render.Account_ = depositID
+
+        // FILE RENDER
+        doc.render(render)
+        const docBuf = doc.getZip().generate({type: 'nodebuffer'})
+
+
+        const
+        blobName = getBlobName(`CashDeposit${accountDB.id}.docx`),
+        blobService = new BlockBlobClient(process.env.AZURE_STORAGE_CONNECTION_STRING,containerName,blobName),
+        stream = getStream(docBuf),
+        streamLength = docBuf.length
+
+        await blobService.uploadStream(stream, streamLength)
+        .catch(err => {
+            console.log(err)
+            return null
+        })
+
+        URLRes = "https://" + config.getStorageAccountName() + ".blob.core.windows.net/" + containerName + "/" + blobName
+
+        // return res.status(200).json({
+        //     message: 'Exported',
+        //     data: URLRes,
+        //     blobName: blobName
+        // })
+        return res.status(200).json({
+            message: 'Exported',
+            account: accountDB,
+            depositDB: depositDB,
+            data: URLRes,
+        })
+        
+
     })
 }
 

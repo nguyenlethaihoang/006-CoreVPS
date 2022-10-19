@@ -28,6 +28,8 @@ route.post('/saving_account/enquiry_periodic', savingAccountController.enquiryPe
 route.post('/saving_account/enquiry_discounted', savingAccountController.enquiryDiscounted)
 route.put('/saving_account/update/:said', savingAccountController.update)
 route.post('/saving_account/close/:id', savingAccountController.closeArrearPeriodic)
+route.post('/saving_account/close_discounted/:id', savingAccountController.closeDiscounted )
+route.put('/saving_account/validate_closurediscounted/:id', savingAccountController.validateDiscounted)
 route.get('/saving_account/get_closure/:id', savingAccountController.getClosure)
 route.put('/saving_account/validate_closure/:id', savingAccountController.validateClosure)
 
