@@ -1004,16 +1004,64 @@ const savingAccountController = {
     validateClosure: asyncHandler(async (req, res, next) => {
         try{
             const IDReq = req.params.id //saving closure id
+            const statusReq = req.body.status
             const closureDB = await ArrearPeriodicClosure.findByPk(IDReq)
             if(!closureDB){
                 throw 'Account Closure Error'
             }
+            if(closureDB.getDataValue('Status') != 1){
+                throw 'Validated'
+            }
             // UPDATE SAVING ACCOUNT
-            const SATypeDB = closureDB.getDataValue('SAType')
-            const savingAccountDB = closureDB.getDataValue('SavingAccount')
-            // TRANSFER AMOUNT
+            if(statusReq == 2){
+                const SATypeDB = closureDB.getDataValue('SAType')
+                const savingAccountID = closureDB.getDataValue('SavingAccount')
+                const savingAccountDB = await savingAccountModel.findByPk(savingAccountID)
+                if(!savingAccountDB){
+                    throw 'Saving Account Error'
+                }
+                await savingAccountDB.update({
+                    AccountStatus: 'Blocked'
+                })
+                // TRANSFER AMOUNT
+                const workingAccountID = closureDB.getDataValue('WorkingAccount')
+                if(workingAccountID){
+                    // GET TRANSFER AMOUNT
+                    let transferAmount
+                    if(SATypeDB == 2){
+                        const arrearDB = await arrearSAModel.findOne({
+                            where: {
+                                Account: savingAccountID
+                            }
+                        })
+                        if(!arrearDB){
+                            throw 'Saving Account Error'
+                        }
+                        transferAmount = parseInt(arrearDB.getDataValue('PrincipalAmount'))
+                    }else if(SATypeDB == 3){
 
+                    }
+                    // TRANSFER
+                    const workingAccountDB = await debitAccountModel.findByPk(workingAccountID)
+                    if(!workingAccountDB){
+                        throw 'Working Account Error'
+                    }
+                    await workingAccountDB.increment({
+                        'WorkingAmount': transferAmount,
+                        'ActualBalance': transferAmount
+                    })
+                }
+            }
+            
             // UPDATE CLOSURE
+            const updatedClosure = await closureDB.update({
+                Status: statusReq
+            })
+
+            res.status(200).json({
+                message: 'Validated',
+                data: updatedClosure
+            })
 
         }catch(err){
             return res.status(404).json({
