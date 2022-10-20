@@ -379,7 +379,7 @@ const exportFileController = {
         render.Month_ = month
         render.Year_ = year
         render.CustomerName_ = subCustomer.GB_FullName? accountDB.get('Customer').GB_FullName : ''
-        render.Street_ = subCustomer.GB_Street?  subCustomer.GB_Street : ''
+        render.Street = subCustomer.GB_Street?  subCustomer.GB_Street : ''
         render.Towndist_ = subCustomer.GB_Towndist ? subCustomer.GB_Towndist : ''
         render.Country_ = subCustomer.COUNTRY.Name ? subCustomer.COUNTRY.Name : ''
         render.City_ = subCustomer.CITYPROVINCE.Name ? subCustomer.CITYPROVINCE.Name.slice(5) : ''
@@ -397,7 +397,7 @@ const exportFileController = {
         // FILE RENDER
         doc.render(render)
         const docBuf = doc.getZip().generate({type: 'nodebuffer'})
-
+        console.log(render)
 
         const
         blobName = getBlobName(`CashDeposit${accountDB.id}.docx`),
@@ -412,21 +412,92 @@ const exportFileController = {
         })
 
         URLRes = "https://" + config.getStorageAccountName() + ".blob.core.windows.net/" + containerName + "/" + blobName
-
-        // return res.status(200).json({
-        //     message: 'Exported',
-        //     data: URLRes,
-        //     blobName: blobName
-        // })
         return res.status(200).json({
-            message: 'Exported',
-            account: accountDB,
-            depositDB: depositDB,
+            message: 'Exported Account',
             data: URLRes,
+            blobName: blobName
         })
-        
+    }),
 
+    exportAccount: asyncHandler(async (req, res, next) => {
+        const accountID = req.params.id
+        // -------------------------------------- OPEN ACCOUNT ---------------------------------
+        const content = fs.readFileSync(path.resolve(__dirname, '../../public/file/OpenAccount.docx'), 'binary')
+        const zip = new PizZip(content)
+        const doc = new Docxtemplater(zip)
+
+        //Get info
+
+        const accountDB = await DebitAccount.findByPk(accountID, {
+            include: [{
+                model: customerModel, as: 'Customer', 
+                include: [{
+                    model: countryModel, attributes:['Name']
+                }, {
+                    model: cityProvinceModel, attributes: ['Name']
+                }]
+            },{
+                model: Currency , attributes: ['Name']
+            }, {
+                model: customerModel, as: 'JoinHolder'
+            }]
+        })
+        if(!accountDB){
+            return res.status(404).json({
+                message: 'Info Error'
+            })
+        }
+        
+        // render
+        let render = {}
+        let subCustomer = accountDB.get('Customer')
+        let today = new Date()
+        let day = today.getDay()
+        let month = today.getMonth()
+        let year = today.getFullYear()
+        render.Date_ = day
+        render.Month_ = month
+        render.Year_ = year
+        render.CustomerName_ = subCustomer.GB_FullName? subCustomer.GB_FullName : ''
+        render.Street = subCustomer.GB_Street?  subCustomer.GB_Street : ''
+        render.Towndist_ = subCustomer.GB_Towndist ? subCustomer.GB_Towndist : ''
+        render.Country_ = subCustomer.COUNTRY.Name ? subCustomer.COUNTRY.Name : ''
+        render.City_ = subCustomer.CITYPROVINCE.Name.slice(5) ? subCustomer.CITYPROVINCE.Name.slice(5) : ''
+        render.Identify_ = subCustomer.DocID ?  subCustomer.DocID : ''
+        render.IssueDate = '           '
+        render.IssuePlace_ = subCustomer.DocIssuePlace ? subCustomer.DocIssuePlace : '            '
+        render.TransNo_ =  `TT.20144.${subCustomer.DocID}`
+        render.Currency_ = accountDB.CURRENCY.Name? accountDB.CURRENCY.Name : ''
+        render.ValueDate_ = ''
+        render.CustomerID_ = subCustomer.id
+        render.AccountID_ = accountID
+        render.JoinHolder_ = accountDB.JoinHolder.GB_FullName ? accountDB.JoinHolder.GB_FullName : ''
+        // FILE RENDER
+        doc.render(render)
+        const docBuf = doc.getZip().generate({type: 'nodebuffer'})
+
+        const
+        blobName = getBlobName(`Account${accountID}.docx`),
+        blobService = new BlockBlobClient(process.env.AZURE_STORAGE_CONNECTION_STRING,containerName,blobName),
+        stream = getStream(docBuf),
+        streamLength = docBuf.length
+
+        await blobService.uploadStream(stream, streamLength)
+        .catch(err => {
+            console.log(err)
+            return null
+        })
+
+        URLRes = "https://" + config.getStorageAccountName() + ".blob.core.windows.net/" + containerName + "/" + blobName
+
+        return res.status(200).json({
+            message: 'Exported Account',
+            data: URLRes,
+            blobName: blobName,
+            account: accountDB
+        })
     })
+
 }
 
 module.exports = exportFileController
