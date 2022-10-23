@@ -89,10 +89,10 @@ const association = () => {
         foreignKey: 'MainIndustry'
     })
     // --FkCustomer_IndustryId
-    customer.belongsTo(industry, {
+    customer.belongsTo(subIndustry, {
         foreignKey: 'Industry'
     })
-    industry.hasMany(customer, {
+    subIndustry.hasMany(customer, {
         foreignKey: 'Industry'
     })
     // --FkCustomer_AccountOfficerId
