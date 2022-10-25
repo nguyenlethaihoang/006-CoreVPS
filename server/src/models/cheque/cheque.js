@@ -5,8 +5,7 @@ class Cheque extends Model {}
 
 Cheque.init({
     ChequeID: {
-        type: DataTypes.TEXT,
-        unique: true,
+        type: DataTypes.TEXT
     },
     ChequeStatus: {
         type: DataTypes.TEXT,

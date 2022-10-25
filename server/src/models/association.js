@@ -43,6 +43,8 @@ const chequeWithdrawal = require('./cheque/withdrawal')
 const chequeTransfer = require('./cheque/transfer')
 const SAClosure = require('./account/closeSA')
 const DiscountedClosure = require('./account/closeDiscounted')
+const creditCollection = require('./creditTransaction/collection')
+const creditTransfer = require('./creditTransaction/transfer')
 
 const association = () => {
     // CUSTOMER 
@@ -507,6 +509,21 @@ const association = () => {
     })
     DiscountedClosure.belongsTo(savingAccount,{
         foreignKey: 'SavingAccount'
+    })
+
+
+    // CREDIT TRANSACTION
+    creditCollection.belongsTo(customer, {
+        foreignKey: 'CustomerID'
+    })
+    creditCollection.belongsTo(statusType,{
+        foreignKey: 'Status'
+    })
+    creditTransfer.belongsTo(debitAccount, {
+        foreignKey: 'DebitAccount'
+    })
+    creditTransfer.belongsTo(statusType,{
+        foreignKey: 'Status'
     })
 }
 

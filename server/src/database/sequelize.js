@@ -18,8 +18,9 @@ const sequelize = new Sequelize('corebanking', 'admin_db', 'dbpassword@1', {
     ssl: 'ca:fs.readFileSync("{ca-cert filename}")'
   });
 
-// const sequelize = new Sequelize('corebanking', 'root', null , {
-//     host: 'localhost',
+// const sequelize = new Sequelize('corebanking', 'root', 'password' , {
+//     host: '103.75.185.190',
+//     port: '8076',
 //     dialect: 'mysql',
 //     define:{
 //       freezeTableName: true
