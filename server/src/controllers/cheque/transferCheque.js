@@ -88,7 +88,7 @@ const transferChequeController = {
         })
 
         // GET AMOUNT - DEBIT ACCOUNT
-        const chequeObj = chequeItemDB.get('CHEQUE')
+        const chequeObj = chequeItemDB.get('CHEQUE') 
         console.log(chequeObj)
         const workingAmountDB = parseInt(chequeObj.DEBITACCOUNT.WorkingAmount)
         console.log('WorkingAmount')
@@ -121,11 +121,10 @@ const transferChequeController = {
             ChequeItem: chequeItemID,
             Status: 1,
             BeneficiaryAccount: transferReq.beneficiaryAccount
-        }).catch(err => {
-            console.log('err')
-            console.log(err)
         })
 
+
+        
         // UPDATE REF ID
         const transID = newTransfer.getDataValue('id')
         let refTemp = transID.toString().padStart(6, '0')
