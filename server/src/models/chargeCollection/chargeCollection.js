@@ -4,6 +4,7 @@ const sequelize = require('../../database/sequelize')
 class ChargeCollection extends Model {}
 
 ChargeCollection.init({
+    RefID: DataTypes.TEXT,
     ChargeAmountLCY: DataTypes.INTEGER,
     ChargeAmountFCY: DataTypes.INTEGER,
     ValueDate: DataTypes.DATEONLY,

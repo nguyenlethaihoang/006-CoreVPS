@@ -126,9 +126,17 @@ const transferChequeController = {
             console.log(err)
         })
 
+        // UPDATE REF ID
+        const transID = newTransfer.getDataValue('id')
+        let refTemp = transID.toString().padStart(6, '0')
+        const refID = `TT.22298.${refTemp}`
+        const updatedTrans = await newTransfer.update({
+            RefID: refID
+        })
+
         return res.status(200).json({
             message: 'transfer',
-            data: newTransfer
+            data: updatedTrans
         })
 
     }), 
@@ -251,7 +259,7 @@ const transferChequeController = {
 
         let transferCond = {}, customerCond = {}
         if(enquiryReq.transferID){
-            transferCond.id = enquiryReq.transferID
+            transferCond.RefID = enquiryReq.transferID
         }
         if(enquiryReq.customerID){
             customerCond.id = enquiryReq.customerID

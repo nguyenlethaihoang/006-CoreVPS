@@ -105,9 +105,17 @@ const withdrawalChequeController = {
 
         })
 
+        // UPDATE REF ID
+        const transID = newWithdrawal.getDataValue('id')
+        let refTemp = transID.toString().padStart(6, '0')
+        const refID = `TT.22298.${refTemp}`
+        const updatedTrans = await newWithdrawal.update({
+            RefID: refID
+        })
+
         return res.status(200).json({
             message: 'withdrawal',
-            data: newWithdrawal
+            data: updatedTrans
         })
 
     }), 
@@ -208,7 +216,7 @@ const withdrawalChequeController = {
 
         let withdrawalCond = {}, customerCond = {}
         if(enquiryReq.withdrawalID){
-            withdrawalCond.id = enquiryReq.withdrawalID
+            withdrawalCond.RefID = {[Op.substring]: enquiryReq.withdrawalID}
         }
         if(enquiryReq.customerID){
             customerCond.id = enquiryReq.customerID

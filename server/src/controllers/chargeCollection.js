@@ -70,6 +70,14 @@ const chargeCollectionController = {
             })
         }
 
+        // UPDATE REF ID
+        const collectionID = newChargeCollection.getDataValue('id')
+        let refTemp = collectionID.toString().padStart(6, '0')
+        const refID = `TT.22298.${refTemp}`
+        const updatedChargeCollection = await newChargeCollection.update({
+            RefID: refID
+        })
+
         const chargeID = newChargeCollection.getDataValue('id')
         const newCCAccount = await chargeCollectionfrAccountModel.create({
             chargeID: chargeID
@@ -77,7 +85,7 @@ const chargeCollectionController = {
 
         return res.status(200).json({
             message: "Charge Collection",
-            data: newChargeCollection
+            data: updatedChargeCollection
         })
     }), 
 
@@ -144,6 +152,14 @@ const chargeCollectionController = {
             })
         }
 
+        // UPDATE REF ID
+        const collectionID = newChargeCollection.getDataValue('id')
+        let refTemp = collectionID.toString().padStart(6, '0')
+        const refID = `TT.22298.${refTemp}`
+        const updatedChargeCollection = await newChargeCollection.update({
+            RefID: refID
+        })
+
         const chargeID = newChargeCollection.getDataValue('id')
         const newCCCash = await chargeCollectionfrCashModel.create({
             CustomerID: chargeReq.customerID? chargeReq.customerID : null,
@@ -161,7 +177,7 @@ const chargeCollectionController = {
 
         return res.status(200).json({
             message: "Charge Collection",
-            data: newChargeCollection,
+            data: updatedChargeCollection,
             CCCash: newCCCash
         })
     }),
@@ -242,7 +258,7 @@ const chargeCollectionController = {
         }
         
         if(enquiryReq.chargeID){
-            chargeCond.id = enquiryReq.chargeID
+            chargeCond.RefID = {[Op.substring]: enquiryReq.chargeID }
         }
         if(enquiryReq.customerID){
             accountCond.CustomerID = enquiryReq.customerID

@@ -120,9 +120,17 @@ const foreignExchangeController = {
             return next(new appError(err, 404))
         })
 
+        // UPDATE REF ID
+        const exchangeID = newExchange.getDataValue('id')
+        let refTemp = exchangeID.toString().padStart(6, '0')
+        const refID = `TT.22299.${refTemp}`
+        const updatedExchange = await newExchange.update({
+            RefID: refID
+        })
+
         return res.status(200).json({
             message: 'foreign exchange', 
-            data: newExchange
+            data: updatedExchange
         })
     }),
 

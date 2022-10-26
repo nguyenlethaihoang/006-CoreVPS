@@ -5,6 +5,7 @@ const sequelize = require('../../database/sequelize')
 class ChequeWithdrawal extends Model {}
 
 ChequeWithdrawal.init({
+    RefID: DataTypes.TEXT,
     ChequeID: DataTypes.TEXT,
     ChequeNo: DataTypes.INTEGER,
     AmountLCY: DataTypes.INTEGER,
