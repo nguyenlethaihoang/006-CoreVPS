@@ -116,9 +116,6 @@ const foreignExchangeController = {
             ChargeCollectionID: chargeID,
             Status: 1
         })
-        .catch(err => {
-            return next(new appError(err, 404))
-        })
 
         // UPDATE REF ID
         const exchangeID = newExchange.getDataValue('id')
