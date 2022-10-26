@@ -102,7 +102,7 @@ const corporateCustomerController = {
         // UPDATE REF ID
         const newCustomerID = newCustomer.getDataValue("id")
         let refTemp = newCustomerID.toString().padStart(5, '0')
-        refTemp = '1' + refTemp
+        refTemp = '2' + refTemp
         const refID = `${refTemp}`
         const updatedCustomer = await newCustomer.update({
             RefID: refID
