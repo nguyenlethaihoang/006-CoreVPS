@@ -132,6 +132,7 @@ const depositController = {
 
         const paidAmount = depositReq.amount * depositReq.dealRate
         
+        // CREATE TRANSACTION
         const newDeposit = await depositModel.create({
             AccountType: depositReq.accountType,
             Account: depositReq.account,
@@ -151,9 +152,18 @@ const depositController = {
             return next(new appError(err, 404))
         })
 
+        // UPDATE REF ID
+        const transID = newDeposit.getDataValue('id')
+            let refTemp = transID.toString().padStart(6, '0')
+            const refID = `TT.22322.${refTemp}`
+            const updatedTrans = await newDeposit.update({
+                RefID: refID
+            })
+
+
         return res.status(200).json({
             message: 'inserted',
-            data: newDeposit,
+            data: updatedTrans,
             charge: newChargeCollection
         })
     }),

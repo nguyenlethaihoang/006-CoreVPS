@@ -4,6 +4,7 @@ const sequelize = require('../../database/sequelize')
 class Customer extends Model {}
 
 Customer.init({
+    RefID: DataTypes.TEXT,
     GB_Street:{
         type: DataTypes.TEXT,
         require: true

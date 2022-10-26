@@ -67,9 +67,14 @@ const savingAccountController = {
             Status: 1,
             Type: 2
         })
-        // .catch(err => {
-        //     return next(new appError(err, 404))
-        // })
+        //UPDATE SAVING ACCOUNT - ACCOUNT
+        const newAccountID = newAccount.getDataValue("id")
+        let refTemp = newAccountID.toString().padStart(10, '0')
+        const refID = `07${refTemp}`
+        const updatedAccount = await newAccount.update({
+            Account: refID
+        })
+
 
         // CREATE ACCOUNT NO + PAYMENT NO
         // get current day
@@ -135,7 +140,7 @@ const savingAccountController = {
         return res.status(200).json({
             message: 'open arrear saving account',
             data: {
-                SavingAccount: newAccount,
+                SavingAccount: updatedAccount,
                 ArrearSA: newArrearSA
             }
         })
@@ -231,6 +236,15 @@ const savingAccountController = {
             return next(new appError(err, 404))
         })
 
+        //UPDATE SAVING ACCOUNT - ACCOUNT
+        const newAccountID = newAccount.getDataValue("id")
+        let refTemp = newAccountID.toString().padStart(10, '0')
+        const refID = `07${refTemp}`
+        const updatedAccount = await newAccount.update({
+            Account: refID
+        })
+        
+
         const accountID = newAccount.getDataValue('id')
 
         //CREATE PAYMENTNO + ACCOUNTNO
@@ -295,7 +309,7 @@ const savingAccountController = {
         return res.status(200).json({
             message: 'open periodic saving account',
             data: {
-                SavingAccount: newAccount,
+                SavingAccount: updatedAccount,
                 PeriodicSA: newPeriodicSA
             }
         })
@@ -373,6 +387,15 @@ const savingAccountController = {
         .catch(err => {
             return next(new appError(err, 404))
         })
+
+        //UPDATE SAVING ACCOUNT - ACCOUNT
+        const newAccountID = newSavingAccount.getDataValue("id")
+        let refTemp = newAccountID.toString().padStart(10, '0')
+        const refID = `07${refTemp}`
+        const updatedAccount = await newSavingAccount.update({
+            Account: refID
+        })
+
         const accountID = newSavingAccount.getDataValue('id')
         const newDiscountedAccount = await discountedSAModel.create({
             ValueDate: accountReq.valueDate,
@@ -408,7 +431,7 @@ const savingAccountController = {
         return res.status(200).json({
             message: 'open discounted saving account',
             data: {
-                SavingAccount: newSavingAccount,
+                SavingAccount: updatedAccount,
                 DiscountedAccount: newDiscountedAccount
             }
         })

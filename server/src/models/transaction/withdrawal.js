@@ -5,6 +5,7 @@ class WithdrawalTrans extends Model {}
 
 WithdrawalTrans.init({
     Account: DataTypes.TEXT,
+    RefID: DataTypes.TEXT,
     InitialAmount: DataTypes.INTEGER,
     WithdrawalAmount: DataTypes.INTEGER,
     PaidAmount: DataTypes.INTEGER,

@@ -57,7 +57,7 @@ const enquiryCustomerController = {
             //     enquiryString += ' where '
             // enquiryString += ' id = ' + enquiryReq.customerID + ''
             // count++
-            enquiryCondition.id = enquiryReq.customerID
+            enquiryCondition.RefID = {[Op.substring]: enquiryReq.customerID}
         }
         if(enquiryReq.GB_FullName){
             // if(count != 0)

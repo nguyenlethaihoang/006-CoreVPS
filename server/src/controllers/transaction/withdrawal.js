@@ -140,9 +140,17 @@ const withdrawalController = {
             return next(new appError(err, 404))
         })
 
+        // UPDATE REF ID
+        const transID = newDeposit.getDataValue('id')
+        let refTemp = transID.toString().padStart(6, '0')
+        const refID = `TT.22322.${refTemp}`
+        const updatedTrans = await newDeposit.update({
+            RefID: refID
+        })
+
         return res.status(200).json({
             message: 'create withdrawal transaction',
-            data: newWithdrawalTrans
+            data: updatedTrans
         })
         
     }), 

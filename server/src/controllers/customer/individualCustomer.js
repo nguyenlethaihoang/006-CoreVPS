@@ -115,7 +115,17 @@ const individualCustomerController = {
             console.log(err)
         })
 
+        // UPDATE REF ID
         const customerID = newCustomer.getDataValue("id")
+            let refTemp = customerID.toString().padStart(5, '0')
+            refTemp = '1' + refTemp
+            const refID = `${refTemp}`
+            const updatedCustomer = await newCustomer.update({
+                RefID: refID
+        })
+
+
+        
         const newIndividualCustomer = await individualCustomerModel.create({
             FirstName: customerReq.FirstName,
             LastName: customerReq.LastName,
@@ -134,7 +144,7 @@ const individualCustomerController = {
         return res.status(200).json({
             message: "inserted",
             data: {
-                customer: newCustomer,
+                customer: updatedCustomer,
                 individualCustomer: newIndividualCustomer
             }
         })

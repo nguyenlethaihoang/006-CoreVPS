@@ -7,6 +7,7 @@ class TransferTrans extends Model {}
 
 //DEBIT ACCOUNT
 TransferTrans.init({
+    RefID: DataTypes.TEXT,
     DebitAccount: DataTypes.TEXT,
     CreditAccount: DataTypes.TEXT,
     InitialAmount: {

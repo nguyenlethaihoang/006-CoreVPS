@@ -99,8 +99,14 @@ const corporateCustomerController = {
         .catch(err => {
             return next(new AppError(err, 404))
         })
-
+        // UPDATE REF ID
         const newCustomerID = newCustomer.getDataValue("id")
+        let refTemp = newCustomerID.toString().padStart(5, '0')
+        refTemp = '1' + refTemp
+        const refID = `${refTemp}`
+        const updatedCustomer = await newCustomer.update({
+            RefID: refID
+        })
 
         const newCorporateCustomer = await corporateCustomerModel.create({
             IncorpDate: customerReq.IncorpDate,
@@ -123,7 +129,7 @@ const corporateCustomerController = {
         return res.status(200).json({
             message: "inserted",
             data: {
-                customer: newCustomer,
+                customer: updatedCustomer,
                 corporateCustomer: newCorporateCustomer
             }
         })

@@ -21,7 +21,7 @@ const enquiryTransaction = {
     enquiry: asyncHandler( async (req, res, next) => {
         const enquiryReq = {
             transactionType: req.body.transactionType,
-            refID: req.body.refID,  // id transaction
+            refID: req.body.refID,  // refID
             customerType: req.body.customerType, // C - P
             GB_FullName: req.body.GB_FullName,
             amountFr: req.body.amountFr,
@@ -55,7 +55,7 @@ const enquiryTransaction = {
             let transCondition = {}
             let cusCondition = {}
             let accountCondition = {}
-            if(enquiryReq.refID)  transCondition.id = enquiryReq.refID
+            if(enquiryReq.refID)  transCondition.RefID = {[Op.substring]: enquiryReq.refID}
             if(enquiryReq.customerType)  cusCondition.CustomerType = enquiryReq.customerType
             if(enquiryReq.GB_FullName)  cusCondition.GB_FullName = enquiryReq.GB_FullName
             if(enquiryReq.accountType)  transCondition.AccountType = enquiryReq.accountType
@@ -153,7 +153,7 @@ const enquiryTransaction = {
             let transCondition = {}
             let cusCondition = {}
             let accountCondition = {}
-            if(enquiryReq.refID)  transCondition.id = enquiryReq.refID
+            if(enquiryReq.refID)  transCondition.RefID = {[Op.substring]: enquiryReq.refID}
             if(enquiryReq.customerType)  cusCondition.CustomerType = enquiryReq.customerType
             if(enquiryReq.GB_FullName)  cusCondition.GB_FullName = enquiryReq.GB_FullName
             if(enquiryReq.accountType)  transCondition.AccountType = enquiryReq.accountType
@@ -241,7 +241,7 @@ const enquiryTransaction = {
             let transCondition = {}
             let cusCondition = {}
             let accountCondition = {}
-            if(enquiryReq.refID)  transCondition.id = enquiryReq.refID
+            if(enquiryReq.refID)  transCondition.RefID = {[Op.substring]: enquiryReq.refID}
             if(enquiryReq.customerType)  cusCondition.CustomerType = enquiryReq.customerType
             if(enquiryReq.GB_FullName)  cusCondition.GB_FullName = enquiryReq.GB_FullName
             if(enquiryReq.accountType)  transCondition.AccountType = null

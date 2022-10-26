@@ -5,6 +5,7 @@ class DepositTrans extends Model {}
 
 DepositTrans.init({
     Account: DataTypes.TEXT,
+    RefID: DataTypes.TEXT,
     InitialAmount: DataTypes.INTEGER,
     DepositAmount: DataTypes.INTEGER,
     PaidAmount: DataTypes.INTEGER,

@@ -70,9 +70,17 @@ const debitAccountController = {
             return next(new appError(err, 404))
         })
 
+        // UPDATE REF ID
+        const newDebitAccountID = newDebitAccount.getDataValue("id")
+        let refTemp = newDebitAccountID.toString().padStart(10, '0')
+        const refID = `07${refTemp}`
+        const updatedDebitAccount = await newDebitAccount.update({
+            Account: refID
+        })
+
         return res.status(200).json({
             message: "debit account",
-            data: newDebitAccount
+            data: updatedDebitAccount
         })
     }),
 
@@ -156,7 +164,7 @@ const debitAccountController = {
         if(enquiryReq.account){
             // count++
             // enquiryString += 'Account = ' + enquiryReq.account
-            enquiryObject.condition.id = enquiryReq.account
+            enquiryObject.condition.Account = {[Op.substring]: enquiryReq.account}
         }
         if(enquiryReq.productLine){
             enquiryObject.condition.ProductLine= enquiryReq.productLine

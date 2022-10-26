@@ -6,11 +6,9 @@ class DebitAccount extends Model {}
 DebitAccount.init({
     Account:{
         type: DataTypes.TEXT,
-        require: true
     },
     CardNumber: {
         type: DataTypes.TEXT,
-        require: true
     },
     AccountTitle: DataTypes.TEXT,
     ShortTitle: DataTypes.TEXT,
