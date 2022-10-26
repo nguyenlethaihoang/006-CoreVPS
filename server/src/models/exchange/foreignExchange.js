@@ -4,6 +4,7 @@ const sequelize = require('../../database/sequelize')
 class ForeignExchange extends Model {}
 
 ForeignExchange.init({
+    RefID: DataTypes.TEXT,
     CustomerName: DataTypes.TEXT,
     Address: DataTypes.TEXT,
     PhoneNo: DataTypes.TEXT,

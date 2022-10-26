@@ -258,7 +258,7 @@ const transferChequeController = {
 
         let transferCond = {}, customerCond = {}
         if(enquiryReq.transferID){
-            transferCond.RefID = enquiryReq.transferID
+            transferCond.RefID = {[Op.substring]: enquiryReq.transferID}
         }
         if(enquiryReq.customerID){
             customerCond.id = enquiryReq.customerID
