@@ -36,6 +36,7 @@ const exportFileRoute = require('./src/routes/exportFile')
 const chargeRoute = require('./src/routes/chargeCollection')
 const chequeRoute = require('./src/routes/cheque')
 const creditRoute = require('./src/routes/creditTransaction')
+const transferRoute = require('./src/routes/transferOperation')
 
 //ROUTE DECLARATION
 //authenMiddleware
@@ -50,6 +51,7 @@ app.use('/export', exportFileRoute)
 app.use('/charge', chargeRoute)
 app.use('/cheque', chequeRoute)
 app.use('/credit', creditRoute)
+app.use('/transfer', transferRoute)
 
 //SET UP SWAGGER
 const swaggerUi = require('swagger-ui-express')

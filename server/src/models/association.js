@@ -46,6 +46,9 @@ const DiscountedClosure = require('./account/closeDiscounted')
 const creditCollection = require('./creditTransaction/collection')
 const creditTransfer = require('./creditTransaction/transfer')
 
+const OutWardByCash = require('./transferOperation/outwardByCash')
+const OutWardByAccount = require('./transferOperation/outwardByAccount')
+
 const association = () => {
     // CUSTOMER 
     // -- FkCustomer_CityProvinceId
@@ -523,6 +526,20 @@ const association = () => {
         foreignKey: 'DebitAccount'
     })
     creditTransfer.belongsTo(statusType,{
+        foreignKey: 'Status'
+    })
+
+    // TRANSFER OPERATION
+    OutWardByCash.belongsTo(cityProvince, {
+        foreignKey: 'Province'
+    })
+    OutWardByCash.belongsTo(statusType,{
+        foreignKey: 'Status'
+    })
+    OutWardByAccount.belongsTo(cityProvince, {
+        foreignKey: 'Province'
+    })
+    OutWardByAccount.belongsTo(statusType,{
         foreignKey: 'Status'
     })
 }
