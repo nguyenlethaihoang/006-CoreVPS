@@ -111,7 +111,7 @@ const debitAccountController = {
     getAll: asyncHandler(async (req, res, next) => {
         const accountsDB = await debitAccountModel.findAll({
             include: [{
-                model: customerModel, attributes: ['GB_ShortName', 'GB_FullName', 'DocID'], as: 'Customer', 
+                model: customerModel, as: 'Customer', 
             }, {
                 model: categoryModel, attributes: ['Name']
             }, {
