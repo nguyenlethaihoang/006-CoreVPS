@@ -170,19 +170,19 @@ const outwardController = {
             if(!debitAccountDB){
                 throw "Debit Account invalid"
             }
-    
-            if(!outwardReq.benAccount){
-                throw "Ben Account is required"
-            }
-            const benAccountDB = await debitAccountModel.findOne({
-                where: {
-                    Account: outwardReq.benAccount
+            
+            let benAccountDB
+            if(outwardReq.benAccount){
+                benAccountDB = await debitAccountModel.findOne({
+                    where: {
+                        Account: outwardReq.benAccount
+                    }
+                })
+                if(!benAccountDB){
+                    throw "Ben Account invalid"
                 }
-            })
-            if(!benAccountDB){
-                throw "Ben Account invalid"
             }
-    
+            
             const newOutward = await outwardByAccountModel.create({
                 ProductID: outwardReq.productID,
                 Currency: outwardReq.currency,
