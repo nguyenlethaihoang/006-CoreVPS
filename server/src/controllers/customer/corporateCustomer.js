@@ -81,6 +81,7 @@ const corporateCustomerController = {
             DocID: customerReq.DocID,
             DocIssuePlace: customerReq.DocIssuePlace,
             DocExpiryDate: customerReq.DocExpiryDate,
+            DocIssueDate: customerReq.DocIssueDate,
             CompanyBook: customerReq.CompanyBook,
             Liability: customerReq.Liability,
             CityProvince: customerReq.CityProvince,

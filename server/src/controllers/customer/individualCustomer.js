@@ -95,6 +95,7 @@ const individualCustomerController = {
             GB_Country: customerReq.GB_Country,
             DocID: customerReq.DocID,
             DocIssuePlace: customerReq.DocIssuePlace,
+            DocIssueDate: customerReq.DocIssueDate,
             DocExpiryDate: customerReq.DocExpiryDate,
             CompanyBook: customerReq.CompanyName,
             Liability: customerReq.Liability,

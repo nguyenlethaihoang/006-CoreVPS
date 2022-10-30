@@ -31,6 +31,9 @@ Customer.init({
     DocIssuePlace: {
         type: DataTypes.TEXT
     },
+    DocIssueDate: {
+        type:DataTypes.DATEONLY
+    },
     DocExpiryDate:{
         type: DataTypes.DATE
     },
