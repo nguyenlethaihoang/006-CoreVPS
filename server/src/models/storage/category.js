@@ -5,6 +5,6 @@ class Category extends Model {}
 
 Category.init({
     Name: DataTypes.TEXT
-}, {sequelize, modelName:'CATEGORY'})
+}, {sequelize, modelName:'CATEGORY', timestamps: false})
 
 module.exports = Category

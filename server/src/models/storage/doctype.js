@@ -8,6 +8,6 @@ Doctype.init({
     Code: {
         type: DataTypes.TEXT
     }
-}, {sequelize, modelName:'DOCTYPE'})
+}, {sequelize, modelName:'DOCTYPE', timestamps: false})
 
 module.exports = Doctype

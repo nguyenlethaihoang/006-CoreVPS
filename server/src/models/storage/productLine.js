@@ -5,6 +5,5 @@ class ProductLine extends Model {}
 
 ProductLine.init({
     Name: DataTypes.TEXT
-}, {sequelize, modelName:'PRODUCTLINE'})
-
+}, {sequelize, modelName:'PRODUCTLINE', timestamps: false})
 module.exports = ProductLine

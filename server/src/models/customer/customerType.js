@@ -5,6 +5,6 @@ class CustomerType extends Model {}
 
 CustomerType.init({
     Name: DataTypes.TEXT,
-}, {sequelize, modelName:'CUSTOMERTYPE'})
+}, {sequelize, modelName:'CUSTOMERTYPE', timestamps: false})
 
 module.exports = CustomerType

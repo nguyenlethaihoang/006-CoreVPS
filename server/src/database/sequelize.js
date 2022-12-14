@@ -20,7 +20,7 @@ console.log(process.env.DIALECT)
 
 const sequelize = new Sequelize('corebanking', 'root', 'password' , {
     host: '103.75.185.190',
-    port: '8049',
+    port: '5005',
     dialect: 'mysql',
     define:{
       freezeTableName: true

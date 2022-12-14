@@ -9,6 +9,5 @@ ChargeCode.init({
         type: DataTypes.INTEGER,
         defaultValue: 0
     }
-}, {sequelize, modelName:'CHARGECODE'})
-
+}, {sequelize, modelName:'CHARGECODE', timestamps: false})
 module.exports = ChargeCode

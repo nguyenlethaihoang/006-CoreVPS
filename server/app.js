@@ -89,6 +89,6 @@ const options = {
 // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 //HOST CONNECTION
-app.listen(5000, () => {
+app.listen(5006, () => {
     console.log("CONNECTED")
 })

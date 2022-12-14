@@ -5,6 +5,5 @@ class CityProvince extends Model {}
 
 CityProvince.init({
     Name: DataTypes.TEXT
-}, {sequelize, modelName:'CITYPROVINCE'})
-
+}, {sequelize, modelName:'CITYPROVINCE', timestamps: false})
 module.exports = CityProvince

@@ -7,6 +7,6 @@ ChargeCategory.init({
     Code: DataTypes.TEXT,
     Name: DataTypes.TEXT,
     Value: DataTypes.FLOAT
-}, {sequelize, modelName:'CHARGECATEGORY'})
+}, {sequelize, modelName:'CHARGECATEGORY', timestamps: false})
 
 module.exports = ChargeCategory

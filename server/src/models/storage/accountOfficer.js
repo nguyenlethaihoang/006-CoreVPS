@@ -5,6 +5,6 @@ class AccountOfficer extends Model {}
 
 AccountOfficer.init({
     Name: DataTypes.TEXT
-}, {sequelize, modelName:'ACCOUNTOFFICER'})
+}, {sequelize, modelName:'ACCOUNTOFFICER', timestamps: false})
 
 module.exports = AccountOfficer

@@ -5,6 +5,6 @@ class StatusType extends Model {}
 
 StatusType.init({
     Name: DataTypes.TEXT
-}, {sequelize, modelName:'STATUSTYPE'})
+}, {sequelize, modelName:'STATUSTYPE', timestamps: false})
 
 module.exports = StatusType

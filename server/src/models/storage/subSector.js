@@ -6,6 +6,6 @@ class SubSector extends Model {}
 SubSector.init({
     Name: DataTypes.TEXT,
     Code: DataTypes.TEXT
-}, {sequelize, modelName:'SUBSECTOR'})
+}, {sequelize, modelName:'SUBSECTOR', timestamps: false})
 
 module.exports = SubSector

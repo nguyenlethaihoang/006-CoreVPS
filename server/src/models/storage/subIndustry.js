@@ -15,6 +15,6 @@ SubIndustry.init({
             key: 'id'
         }
     }
-}, {sequelize, modelName:'SUBINDUSTRY'})
+}, {sequelize, modelName:'SUBINDUSTRY', timestamps: false})
 
 module.exports = SubIndustry

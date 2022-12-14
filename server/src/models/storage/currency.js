@@ -6,6 +6,6 @@ class Currency extends Model {}
 Currency.init({
     Name: DataTypes.TEXT,
     Value: DataTypes.INTEGER
-}, {sequelize, modelName:'CURRENCY'})
+}, {sequelize, modelName:'CURRENCY', timestamps: false})
 
 module.exports = Currency

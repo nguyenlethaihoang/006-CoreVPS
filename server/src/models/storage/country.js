@@ -6,6 +6,6 @@ class Country extends Model {}
 Country.init({
     Name: DataTypes.TEXT,
     Code: DataTypes.TEXT
-}, {sequelize, modelName:'COUNTRY'})
+}, {sequelize, modelName:'COUNTRY', timestamps: false})
 
 module.exports = Country

@@ -6,6 +6,6 @@ class Sector extends Model {}
 Sector.init({
     Name: DataTypes.TEXT,
     Code: DataTypes.TEXT
-}, {sequelize, modelName:'SECTOR'})
+}, {sequelize, modelName:'SECTOR', timestamps: false})
 
 module.exports = Sector
