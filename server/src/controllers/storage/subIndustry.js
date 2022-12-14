@@ -1,5 +1,5 @@
 const industry = require('../../models/storage/industry')
-const subIndustryModel = require('../../models/storage/subindustry')
+const subIndustryModel = require('../../models/storage/subIndustry')
 const asyncHandler = require('../../utils/async')
 const appError = require('../../utils/appError')
 
