@@ -48,6 +48,7 @@ const creditTransfer = require('./creditTransaction/transfer')
 
 const OutWardByCash = require('./transferOperation/outwardByCash')
 const OutWardByAccount = require('./transferOperation/outwardByAccount')
+const Inward = require('./transferOperation/inward')
 
 const association = () => {
     // CUSTOMER 
@@ -542,7 +543,11 @@ const association = () => {
     OutWardByAccount.belongsTo(statusType,{
         foreignKey: 'Status'
     })
-}
+
+    Inward.belongsTo(statusType,{
+        foreignKey: 'Status'
+    })
+}   
 
 
 module.exports = association

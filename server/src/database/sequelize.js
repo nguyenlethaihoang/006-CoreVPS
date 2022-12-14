@@ -9,23 +9,23 @@ const connection = {
 require('dotenv').config()
 console.log(process.env.DIALECT)
 
-const sequelize = new Sequelize('corebanking', 'admin_db', 'dbpassword@1', {
-    host: 'core-banking-db.mysql.database.azure.com',
-    dialect: 'mysql',
-    define:{
-      freezeTableName: true
-    },
-    ssl: 'ca:fs.readFileSync("{ca-cert filename}")'
-  });
-
-// const sequelize = new Sequelize('corebanking', 'root', 'password' , {
-//     host: '103.75.185.190',
-//     port: '8076',
+// const sequelize = new Sequelize('corebanking', 'admin_db', 'dbpassword@1', {
+//     host: 'core-banking-db.mysql.database.azure.com',
 //     dialect: 'mysql',
 //     define:{
 //       freezeTableName: true
-//     }
-// });
+//     },
+//     ssl: 'ca:fs.readFileSync("{ca-cert filename}")'
+//   });
+
+const sequelize = new Sequelize('corebanking', 'root', 'password' , {
+    host: '103.75.185.190',
+    port: '8049',
+    dialect: 'mysql',
+    define:{
+      freezeTableName: true
+    }
+});
 
 module.exports = sequelize
 
