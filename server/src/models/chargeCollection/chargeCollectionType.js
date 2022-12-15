@@ -5,6 +5,6 @@ class ChargeCollectionType extends Model {}
 
 ChargeCollectionType.init({
     Name: DataTypes.TEXT
-}, {sequelize, modelName:'CHARGECOLLECTIONTYPE'})
+}, {sequelize, modelName:'CHARGECOLLECTIONTYPE', timestamps: false})
 
 module.exports = ChargeCollectionType

@@ -5,7 +5,7 @@ const appError = require('../../utils/appError')
 
 const subIndustryController = {
     getAll: asyncHandler( async (req, res, next) => {
-        const {count, rows} = await subIndustry.findAndCountAll()
+        const {count, rows} = await subIndustryModel.findAndCountAll()
 
         return res.status(200).json({
             message: "get all subIndustry",
