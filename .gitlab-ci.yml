@@ -7,5 +7,5 @@ access-and-pull:
   stage: action
   script:
     - sshpass -p 'tZTg@VBqdVZ*' ssh -o StrictHostKeyChecking=no root@103.75.185.190 -p 24700 "ls -la && cd source_code/bussiness-core-api/006-CoreVPS/server && git pull "
-  when: manual
+  when: manual 
 
