@@ -3,6 +3,8 @@ const app = express()
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const database = require('./src/database/connection')
+const minIO = require('./minio-connect')
+const minIOConnect = require('./minio-create-buckets')
 
 app.use(cors())
 
@@ -87,6 +89,9 @@ const options = {
 // const swaggerDocument = require('./swagger.json')
 
 // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+
+// MINIO
+(async ()=>minIOConnect.connect())();
 
 //HOST CONNECTION
 app.listen(5006, () => {
