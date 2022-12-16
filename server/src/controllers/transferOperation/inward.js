@@ -244,6 +244,8 @@ const inwardController = {
                 throw "Transaction Type require"
             }
 
+
+            
             if(enquiryReq.transactionType == 1){
                 enquiry.Type = {[Op.in]: [1, 2]}
             }else if(enquiryReq.transactionType == 2){
